@@ -1,0 +1,2230 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>R2API</name>
+    </assembly>
+    <members>
+        <member name="T:R2API.IModdedUnlockableDataProvider">
+            <summary>
+            Interface used to provide the metadata needed to register an achievement
+            </summary>
+        </member>
+        <member name="P:R2API.IModdedUnlockableDataProvider.AchievementIdentifier">
+            <summary>
+            The identifier of the achievement being added
+            Should be unique
+            </summary>
+        </member>
+        <member name="P:R2API.IModdedUnlockableDataProvider.UnlockableIdentifier">
+            <summary>
+            The identifier of the unlockable granted when the achievement is completed
+            Should be unique
+            This is what is used when specifying an unlock condition for various things in the game
+            </summary>
+        </member>
+        <member name="P:R2API.IModdedUnlockableDataProvider.PrerequisiteUnlockableIdentifier">
+            <summary>
+            The unlockableIdentifier of a prerequisite
+            Should be used for skill unlocks for a custom character if the character has an unlock condition
+            Multiple prereqs are not supported (as far as I can tell)
+            </summary>
+        </member>
+        <member name="P:R2API.IModdedUnlockableDataProvider.AchievementNameToken">
+            <summary>
+            The language token for the name to be shown in logbook for this achievement
+            </summary>
+        </member>
+        <member name="P:R2API.IModdedUnlockableDataProvider.AchievementDescToken">
+            <summary>
+            The language token for the description to be shown in logbook for this achievement
+            Also used to create the 'How to unlock' text
+            </summary>
+        </member>
+        <member name="P:R2API.IModdedUnlockableDataProvider.UnlockableNameToken">
+            <summary>
+            The language token for the unlockable
+            Not 100% sure where this is shown in game
+            </summary>
+        </member>
+        <member name="P:R2API.IModdedUnlockableDataProvider.SpritePath">
+            <summary>
+            The path that is passed to Resources.Load when the sprite is loaded for this achievement
+            </summary>
+        </member>
+        <member name="T:R2API.IAchievementSpriteProvider">
+            <summary>
+            Interface for supplying alternative ways of loading sprites for achievements in the future
+            </summary>
+        </member>
+        <member name="P:R2API.IAchievementSpriteProvider.PathString">
+            <summary>
+            The path that will be passed to Resources.Load to get the sprite
+            </summary>
+        </member>
+        <member name="P:R2API.IAchievementSpriteProvider.Sprite">
+            <summary>
+            The sprite that is being provided
+            </summary>
+        </member>
+        <member name="T:R2API.VanillaSpriteProvider">
+            <summary>
+            An implementation of IAchievementSpriteProvider for using vanilla achievement icons
+            </summary>
+        </member>
+        <member name="M:R2API.VanillaSpriteProvider.#ctor(System.String)">
+            <summary>
+            Creates a VanillaSpriteProvider from the path to its target sprite.
+            The sprite is loaded and cached immediately upon creation
+            </summary>
+            <param name="path">A path suitable for Resources.Load that will return the desired sprite</param>
+        </member>
+        <member name="P:R2API.VanillaSpriteProvider.PathString">
+            <summary>
+            The path that will be passed to Resources.Load to get the sprite
+            </summary>
+        </member>
+        <member name="P:R2API.VanillaSpriteProvider.Sprite">
+            <summary>
+            Returns the cached sprite
+            </summary>
+        </member>
+        <member name="T:R2API.CustomSpriteProvider">
+            <summary>
+            An implementation of IAchievementSpriteProvider for use with AssetBundleResourcesProvider and ResourcesAPI
+            </summary>
+        </member>
+        <member name="M:R2API.CustomSpriteProvider.#ctor(System.String)">
+            <summary>
+            Creates a CustomSpriteProvider from the path used for a ResourcesProvider from ResourcesAPI
+            </summary>
+            <param name="modPrefixedPath">The path used to retreive the sprite from the provider</param>
+        </member>
+        <member name="P:R2API.CustomSpriteProvider.PathString">
+            <summary>
+            The path that will be passed to Resources.Load to get the sprite
+            </summary>
+        </member>
+        <member name="P:R2API.CustomSpriteProvider.Sprite">
+            <summary>
+            Loads the sprite
+            </summary>
+        </member>
+        <member name="T:R2API.ModdedUnlockableAndAchievement`1">
+            <summary>
+            A base class that can be used to conveinently supply all the required info for a modded achievement
+            </summary>
+            <typeparam name="TSpriteProvider">The type of sprite provider being used for this achievement</typeparam>
+        </member>
+        <member name="P:R2API.ModdedUnlockableAndAchievement`1.SpritePath">
+            <summary>
+            The path that will be passed to Resources.Load to get the sprite
+            </summary>
+        </member>
+        <member name="M:R2API.ModdedUnlockableAndAchievement`1.Revoke">
+            <summary>
+            Removes this achievement from the current profile.
+            </summary>
+        </member>
+        <member name="P:R2API.ModdedUnlockableAndAchievement`1.SpriteProvider">
+            <summary>
+            This should return the sprite provider for this achievement
+            </summary>
+        </member>
+        <member name="P:R2API.ModdedUnlockableAndAchievement`1.AchievementIdentifier">
+            <summary>
+            The identifier of the achievement being added
+            Should be unique
+            </summary>
+        </member>
+        <member name="P:R2API.ModdedUnlockableAndAchievement`1.UnlockableIdentifier">
+            <summary>
+            The identifier of the unlockable granted when the achievement is completed
+            Should be unique
+            This is what is used when specifying an unlock condition for various things in the game
+            </summary>
+        </member>
+        <member name="P:R2API.ModdedUnlockableAndAchievement`1.PrerequisiteUnlockableIdentifier">
+            <summary>
+            The unlockableIdentifier of a prerequisite
+            Should be used for skill unlocks for a custom character if the character has an unlock condition
+            Multiple prereqs are not supported (as far as I can tell)
+            </summary>
+        </member>
+        <member name="P:R2API.ModdedUnlockableAndAchievement`1.AchievementNameToken">
+            <summary>
+            The language token for the name to be shown in logbook for this achievement
+            </summary>
+        </member>
+        <member name="P:R2API.ModdedUnlockableAndAchievement`1.AchievementDescToken">
+            <summary>
+            The language token for the description to be shown in logbook for this achievement
+            Also used to create the 'How to unlock' text
+            </summary>
+        </member>
+        <member name="P:R2API.ModdedUnlockableAndAchievement`1.UnlockableNameToken">
+            <summary>
+            The language token for the unlockable
+            Not 100% sure where this is shown in game
+            </summary>
+        </member>
+        <member name="M:R2API.ModdedUnlockableAndAchievement`1.OnGranted">
+            <summary>
+            Called when this achievement is granted
+            </summary>
+        </member>
+        <member name="M:R2API.ModdedUnlockableAndAchievement`1.OnInstall">
+            <summary>
+            This should be used to register to an event or apply a hook in order to detect when the achievement conditions are met
+            When you detect that the conditions are met, call `base.Grant` inside the method
+            </summary>
+        </member>
+        <member name="M:R2API.ModdedUnlockableAndAchievement`1.OnUninstall">
+            <summary>
+            This should unregister whatever was registered in OnInstall
+            </summary>
+        </member>
+        <member name="M:R2API.ModdedUnlockableAndAchievement`1.ProgressForAchievement">
+            <summary>
+            TODO
+            </summary>
+            <returns>TODO</returns>
+        </member>
+        <member name="M:R2API.ModdedUnlockableAndAchievement`1.LookUpRequiredBodyIndex">
+            <summary>
+            Used to specify if this achievement is limited to a certain character
+            </summary>
+            <returns>The index of the character that is needed to unlock this achievement</returns>
+        </member>
+        <member name="M:R2API.ModdedUnlockableAndAchievement`1.OnBodyRequirementBroken">
+            <summary>
+            Called when the body changes to a body that does not meet the requirements for this achievement
+            </summary>
+        </member>
+        <member name="M:R2API.ModdedUnlockableAndAchievement`1.OnBodyRequirementMet">
+            <summary>
+            Called when the body changes to a body that meets the requirements for this acheivement
+            </summary>
+        </member>
+        <member name="P:R2API.ModdedUnlockableAndAchievement`1.wantsBodyCallbacks">
+            <summary>
+            This actually does nothing in vanilla, it is here in case that changes in future updates.
+            </summary>
+        </member>
+        <member name="T:R2API.AssetAPI">
+            <summary>
+            An API for adding assets to the Master and Object Catalogs.
+            </summary>
+        </member>
+        <member name="E:R2API.AssetAPI.AssetLoaderReady">
+            <summary>
+            This event is invoked as soon as the AssetAPI is loaded. This is the perfect time to add assets to the Master and Object Catalogs in the API.
+            </summary>
+        </member>
+        <member name="P:R2API.AssetAPI.DoneLoading">
+            <summary>
+            Returns true once assets have been loaded.
+            </summary>
+        </member>
+        <member name="P:R2API.AssetAPI.MasterCatalog">
+            <summary>
+            List of all character masters, including both vanilla and modded ones.
+            </summary>
+        </member>
+        <member name="P:R2API.AssetAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="F:R2API.AssetAPI.BodyCatalog">
+            <summary>
+            List of all character bodies, including both vanilla and modded ones.
+            </summary>
+        </member>
+        <member name="F:R2API.AssetAPI._bodyCatalogReady">
+            <summary>
+            If BodyCatalog.Init was called already.
+            </summary>
+        </member>
+        <member name="E:R2API.AssetAPI.OnBodyCatalogReady">
+            <summary>
+            Invokes just before BodyCatalog.Init - EventArgs is AssetAPI.BodyCatalog.
+            </summary>
+        </member>
+        <member name="M:R2API.AssetAPI.AddToBodyCatalog(UnityEngine.GameObject,UnityEngine.Texture2D)">
+            <summary>
+            Add a BodyPrefab to RoR2.BodyCatalog, even after init.
+            If you try to add a BodyPrefab whose name already exists in nameToIndexMap, this method will throw.
+            </summary>
+            <param name="bodyPrefab"></param>
+            <param name="portraitIcon"></param>
+            <returns>The index of your BodyPrefab.</returns>
+        </member>
+        <member name="T:R2API.AssetBundleResourcesProvider">
+            <summary>
+            This class provides a wrapper around an AssetBundle for integrating it into the regular Unity Resources library
+            </summary>
+        </member>
+        <member name="M:R2API.AssetBundleResourcesProvider.#ctor(System.String,UnityEngine.AssetBundle)">
+            <summary>
+            Creates an AssetBundleResourcesProvider with the specified modPrefix.
+            </summary>
+        </member>
+        <member name="P:R2API.AssetBundleResourcesProvider.ModPrefix">
+            <summary>
+            The prefix for to access the assets in this provider.
+            </summary>
+        </member>
+        <member name="M:R2API.AssetBundleResourcesProvider.Load(System.String,System.Type)">
+            <summary>
+            Load an asset out of the included assetbundle.
+            </summary>
+            <param name="path">The path to the asset</param>
+            <param name="type">The type of the asset to find</param>
+            <returns>object of type <paramref name="type"/></returns>
+        </member>
+        <member name="M:R2API.AssetBundleResourcesProvider.LoadAsync(System.String,System.Type)">
+            <summary>
+            Load an asset out of the included assetbundle asynchronosly.
+            </summary>
+            <param name="path">the path to the asset</param>
+            <param name="type">the type of the asset to find</param>
+            <returns>object of type <paramref name="type"/></returns>
+        </member>
+        <member name="M:R2API.AssetBundleResourcesProvider.LoadAll(System.Type)">
+            <summary>
+            Load all assets in this assetbundle that are assignable from the specified type.
+            </summary>
+            <param name="type">The type to match</param>
+            <returns>Array of the type</returns>
+        </member>
+        <member name="T:R2API.AssetPlus.AssetPlus">
+            <summary>
+            Simple class for adding all the individual of AssetPlus together
+            </summary>
+                // ReSharper disable once InconsistentNaming
+        </member>
+        <member name="T:R2API.AssetPlus.Fonts">
+            <summary>
+            use this class to add fonts
+            </summary>
+        </member>
+        <member name="M:R2API.AssetPlus.Fonts.Add(System.String)">
+            <summary>
+            for adding an TMP_FontAsset inside an seperate assetbundle (.font is loaded automatically)
+            </summary>
+            <param name="path">absolute path to the assetbundle</param>
+        </member>
+        <member name="M:R2API.AssetPlus.Fonts.Add(System.Byte[])">
+            <summary>
+            for adding an TMP_FontAsset while it is still in an assetbundle
+            </summary>
+            <param name="fontFile">the assetbundle file</param>
+        </member>
+        <member name="M:R2API.AssetPlus.Fonts.Add(TMPro.TMP_FontAsset)">
+            <summary>
+            for adding an TMP_FontAsset directly
+            </summary>
+            <param name="fontAsset">The loaded fontasset</param>
+        </member>
+        <member name="T:R2API.AssetPlus.Languages">
+            <summary>
+            class for language files to load
+            </summary>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.AddPath(System.String)">
+            <summary>
+            adding an file via path (.language is added automatically )
+            </summary>
+            <param name="path">absolute path to file</param>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.AddToken(System.String,System.String)">
+            <summary>
+            Adds a single languagetoken and value
+            </summary>
+            <param name="key">Token the game asks</param>
+            <param name="value">Value it gives back</param>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.AddToken(System.String,System.String,System.Boolean)">
+            <summary>
+            Adds a single languagetoken and value with optional reload
+            </summary>
+            <param name="key">Token the game asks</param>
+            <param name="value">Value it gives back</param>
+            <param name="reload">if the dictionary of the game should be reloaded</param>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.AddToken(System.String,System.String,System.String)">
+            <summary>
+            Adds a single languagetoken and value to a specific language
+            </summary>
+            <param name="key">Token the game asks</param>
+            <param name="value">Value it gives back</param>
+            <param name="language">Language you want to add this to</param>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.AddToken(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Adds a single languagetoken and value to a specific language
+            </summary>
+            <param name="key">Token the game asks</param>
+            <param name="value">Value it gives back</param>
+            <param name="language">Language you want to add this to</param>
+            <param name="reload">if the dictionary of the game should be reloaded</param>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.AddToken(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.Dictionary{System.String,System.String}})">
+            <summary>
+            Adds multiple languagetokens and value to languages
+            </summary>
+            <param name="languageDictionary">dictionary of languages containing dictionaries of key-value (eg ["en"]["mytoken"]="mystring")</param>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.AddToken(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.Dictionary{System.String,System.String}},System.Boolean)">
+            <summary>
+            Adds multiple languagetokens and value to languages
+            </summary>
+            <param name="languageDictionary">dictionary of languages containing dictionaries of key-value (eg ["en"]["mytoken"]="mystring")</param>
+            <param name="reload">if the dictionary of the game should be reloaded</param>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.AddToken(System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
+            <summary>
+            Adds multiple languagetokens and value to a specific language
+            </summary>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.AddToken(System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.Boolean)">
+            <summary>
+            Adds multiple languagetokens and value to a specific language
+            </summary>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.AddToken(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Adds multiple languagetokens and value
+            </summary>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.AddToken(System.Collections.Generic.Dictionary{System.String,System.String},System.Boolean)">
+            <summary>
+            Adds multiple languagetokens and value
+            </summary>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.Add(System.String)">
+            <summary>
+            Adding an file which is read into an string
+            </summary>
+            <param name="file">entire file as string</param>
+        </member>
+        <member name="M:R2API.AssetPlus.Languages.ReloadLanguage">
+            <summary>
+            Reloads the game language if it is already loaded
+            </summary>
+        </member>
+        <member name="T:R2API.AssetPlus.SoundBanks">
+            <summary>
+            class for SoundBanks to load
+            </summary>
+        </member>
+        <member name="M:R2API.AssetPlus.SoundBanks.Add(System.Byte[])">
+            <summary>
+            Adds a soundbank to load, returns the ID used for unloading
+            </summary>
+            <param name="bank">byte array of the entire .bnk file</param>
+        </member>
+        <member name="M:R2API.AssetPlus.SoundBanks.Add(System.String)">
+            <summary>
+            Adds an external soundbank to load, returns the ID used for unloading (.sound files are loaded automatically)
+            </summary>
+            <param name="path">the absolute path to the file</param>
+        </member>
+        <member name="M:R2API.AssetPlus.SoundBanks.Remove(System.UInt32)">
+            <summary>
+            Unloads an bank using the ID (ID is returned at the Add() of the bank)
+            </summary>
+            <param name="ID">BankID</param>
+            <returns></returns>
+        </member>
+        <member name="T:R2API.BuffAPI">
+            <summary>
+            API for adding custom buffs to the game. Previously included in ItemAPI.
+            </summary>
+        </member>
+        <member name="F:R2API.BuffAPI.BuffDefinitions">
+            <summary>
+            All custom buffs added by the API.
+            </summary>
+        </member>
+        <member name="F:R2API.BuffAPI.OriginalBuffCount">
+            <summary>
+            The original buff count of the game.
+            </summary>
+        </member>
+        <member name="F:R2API.BuffAPI.CustomBuffCount">
+            <summary>
+            Amount of custom Buffs added by R2API
+            </summary>
+        </member>
+        <member name="P:R2API.BuffAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="M:R2API.BuffAPI.Add(R2API.CustomBuff)">
+            <summary>
+            Add a custom buff to the list of available buffs.
+            Value for BuffDef.buffIndex can be ignored.
+            If this is called after the BuffCatalog inits then this will return false and ignore the custom buff.
+            </summary>
+            <param name="buff">The buff to add.</param>
+            <returns>the BuffIndex of your item if added. -1 otherwise</returns>
+        </member>
+        <member name="T:R2API.CustomBuff">
+            <summary>
+            Class that defines a custom buff type for use in the game;
+            you may omit the buffIndex in the BuffDef, as that will
+            be assigned by the API.
+            If you are doing a buff for a custom elite, don't forget to register your CustomElite before too to fill the eliteIndex field !
+            </summary>
+        </member>
+        <member name="F:R2API.CustomBuff.BuffDef">
+            <summary>
+            Definition of the Buff
+            </summary>
+        </member>
+        <member name="M:R2API.CustomBuff.#ctor(System.String,System.String,UnityEngine.Color,System.Boolean,System.Boolean)">
+            <summary>
+            Create a custom buff to add into the game.
+            If you are doing a buff for a custom elite, don't forget to register your CustomElite before too to fill the eliteIndex field !
+            </summary>
+        </member>
+        <member name="M:R2API.CustomBuff.#ctor(RoR2.BuffDef)">
+            <summary>
+            Create a custom buff to add into the game.
+            you may omit the buffIndex in the BuffDef, as that will be assigned by the API.
+            If you are doing a buff for a custom elite, don't forget to register your CustomElite before too to fill the eliteIndex field !
+            </summary>
+        </member>
+        <member name="M:R2API.CustomBuff.#ctor(System.String,RoR2.BuffDef)">
+            <summary>
+            DEPRECATED: Use the constructor that allows you to input the fields of an BuffDef or use the one that take an BuffDef as parameter directly.
+            Create a custom buff to add into the game.
+            </summary>
+        </member>
+        <member name="T:R2API.DifficultyAPI">
+            <summary>
+            API for adding difficulties like Drizzle, Rainstorm, and Monsoon to the game. Does not cover "very easy, easy, ..., HAHAHAHA".
+            </summary>
+        </member>
+        <member name="P:R2API.DifficultyAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="E:R2API.DifficultyAPI.difficultyCatalogReady">
+            <summary>
+            <see cref="E:R2API.DifficultyAPI.DifficultyCatalogReady"/>
+            </summary>
+        </member>
+        <member name="E:R2API.DifficultyAPI.DifficultyCatalogReady">
+            <summary>
+            Fired right before the hooks for the difficultyAPI are set. This is the last chance to add difficulties to the API.
+            </summary>
+        </member>
+        <member name="F:R2API.DifficultyAPI.difficultyDefinitions">
+            <summary>
+            A dictionairy with ALL difficulty definitions. Post start, this includes both the vanilla ones and the ones added by R2API. Not all indexes are promised to be populated. Iterate over the keyset instead.
+            </summary>
+        </member>
+        <member name="M:R2API.DifficultyAPI.AddDifficulty(RoR2.DifficultyDef)">
+            <summary>
+            Add a DifficultyDef to the list of available difficulties.
+            This must be called before the DifficultyCatalog inits, so before plugin.Start()
+            You'll get your new index returned that you can work with for comparing to Run.Instance.selectedDifficulty.
+            If this is called after the DifficultyCatalog inits then this will return -1/DifficultyIndex.Invalid and ignore the difficulty
+            </summary>
+            <param name="difficulty">The difficulty definition to add.</param>
+            <returns>DifficultyIndex.Invalid if it fails. Your index otherwise.</returns>
+        </member>
+        <member name="M:R2API.DifficultyAPI.AddDifficulty(RoR2.DifficultyDef,System.Boolean)">
+            <summary>
+            Add a DifficultyDef to the list of available difficulties.
+            This must be called before the DifficultyCatalog inits, so before plugin.Start()
+            You'll get your new index returned that you can work with for comparing to Run.Instance.selectedDifficulty.
+            If this is called after the DifficultyCatalog inits then this will return -1/DifficultyIndex.Invalid and ignore the difficulty
+            </summary>
+            <param name="difficulty">The difficulty definition to add.</param>
+            <param name="preferPositive">If you prefer to be appended to the array. In game version 1.0.0.X this means you will get all Eclipse modifiers as well when your difficulty is selected. </param>
+            <returns>DifficultyIndex.Invalid if it fails. Your index otherwise.</returns>
+        </member>
+        <member name="T:R2API.DirectorAPI">
+            <summary>
+            API for modifying the monster and scene directors.
+            </summary>
+        </member>
+        <member name="P:R2API.DirectorAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="E:R2API.DirectorAPI.StageSettingsActions">
+            <summary>
+            Event used to edit stage settings.
+            </summary>
+        </member>
+        <member name="E:R2API.DirectorAPI.MonsterActions">
+            <summary>
+            Event used to edit/add/remove the monsters spawned on a stage.
+            </summary>
+        </member>
+        <member name="E:R2API.DirectorAPI.InteractableActions">
+            <summary>
+            Event used to edit/add/remove interactables spawned on a stage.
+            </summary>
+        </member>
+        <member name="E:R2API.DirectorAPI.FamilyActions">
+            <summary>
+            Event used to edit/add/remove monster families on a stage.
+            </summary>
+        </member>
+        <member name="T:R2API.DirectorAPI.MonsterCategory">
+            <summary>
+            If this is called then DirectorAPI will hook ClassicStageInfo.Awake and use the events to make changes
+            </summary>
+            <summary>
+            The three categories for monsters. Support for custom categories will come later.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterCategory.None">
+            <summary>
+            An invalid default value. Anything with this value is ignored when dealing with monsters.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterCategory.BasicMonsters">
+            <summary>
+            Small enemies like Lemurians and Beetles.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterCategory.Minibosses">
+            <summary>
+            Medium enemies like Golems and Beetle Guards.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterCategory.Champions">
+            <summary>
+            Bosses like Vagrants and Titans.
+            </summary>
+        </member>
+        <member name="T:R2API.DirectorAPI.InteractableCategory">
+            <summary>
+            The categories for interactables. Support for custom categories will come later.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.InteractableCategory.None">
+            <summary>
+            An invalid default value. Anything with this value is ignored when dealing with interactables.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.InteractableCategory.Chests">
+            <summary>
+            Chests, such as basic chests, large chests, shops, equipment barrels, lunar pods, and category chests. NOT legendary chests or cloaked chests.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.InteractableCategory.Barrels">
+            <summary>
+            Barrels.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.InteractableCategory.Shrines">
+            <summary>
+            Chance shrines, blood shrines, combat shrines, order shrines, mountain shrines, shrine of the woods. NOT shrine of gold.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.InteractableCategory.Drones">
+            <summary>
+            All types of drones such as TC-280, equipment drones, gunner drones, healing drones, and incinerator drones. NOT gunner turrets.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.InteractableCategory.Misc">
+            <summary>
+            Gunner turrets only.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.InteractableCategory.Rare">
+            <summary>
+            Legendary chests, cloaked chests, shrine of gold, and radio scanners.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.InteractableCategory.Duplicator">
+            <summary>
+            All three tiers of printers.
+            </summary>
+        </member>
+        <member name="T:R2API.DirectorAPI.Stage">
+            <summary>
+            A flags enum for the vanilla stages. Custom stages are handled with a string in StageInfo.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.Stage.Custom">
+            <summary>
+            When this is set to custom, check the string in StageInfo
+            </summary>
+        </member>
+        <member name="T:R2API.DirectorAPI.StageInfo">
+            <summary>
+            Struct for holding information about the stage.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.StageInfo.stage">
+            <summary>
+            The current stage. If set to custom, check customStageName.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.StageInfo.CustomStageName">
+            <summary>
+            This is set to the name of the custom stage. Is left blank for vanilla stages.
+            </summary>
+        </member>
+        <member name="M:R2API.DirectorAPI.StageInfo.CheckStage(R2API.DirectorAPI.Stage,System.String[])">
+            <summary>
+            Returns true if the current stage matches any of the stages you specify.
+            To match a custom stage, include Stage.Custom in your stage input and specify names in customStageNames.
+            </summary>
+            <param name="stage">The stages to match with</param>
+            <param name="customStageNames">Names of the custom stages to match. Leave blank to match all custom stages</param>
+            <returns></returns>
+        </member>
+        <member name="T:R2API.DirectorAPI.StageSettings">
+            <summary>
+            A class passed to everything subscribed to stageSettingsActions that contains various settings for a stage.
+            All mods will be working off the same settings, so operators like *=,+=,-=, and /= are preferred over directly setting values.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.StageSettings.SceneDirectorMonsterCredits">
+            <summary>
+            How many credits the scene director has for monsters at the start of a stage.
+            This scales with difficulty, and thus will always be zero on the first stage.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.StageSettings.SceneDirectorInteractableCredits">
+            <summary>
+            How many credits the scene director has for interactables at the start of a stage.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.StageSettings.BonusCreditObjects">
+            <summary>
+            If the GameObject key of the dictionary is enabled, then the scene director gains the value in extra interactable credits
+            Used for things like the door in Abyssal Depths.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.StageSettings.MonsterCategoryWeights">
+            <summary>
+            The weights for each monster category on this stage.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.StageSettings.InteractableCategoryWeights">
+            <summary>
+            The weights for each interactable category on this stage.
+            </summary>
+        </member>
+        <member name="T:R2API.DirectorAPI.DirectorCardHolder">
+            <summary>
+            A wrapper class for DirectorCards. A list of these is passed to everything subscribed to monsterActions and interactableActions.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.DirectorCardHolder.Card">
+            <summary>
+            The director card. This contains the majority of the information for an interactable or monster, including the prefab.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.DirectorCardHolder.MonsterCategory">
+            <summary>
+            The monster category the card belongs to. Will be set to None for interactables.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.DirectorCardHolder.InteractableCategory">
+            <summary>
+            The interactable category the card belongs to. Will be set to none for monsters.
+            </summary>
+        </member>
+        <member name="T:R2API.DirectorAPI.MonsterFamilyHolder">
+            <summary>
+            A wrapper class for Monster Families. A list of these is passed to everything subscribed to familyActions.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterFamilyHolder.FamilyBasicMonsters">
+            <summary>
+            List of all basic monsters that can spawn during this family event.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterFamilyHolder.FamilyMinibosses">
+            <summary>
+            List of all minibosses that can spawn during this family event.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterFamilyHolder.FamilyChampions">
+            <summary>
+            List of all champions that can spawn during this family event.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterFamilyHolder.FamilyBasicMonsterWeight">
+            <summary>
+            The selection weight for basic monsters during the family event.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterFamilyHolder.FamilyMinibossWeight">
+            <summary>
+            The selection weight for minibosses during the family event.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterFamilyHolder.FamilyChampionWeight">
+            <summary>
+            The selection weight for champions during the family event.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterFamilyHolder.MinStageCompletion">
+            <summary>
+            The minimum number of stages completed for this family event to occur.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterFamilyHolder.MaxStageCompletion">
+            <summary>
+            The maximum number of stages for this family event to occur.
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterFamilyHolder.FamilySelectionWeight">
+            <summary>
+            The weight of this monster family relative to other monster families.
+            Does NOT increase the chances of a family event occuring, just the chance that this will be chosen when one does occur.
+            Support for modifying the chance of family events overall will come later (and will be in StageSettings)
+            </summary>
+        </member>
+        <member name="F:R2API.DirectorAPI.MonsterFamilyHolder.SelectionChatString">
+            <summary>
+            The message sent to chat when this family is selected.
+            </summary>
+        </member>
+        <member name="T:R2API.DirectorAPI.Helpers">
+            <summary>
+            This subclass contains helper methods for use with DirectorAPI.
+            Note that there is much more flexibility by working with the API directly through its event system.
+            The primary purpose of these helpers is to serve as example code, and to assist with very simple tasks.
+            They are NOT intended to be, or ever will be, a comprehensive way to use the DirectorAPI.
+            </summary>
+        </member>
+        <member name="T:R2API.DirectorAPI.Helpers.MonsterNames">
+            <summary>
+            This class contains static strings for each characterspawncard in the base game.
+            These can be used for matching names.
+            </summary>
+        </member>
+        <member name="T:R2API.DirectorAPI.Helpers.InteractableNames">
+            <summary>
+            This class contains static strings for each interactablespawncard in the base game.
+            These can be used for matching names.
+            </summary>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.PreventElites(System.String,System.Boolean)">
+            <summary>
+            Enables or disables elite spawns for a specific monster.
+            </summary>
+            <param name="monsterName">The name of the monster to edit</param>
+            <param name="elitesAllowed">Should elites be allowed?</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.AddNewMonster(RoR2.DirectorCard,R2API.DirectorAPI.MonsterCategory)">
+            <summary>
+            Adds a new monster to all stages.
+            </summary>
+            <param name="monsterCard">The DirectorCard for the monster</param>
+            <param name="category">The category to add the monster to</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.AddNewMonsterToStage(RoR2.DirectorCard,R2API.DirectorAPI.MonsterCategory,R2API.DirectorAPI.Stage,System.String)">
+            <summary>
+            Adds a new monster to a specific stage.
+            For custom stages use Stage.Custom and enter the name of the stage in customStageName.
+            </summary>
+            <param name="monsterCard">The DirectorCard of the monster to add</param>
+            <param name="category">The category to add the monster to</param>
+            <param name="stage">The stage to add the monster to</param>
+            <param name="customStageName">The name of the custom stage</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.AddNewInteractable(RoR2.DirectorCard,R2API.DirectorAPI.InteractableCategory)">
+            <summary>
+            Adds a new interactable to all stages.
+            </summary>
+            <param name="interactableCard">The DirectorCard for the interactable</param>
+            <param name="category">The category of the interactable</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.AddNewInteractableToStage(RoR2.DirectorCard,R2API.DirectorAPI.InteractableCategory,R2API.DirectorAPI.Stage,System.String)">
+            <summary>
+            Adds a new interactable to a specific stage.
+            For custom stages use Stage.Custom and enter the name of the stage in customStageName.
+            </summary>
+            <param name="interactableCard">The DirectorCard of the interactable</param>
+            <param name="category">The category of the interactable</param>
+            <param name="stage">The stage to add the interactable to</param>
+            <param name="customStageName">The name of the custom stage</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.RemoveExistingMonster(System.String)">
+            <summary>
+            Removes a monster from spawns on all stages.
+            </summary>
+            <param name="monsterName">The name of the monster card to remove</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.RemoveExistingMonsterFromStage(System.String,R2API.DirectorAPI.Stage,System.String)">
+            <summary>
+            Removes a monster from spawns on a specific stage.
+            For custom stages use Stage.Custom and enter the name of the stage in customStageName.
+            </summary>
+            <param name="monsterName">The name of the monster card to remove</param>
+            <param name="stage">The stage to remove on</param>
+            <param name="customStageName">The name of the custom stage</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.RemoveExistingInteractable(System.String)">
+            <summary>
+            Remove an interactable from spawns on all stages.
+            </summary>
+            <param name="interactableName">Name of the interactable to remove</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.RemoveExistingInteractableFromStage(System.String,R2API.DirectorAPI.Stage,System.String)">
+            <summary>
+            Remove an interactable from spawns on a specific stage.
+            For custom stages use Stage.Custom and enter the name of the stage in customStageName.
+            </summary>
+            <param name="interactableName">The name of the interactable to remove</param>
+            <param name="stage">The stage to remove on</param>
+            <param name="customStageName">The name of the custom stage</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.AddSceneMonsterCredits(System.Int32,R2API.DirectorAPI.Stage,System.String)">
+            <summary>
+            Adds a flat amount of monster credits to the scene director on a specific stage.
+            For custom stages use Stage.Custom and enter the name of the stage in customStageName.
+            </summary>
+            <param name="increase">The quantity to add</param>
+            <param name="stage">The stage to add on</param>
+            <param name="customStageName">The name of the custom stage</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.AddSceneInteractableCredits(System.Int32,R2API.DirectorAPI.Stage,System.String)">
+            <summary>
+            Adds a flat amount of interactable credits to the scene director on a specific stage.
+            For custom stages use Stage.Custom and enter the name of the stage in customStageName.
+            </summary>
+            <param name="increase">The quantity to add</param>
+            <param name="stage">The stage to add on</param>
+            <param name="customStageName">The name of the custom stage</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.MultiplySceneMonsterCredits(System.Int32,R2API.DirectorAPI.Stage,System.String)">
+            <summary>
+            Multiplies the scene director monster credits on a specific stage.
+            For custom stages use Stage.Custom and enter the name of the stage in customStageName.
+            </summary>
+            <param name="multiplier">The number to multiply by</param>
+            <param name="stage">The stage to multiply on</param>
+            <param name="customStageName">The name of the custom stage</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.MultiplySceneInteractableCredits(System.Int32,R2API.DirectorAPI.Stage,System.String)">
+            <summary>
+            Multiplies the scene director interactable credits on a specific stage.
+            For custom stages use Stage.Custom and enter the name of the stage in customStageName.
+            </summary>
+            <param name="multiplier">The number to multiply by</param>
+            <param name="stage">The stage to multiply on</param>
+            <param name="customStageName">The name of the custom stage</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.ReduceSceneMonsterCredits(System.Int32,R2API.DirectorAPI.Stage,System.String)">
+            <summary>
+            Divides the scene director monster credits on a specific stage.
+            For custom stages use Stage.Custom and enter the name of the stage in customStageName.
+            </summary>
+            <param name="divisor">The number to divide by</param>
+            <param name="stage">The stage to divide on</param>
+            <param name="customStageName">The name of the custom stage</param>
+        </member>
+        <member name="M:R2API.DirectorAPI.Helpers.ReduceSceneInteractableCredits(System.Int32,R2API.DirectorAPI.Stage,System.String)">
+            <summary>
+            Divides the scene director interactable credits on a specific stage.
+            For custom stages use Stage.Custom and enter the name of the stage in customStageName.
+            </summary>
+            <param name="divisor">The number to divide by</param>
+            <param name="stage">The stage to divide on</param>
+            <param name="customStageName">The name of the custom stage</param>
+        </member>
+        <member name="T:R2API.DotAPI">
+            <summary>
+            API for adding damage over time effects to the game.
+            </summary>
+        </member>
+        <member name="P:R2API.DotAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="T:R2API.DotAPI.CustomDotBehaviour">
+            <summary>
+            Allows for custom behaviours when applying the dot. EG, percentburn. <see cref="M:RoR2.DotController.AddDot(UnityEngine.GameObject,System.Single,RoR2.DotController.DotIndex,System.Single)"/>
+            </summary>
+            <param name="self"></param>
+            <param name="dotStack"></param>
+        </member>
+        <member name="T:R2API.DotAPI.CustomDotVisual">
+            <summary>
+            Allows custom visuals for your buff. think bleeding etc. <see cref="M:RoR2.DotController.FixedUpdate"/>
+            </summary>
+            <param name="self"></param>
+        </member>
+        <member name="M:R2API.DotAPI.RegisterDotDef(RoR2.DotController.DotDef,R2API.DotAPI.CustomDotBehaviour,R2API.DotAPI.CustomDotVisual)">
+            <summary>
+            customDotBehaviour code will be executed when the dot is added to the target.
+            Please refer to the game AddDot() method for example use case.
+            customDotVisual code will be executed in the FixedUpdate of the DotController.
+            Please refer to the game FixedUpdate() method for example use case.
+            </summary>
+            <param name="dotDef"></param>
+            <param name="customDotBehaviour"></param>
+            <param name="customDotVisual"></param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.DotAPI.RegisterDotDef(System.Single,System.Single,RoR2.DamageColorIndex,RoR2.BuffIndex,R2API.DotAPI.CustomDotBehaviour,R2API.DotAPI.CustomDotVisual)">
+            <summary>
+            Unrolled version of RegisterDotDef(DotController.DotDef, CustomDotBehaviour, CustomDotVisual)
+            <see cref="M:R2API.DotAPI.RegisterDotDef(RoR2.DotController.DotDef,R2API.DotAPI.CustomDotBehaviour,R2API.DotAPI.CustomDotVisual)"/>
+            </summary>
+            <param name="interval"></param>
+            <param name="damageCoefficient"></param>
+            <param name="colorIndex"></param>
+            <param name="associatedBuff"></param>
+            <param name="customDotBehaviour"></param>
+            <param name="customDotVisual"></param>
+            <returns></returns>
+        </member>
+        <member name="P:R2API.EffectAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="E:R2API.EffectAPI.GetAdditionalEntries">
+            <summary>
+            Mimics events found in CatalogModHelpers, can be used to add or sort effects.
+            </summary>
+        </member>
+        <member name="M:R2API.EffectAPI.AddEffect(UnityEngine.GameObject)">
+            <summary>
+            Creates an EffectDef from a prefab and adds it to the EffectCatalog.
+            The prefab must have an the following components: EffectComponent, VFXAttributes
+            For more control over the EffectDef, use AddEffect(EffectDef)
+            </summary>
+            <param name="effect">The prefab of the effect to be added</param>
+            <returns>True if the effect was added</returns>
+        </member>
+        <member name="M:R2API.EffectAPI.AddEffect(RoR2.EffectDef)">
+            <summary>
+            Adds an EffectDef to the EffectCatalog when the catalog inits.
+            </summary>
+            <param name="effect">The EffectDef to addZ</param>
+            <returns>False if the EffectDef was null</returns>
+        </member>
+        <member name="P:R2API.EliteAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="M:R2API.EliteAPI.Add(R2API.CustomElite)">
+            <summary>
+            Add a custom elite to the list of available elites.
+            Value for EliteDef.eliteIndex can be ignored.
+            If this is called after the ItemCatalog inits then this will return false and ignore the custom elite.
+            </summary>
+            <param name="elite">The elite to add.</param>
+            <returns>the EliteIndex of your item if added. -1 otherwise</returns>
+        </member>
+        <member name="M:R2API.EliteAPI.GetCombatDirectorEliteTiers">
+            <summary>
+            Returns the current elite tier definitions used by the Combat Director for doing its elite spawning while doing a run.
+            </summary>
+        </member>
+        <member name="M:R2API.EliteAPI.OverrideCombatDirectorEliteTiers(RoR2.CombatDirector.EliteTierDef[])">
+            <summary>
+            The EliteTierDef array is used by the Combat Director for doing its elite spawning while doing a run.
+            You can get the current array used by the director with EliteAPI.GetCombatDirectorEliteTiers()
+            </summary>
+            <param name="newEliteTiers">The new elite tiers that will be used by the combat director.</param>
+        </member>
+        <member name="M:R2API.EliteAPI.AddCustomEliteTier(RoR2.CombatDirector.EliteTierDef)">
+            <summary>
+            Allows for easily adding a new elite tier def to the combat director.
+            When adding a new elite tier,
+            do not fill the eliteTypes field if your goal is to add your custom elite in it right after.
+            Because when doing EliteAPI.Add, the API will add your elite to the specified tier automaticly.
+            Returns the elite tier (normally starts at 3, 2 vanilla tiers atm)
+            </summary>
+            <param name="eliteTierDef">The new elite tier to add.</param>
+        </member>
+        <member name="T:R2API.CustomElite">
+            <summary>
+            Class that defines a custom Elite type for use in the game
+            All Elites consistent of an Elite definition, a <see cref="T:R2API.CustomEquipment"/>
+            and a <see cref="T:R2API.CustomBuff"/>. The equipment is automatically provided to
+            the Elite when it spawns and is configured to passively apply the buff.
+            </summary>
+        </member>
+        <member name="F:R2API.CustomElite.EliteDef">
+            <summary>
+            Elite definition
+            </summary>
+        </member>
+        <member name="F:R2API.CustomElite.EliteTier">
+            <summary>
+            Elite tier, vanilla game currently have two different tiers :
+            1 for fire, lightning, and ice, and tier 2, for poison and haunted.
+            </summary>
+        </member>
+        <member name="M:R2API.CustomElite.#ctor(System.String,RoR2.EquipmentIndex,UnityEngine.Color32,System.String,System.Int32)">
+            <summary>
+            You can omit the index references for the EliteDef, as those will be filled in automatically by the API.
+            If you are doing an equipment for a custom elite, don't forget to register your CustomEquipment before too to fill the equipmentIndex field !
+            Also, don't forget to give it a valid eliteTier so that your custom elite correctly get spawned.
+            You can also make a totally new tier, by using OverrideCombatDirectorEliteTiers for example.
+            </summary>
+        </member>
+        <member name="M:R2API.CustomElite.#ctor(RoR2.EliteDef,System.Int32)">
+            <summary>
+            You can omit the index references for the EliteDef, as those will be filled in automatically by the API.
+            But don't forget to give it a valid eliteTier so that your custom elite correctly get spawned.
+            You can also make a totally new tier, by using OverrideCombatDirectorEliteTiers for example.
+            </summary>
+        </member>
+        <member name="T:R2API.FontAPI">
+            <summary>
+            API for replacing the ingame font
+            </summary>
+        </member>
+        <member name="T:R2API.FontAPI.Fonts">
+            <summary>
+            use this class to add fonts
+            </summary>
+        </member>
+        <member name="M:R2API.FontAPI.Fonts.Add(System.String)">
+            <summary>
+            for adding an TMP_FontAsset inside an seperate assetbundle (.font is loaded automatically)
+            </summary>
+            <param name="path">absolute path to the assetbundle</param>
+        </member>
+        <member name="M:R2API.FontAPI.Fonts.Add(System.Byte[])">
+            <summary>
+            for adding an TMP_FontAsset while it is still in an assetbundle
+            </summary>
+            <param name="fontFile">the assetbundle file</param>
+        </member>
+        <member name="M:R2API.FontAPI.Fonts.Add(TMPro.TMP_FontAsset)">
+            <summary>
+            for adding an TMP_FontAsset directly
+            </summary>
+            <param name="fontAsset">The loaded fontasset</param>
+        </member>
+        <member name="P:R2API.InventoryAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="P:R2API.ItemAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="M:R2API.ItemAPI.Add(R2API.CustomItem)">
+            <summary>
+            Add a custom item to the list of available items.
+            Value for ItemDef.ItemIndex can be ignored.
+            If this is called after the ItemCatalog inits then this will return false and ignore the custom item.
+            </summary>
+            <param name="item">The item to add.</param>
+            <returns>the ItemIndex of your item if added. -1 otherwise</returns>
+        </member>
+        <member name="M:R2API.ItemAPI.Add(R2API.CustomEquipment)">
+            <summary>
+            Add a custom equipment item to the list of available items.
+            Value for EquipmentDef.ItemIndex can be ignored.
+            If this is called after the EquipmentCatalog inits then this will return false and ignore the custom equipment item.
+            </summary>
+            <param name="item">The equipment item to add.</param>
+            <returns>the EquipmentIndex of your item if added. -1 otherwise</returns>
+        </member>
+        <member name="M:R2API.ItemDisplayRuleDict.Add(System.String,RoR2.ItemDisplayRule[])">
+            <summary>
+            Equivalent to using the set property of the indexer, but added bonus is the ability to ignore the array wrapper normally needed.
+            </summary>
+            <param name="CharacterModelName"></param>
+            <param name="itemDisplayRules"></param>
+        </member>
+        <member name="M:R2API.ItemDisplayRuleDict.TryGetRules(System.String,RoR2.ItemDisplayRule[]@)">
+            <summary>
+            Safe way of getting a characters rules, with the promise that the out is always filled.
+            </summary>
+            <param name="CharacterModelName"></param>
+            <param name="itemDisplayRules">The specific rules for this model, or if false is returned, the default rules.</param>
+            <returns></returns>
+        </member>
+        <member name="P:R2API.ItemDropAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="T:R2API.LanguageAPI">
+            <summary>
+            class for language files to load
+            </summary>
+        </member>
+        <member name="M:R2API.LanguageAPI.Add(System.String,System.String)">
+            <summary>
+            Adds a single languagetoken and its associated value to all languages
+            </summary>
+            <param name="key">Token the game asks</param>
+            <param name="value">Value it gives back</param>
+        </member>
+        <member name="M:R2API.LanguageAPI.Add(System.String,System.String,System.String)">
+            <summary>
+            Adds a single languagetoken and value to a specific language
+            </summary>
+            <param name="key">Token the game asks</param>
+            <param name="value">Value it gives back</param>
+            <param name="language">Language you want to add this to</param>
+        </member>
+        <member name="M:R2API.LanguageAPI.AddPath(System.String)">
+            <summary>
+            adding an file via path (.language is added automatically)
+            </summary>
+            <param name="path">absolute path to file</param>
+        </member>
+        <member name="M:R2API.LanguageAPI.Add(System.String)">
+            <summary>
+            Adding an file which is read into an string
+            </summary>
+            <param name="file">entire file as string</param>
+        </member>
+        <member name="M:R2API.LanguageAPI.Add(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Adds multiple languagetokens and value
+            </summary>
+            <param name="tokenDictionary">dictionaries of key-value (eg ["mytoken"]="mystring")</param>
+        </member>
+        <member name="M:R2API.LanguageAPI.Add(System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
+            <summary>
+            Adds multiple languagetokens and value to a specific language
+            </summary>
+            <param name="tokenDictionary">dictionaries of key-value (eg ["mytoken"]="mystring")</param>
+            <param name="language">Language you want to add this to</param>
+        </member>
+        <member name="M:R2API.LanguageAPI.Add(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.Dictionary{System.String,System.String}})">
+            <summary>
+            Adds multiple languagetokens and value to languages
+            </summary>
+            <param name="languageDictionary">dictionary of languages containing dictionaries of key-value (eg ["en"]["mytoken"]="mystring")</param>
+        </member>
+        <member name="T:R2API.LanguageAPI.LanguageOverlay">
+            <summary>
+            Manages temporary language token changes.
+            </summary>
+        </member>
+        <member name="F:R2API.LanguageAPI.LanguageOverlay.readOnlyOverlays">
+            <summary>Contains information about the language token changes this LanguageOverlay makes.</summary>
+        </member>
+        <member name="M:R2API.LanguageAPI.LanguageOverlay.Remove">
+            <summary>Undoes this LanguageOverlay's language token changes; you may safely dispose it afterwards. Requires a language reload to take effect.</summary>
+        </member>
+        <member name="M:R2API.LanguageAPI.AddOverlay(System.String,System.String)">
+            <summary>
+            Adds a single temporary language token, and its associated value, to all languages. Please add multiple instead (dictionary- or file-based signatures) where possible. Language-specific tokens, as well as overlays added later in time, will take precedence. Call LanguageOverlay.Remove() on the result to undo your change to this language token.
+            </summary>
+            <param name="key">Token the game asks</param>
+            <param name="value">Value it gives back</param>
+            <returns>A LanguageOverlay representing your language addition/override; call .Remove() on it to undo the change. May be safely disposed after calling .Remove().</returns>
+        </member>
+        <member name="M:R2API.LanguageAPI.AddOverlay(System.String,System.String,System.String)">
+            <summary>
+            Adds a single temporary language token, and its associated value, to a specific language. Please add multiple instead (dictionary- or file-based signatures) where possible. Overlays added later in time will take precedence. Call LanguageOverlay.Remove() on the result to undo your change to this language token.
+            </summary>
+            <param name="key">Token the game asks</param>
+            <param name="value">Value it gives back</param>
+            <param name="lang">Language you want to add this to</param>
+            <returns>A LanguageOverlay representing your language addition/override; call .Remove() on it to undo the change. May be safely disposed after calling .Remove().</returns>
+        </member>
+        <member name="M:R2API.LanguageAPI.AddOverlayPath(System.String)">
+            <summary>
+            Add temporary language tokens from a file via path (.language is added automatically). Call LanguageOverlay.Remove() on the result to undo all contained changes. May return null.
+            </summary>
+            <param name="path">absolute path to file</param>
+            <returns>A LanguageOverlay representing your language addition/override; call .Remove() on it to undo the change. Returns null if the target file is missing or cannot be parsed, or if no changes would otherwise be made.</returns>
+        </member>
+        <member name="M:R2API.LanguageAPI.AddOverlay(System.String)">
+            <summary>
+            Add temporary language tokens from a file via string. Call LanguageOverlay.Remove() on the result to undo all contained changes. May return null.
+            </summary>
+            <param name="file">entire file as string</param>
+            <returns>A LanguageOverlay representing your language addition/override; call .Remove() on it to undo the change. Returns null if no changes would be made.</returns>
+        </member>
+        <member name="M:R2API.LanguageAPI.AddOverlay(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Adds multiple temporary language tokens, and corresponding values, to all languages. Language-specific tokens, as well as overlays added later in time, will take precedence. Call LanguageOverlay.Remove() on the result to remove your changes to these language tokens.
+            </summary>
+            <param name="tokenDictionary">dictionaries of key-value (eg ["mytoken"]="mystring")</param>
+            <returns>A LanguageOverlay representing your language addition/override; call .Remove() on it to undo the change.</returns>
+        </member>
+        <member name="M:R2API.LanguageAPI.AddOverlay(System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
+            <summary>
+            Adds multiple temporary language tokens, and corresponding values, to a specific language. Overlays added later in time will take precedence. Call LanguageOverlay.Remove() on the result to remove your changes to these language tokens.
+            </summary>
+            <param name="tokenDictionary">dictionaries of key-value (eg ["mytoken"]="mystring")</param>
+            <param name="language">Language you want to add this to</param>
+            <returns>A LanguageOverlay representing your language addition/override; call .Remove() on it to undo the change.</returns>
+        </member>
+        <member name="M:R2API.LanguageAPI.AddOverlay(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.Dictionary{System.String,System.String}})">
+            <summary>
+            Adds multiple temporary language tokens, and corresponding values, to mixed languages. Overlays added later in time will take precedence. Call LanguageOverlay.Remove() on the result to remove your changes to these language tokens.
+            </summary>
+            <param name="languageDictionary">dictionary of languages containing dictionaries of key-value (eg ["en"]["mytoken"]="mystring")</param>
+            <returns>A LanguageOverlay representing your language addition/override; call .Remove() on it to undo the change.</returns>
+        </member>
+        <member name="T:R2API.LanguageAPI.OverlayTokenData">
+            <summary>
+            Contains information about a single temporary language token change.
+            </summary>
+        </member>
+        <member name="F:R2API.LanguageAPI.OverlayTokenData.key">
+            <summary>The token identifier to add/replace the value of.</summary>
+        </member>
+        <member name="F:R2API.LanguageAPI.OverlayTokenData.value">
+            <summary>The value to set the target token to.</summary>
+        </member>
+        <member name="F:R2API.LanguageAPI.OverlayTokenData.lang">
+            <summary>The language which the target token belongs to, if isGeneric = false.</summary>
+        </member>
+        <member name="F:R2API.LanguageAPI.OverlayTokenData.isGeneric">
+            <summary>Whether the target token is generic (applies to all languages which don't contain the token).</summary>
+        </member>
+        <member name="P:R2API.LoadoutAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="M:R2API.LoadoutAPI.AddSkill(System.Type)">
+            <summary>
+            Adds a type for a skill EntityState to the SkillsCatalog.
+            State must derive from EntityStates.EntityState.
+            Note that SkillDefs and SkillFamiles must also be added seperately.
+            </summary>
+            <param name="t">The type to add</param>
+            <returns>True if succesfully added</returns>
+        </member>
+        <member name="M:R2API.LoadoutAPI.StateTypeOf``1">
+            <summary>
+            Creates a SerializableEntityStateType with a much simpler syntax
+            Effectively the same as new SerializableEntityStateType(typeof(T))
+            </summary>
+            <typeparam name="T">The state type</typeparam>
+            <returns>The created SerializableEntityStateType</returns>
+        </member>
+        <member name="M:R2API.LoadoutAPI.AddSkillDef(RoR2.Skills.SkillDef)">
+            <summary>
+            Registers an event to add a SkillDef to the SkillDefCatalog.
+            Must be called before Catalog init (during Awake() or OnEnable())
+            </summary>
+            <param name="s">The SkillDef to add</param>
+            <returns>True if the event was registered</returns>
+        </member>
+        <member name="M:R2API.LoadoutAPI.AddSkillFamily(RoR2.Skills.SkillFamily)">
+            <summary>
+            Registers an event to add a SkillFamily to the SkillFamiliesCatalog
+            Must be called before Catalog init (during Awake() or OnEnable())
+            </summary>
+            <param name="sf">The skillfamily to add</param>
+            <returns>True if the event was registered</returns>
+        </member>
+        <member name="M:R2API.LoadoutAPI.CreateSkinIcon(UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color)">
+            <summary>
+            Creates a skin icon sprite styled after the ones already in the game.
+            </summary>
+            <param name="top">The color of the top portion</param>
+            <param name="right">The color of the right portion</param>
+            <param name="bottom">The color of the bottom portion</param>
+            <param name="left">The color of the left portion</param>
+            <returns>The icon sprite</returns>
+        </member>
+        <member name="M:R2API.LoadoutAPI.CreateSkinIcon(UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color)">
+            <summary>
+            Creates a skin icon sprite styled after the ones already in the game.
+            </summary>
+            <param name="top">The color of the top portion</param>
+            <param name="right">The color of the right portion</param>
+            <param name="bottom">The color of the bottom portion</param>
+            <param name="left">The color of the left portion</param>
+            <param name="line">The color of the dividing lines</param>
+            <returns></returns>
+        </member>
+        <member name="T:R2API.LoadoutAPI.SkinDefInfo">
+            <summary>
+            A container struct for all SkinDef parameters.
+            Use this to set skinDef values, then call CreateNewSkinDef().
+            </summary>
+        </member>
+        <member name="M:R2API.LoadoutAPI.CreateNewSkinDef(R2API.LoadoutAPI.SkinDefInfo)">
+            <summary>
+            Creates a new SkinDef from a SkinDefInfo.
+            Note that this prevents null-refs by disabling SkinDef awake while the SkinDef is being created.
+            The things that occur during awake are performed when first applied to a character instead.
+            </summary>
+            <param name="skin"></param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.LoadoutAPI.AddSkinToCharacter(UnityEngine.GameObject,R2API.LoadoutAPI.SkinDefInfo)">
+            <summary>
+            Adds a skin to the body prefab for a character.
+            Will attempt to create a default skin if one is not present.
+            Must be called during plugin Awake or OnEnable. If called afterwards the new skins must be added to bodycatalog manually.
+            </summary>
+            <param name="bodyPrefab">The body to add the skin to</param>
+            <param name="skin">The SkinDefInfo for the skin to add</param>
+            <returns>True if successful</returns>
+        </member>
+        <member name="M:R2API.LoadoutAPI.AddSkinToCharacter(UnityEngine.GameObject,RoR2.SkinDef)">
+            <summary>
+            Adds a skin to the body prefab for a character.
+            Will attempt to create a default skin if one is not present.
+            Must be called during plugin Awake or OnEnable. If called afterwards the new skins must be added to bodycatalog manually.
+            </summary>
+            <param name="bodyPrefab">The body to add the skin to</param>
+            <param name="skin">The SkinDef to add</param>
+            <returns>True if successful</returns>
+        </member>
+        <member name="P:R2API.LobbyConfigAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="M:R2API.LobbyConfigAPI.LobbyCategory.#ctor(System.String,UnityEngine.Color,System.String)">
+            <summary>
+            Adds a rule category to the lobby.
+            </summary>
+            <param name="title">The category's title.</param>
+            <param name="color">The category's color</param>
+            <param name="description">Should the category be empty, you can show this description.</param>
+        </member>
+        <member name="M:R2API.LobbyConfigAPI.LobbyCategory.#ctor(RoR2.RuleCategoryDef)">
+            <summary>
+            Wraps a rule category for the lobby.
+            </summary>
+            <param name="category">The category.</param>
+        </member>
+        <member name="M:R2API.LobbyConfigAPI.LobbyCategory.PushRule``1(R2API.LobbyConfigAPI.LobbyRule{``0})">
+            <summary>
+            Adds a rule to the category. You cannot add choices to that rule after pushing it.
+            </summary>
+            <param name="rule">The rule to add.</param>
+            <typeparam name="T">The type of value this rule holds.</typeparam>
+            <returns>'this', for chaining.</returns>
+        </member>
+        <member name="M:R2API.LobbyConfigAPI.LobbyCategory.AddChildCategory(R2API.LobbyConfigAPI.LobbyCategory)">
+            <summary>
+            Adds a child to this category.
+            The child will get hidden should the parent be collapsed.
+            </summary>
+            <param name="category">The child.</param>
+            <returns>'this', for chaining.</returns>
+        </member>
+        <member name="P:R2API.LobbyConfigAPI.LobbyRule`1.Value">
+            <summary>
+            Value of the current choice of the rule.
+            </summary>
+        </member>
+        <member name="E:R2API.LobbyConfigAPI.LobbyRule`1.ValueChanged">
+            <summary>
+            Gets invoked if the rule is added to a category and the value changed.
+            Sender is 'this', args is 'this.Value'.
+            </summary>
+        </member>
+        <member name="M:R2API.LobbyConfigAPI.LobbyRule`1.#ctor">
+            <summary>
+            Construct a rule. Does not affect the game until you push the rule to a category.
+            </summary>
+        </member>
+        <member name="M:R2API.LobbyConfigAPI.LobbyRule`1.AddChoice(`0,System.String,System.String,UnityEngine.Color,UnityEngine.Color,System.String)">
+            <summary>
+            Adds a choice to the rule.
+            </summary>
+            <param name="value">The value this choice represents.</param>
+            <param name="title">Tooltip title.</param>
+            <param name="description">Tooltip description.</param>
+            <param name="titleColor"></param>
+            <param name="descriptionColor"></param>
+            <param name="sprite">A path to the sprite for this choice.</param>
+            <returns>'this', for chaining.</returns>
+        </member>
+        <member name="M:R2API.LobbyConfigAPI.LobbyRule`1.MakeValueDefault(`0)">
+            <summary>
+            Set the default value for this rule.
+            </summary>
+            <param name="value">The value for which the choice will be marked as default.</param>
+            <returns>'this', for chaining.</returns>
+        </member>
+        <member name="M:R2API.LobbyConfigAPI.LobbyRule`1.AddChoice(`0,System.String,System.String,UnityEngine.Color,UnityEngine.Color,System.String,System.String)">
+            <summary>
+            Adds a choice to the rule.
+            </summary>
+            <param name="value">The value this choice represents.</param>
+            <param name="title">Tooltip title.</param>
+            <param name="description">Tooltip description.</param>
+            <param name="titleColor"></param>
+            <param name="descriptionColor"></param>
+            <param name="sprite">A path to the sprite for this choice.</param>
+            <param name="name">An internal name for this choice.</param>
+            <returns>'this', for chaining.</returns>
+        </member>
+        <member name="M:R2API.LobbyConfigAPI.AddCategory(System.String,UnityEngine.Color,System.String)">
+            <summary>
+            Adds a rule category to the lobby. If a category with the same title already exists, will return that.
+            </summary>
+            <param name="title">The category's title.</param>
+            <param name="color">The category's color</param>
+            <param name="emptyDescription">Should the category be empty, you can show this description.</param>
+            <returns>The RuleCategoryDef, keep if you want to add rules.</returns>
+        </member>
+        <member name="M:R2API.LobbyConfigAPI.AddToCategory``1(RoR2.RuleCategoryDef,R2API.LobbyConfigAPI.LobbyRule{``0})">
+            <summary>
+            Adds a rule to the category. DO NOT ADD CHOICES AFTER THIS.
+            </summary>
+            <param name="category">The category to add this rule to.</param>
+            <param name="rule">The rule to add.</param>
+            <typeparam name="T">The type of value this rule holds.</typeparam>
+        </member>
+        <member name="M:R2API.MiscHelpers.KeyValuePairExtensions.Deconstruct``2(System.Collections.Generic.KeyValuePair{``0,``1},``0@,``1@)">
+            <summary>
+            Extension to allow tuple style deconstruction of keys and values when enumerating a dictionary.
+            Example: foreach(var (key, value) in myDictionary)
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="kvp"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="P:R2API.Networking.NetworkingAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="M:R2API.Networking.NetworkingAPI.GetNetworkHash(System.Type)">
+            <summary>
+            <para>Used for generating and retrieving hash when registering messages.</para>
+            <para>Also used when looking up the TypeCode when sending / retrieving the Header</para>
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="T:R2API.Networking.NetworkingHelpers">
+            <summary>
+            Helper functions for various RoR2 networking needs
+            </summary>
+        </member>
+        <member name="P:R2API.OrbAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="M:R2API.OrbAPI.AddOrb(System.Type)">
+            <summary>
+            Adds an Orb to the orb catalog.
+            This must be called during plugin Awake() or OnEnable().
+            The type must be a subclass of RoR2.Orbs.Orb
+            </summary>
+            <param name="t">The type of the orb being added</param>
+            <returns>True if orb will be added</returns>
+        </member>
+        <member name="P:R2API.PrefabAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="M:R2API.PrefabAPI.InstantiateClone(UnityEngine.GameObject,System.String,System.Boolean,System.String,System.String,System.Int32)">
+            <summary>
+            Duplicates a GameObject and leaves it in a "sleeping" state where it is inactive, but becomes active when spawned.
+            Also registers the clone to network if registerNetwork is not set to false.
+            Do not override the file, member, and line number parameters. They are used to generate a unique hash for the network ID.
+            </summary>
+            <param name="g">The GameObject to clone</param>
+            <param name="nameToSet">The name to give the clone (Should be unique)</param>
+            <param name="registerNetwork">Should the object be registered to network</param>
+            <returns>The GameObject of the clone</returns>
+        </member>
+        <member name="M:R2API.PrefabAPI.RegisterNetworkPrefab(UnityEngine.GameObject,System.String,System.String,System.Int32)">
+            <summary>
+            Registers a prefab so that NetworkServer.Spawn will function properly with it.
+            Only will work on prefabs with a NetworkIdentity component.
+            Is never needed for existing objects unless you have cloned them.
+            Do not override the file, member, and line number parameters. They are used to generate a unique hash for the network ID.
+            </summary>
+            <param name="g">The prefab to register</param>
+        </member>
+        <member name="M:R2API.R2API.IsLoaded(System.String)">
+            <summary>
+            Return true if the specified submodule is loaded.
+            </summary>
+            <param name="submodule">nameof the submodule</param>
+        </member>
+        <member name="T:R2API.ResourcesAPI">
+            <summary>
+            Allow to register AssetBundles for Mod Makers.
+            </summary>
+        </member>
+        <member name="P:R2API.ResourcesAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="M:R2API.ResourcesAPI.AddProvider(R2API.IResourceProvider)">
+            <summary>
+            Add an AssetBundleResourcesProvider to the API.
+            A prefix usually looks like this: "@MyModPrefix"
+            More information on the R2API Wiki.
+            </summary>
+            <param name="provider">assetbundle provider to give, usually made with an AssetBundleResourcesProvider(prefix, assetbundle)</param>
+        </member>
+        <member name="M:R2API.SkillAPI.AddSkill(System.Type)">
+            <summary>
+            Adds a type for a skill EntityState to the SkillsCatalog.
+            State must derive from EntityStates.EntityState.
+            Note that SkillDefs and SkillFamiles must also be added seperately.
+            </summary>
+            <param name="t">The type to add</param>
+            <returns>True if succesfully added</returns>
+        </member>
+        <member name="M:R2API.SkillAPI.AddSkillDef(RoR2.Skills.SkillDef)">
+            <summary>
+            Registers an event to add a SkillDef to the SkillDefCatalog.
+            Must be called before Catalog init (during Awake() or OnEnable())
+            </summary>
+            <param name="s">The SkillDef to add</param>
+            <returns>True if the event was registered</returns>
+        </member>
+        <member name="M:R2API.SkillAPI.AddSkillFamily(RoR2.Skills.SkillFamily)">
+            <summary>
+            Registers an event to add a SkillFamily to the SkillFamiliesCatalog
+            Must be called before Catalog init (during Awake() or OnEnable())
+            </summary>
+            <param name="sf">The skillfamily to add</param>
+            <returns>True if the event was registered</returns>
+        </member>
+        <member name="T:R2API.SkinAPI.SkinDefInfo">
+            <summary>
+            A container struct for all SkinDef parameters.
+            Use this to set skinDef values, then call CreateNewSkinDef().
+            </summary>
+        </member>
+        <member name="M:R2API.SkinAPI.CreateNewSkinDef(R2API.SkinAPI.SkinDefInfo)">
+            <summary>
+            Creates a new SkinDef from a SkinDefInfo.
+            Note that this prevents null-refs by disabling SkinDef awake while the SkinDef is being created.
+            The things that occur during awake are performed when first applied to a character instead.
+            </summary>
+            <param name="skin"></param>
+            <returns></returns>
+        </member>
+        <member name="T:R2API.SoundAPI">
+            <summary>
+            API for adding music with Wwise
+            </summary>
+        </member>
+        <member name="M:R2API.SoundAPI.LoadBanks">
+            <summary>
+            Loads all the banks, can only be called once and after RoR2.RoR2Application.OnLoad because of the initialization of the init bank
+            </summary>
+        </member>
+        <member name="T:R2API.SoundAPI.SoundBanks">
+            <summary>
+            class for SoundBanks to load
+            </summary>
+        </member>
+        <member name="F:R2API.SoundAPI.SoundBanks.Loaded">
+            <summary>
+            Makes sure to correctly load banks added before or after RoR2.RoR2Application.OnLoad()
+            </summary>
+        </member>
+        <member name="M:R2API.SoundAPI.SoundBanks.Add(System.Byte[])">
+            <summary>
+            Adds a soundbank to load, returns the ID used for unloading
+            </summary>
+            <param name="bank">byte array of the entire .bnk file</param>
+        </member>
+        <member name="M:R2API.SoundAPI.SoundBanks.Add(System.String)">
+            <summary>
+            Adds an external soundbank to load, returns the ID used for unloading (.sound files are loaded automatically)
+            </summary>
+            <param name="path">the absolute path to the file</param>
+        </member>
+        <member name="M:R2API.SoundAPI.SoundBanks.Remove(System.UInt32)">
+            <summary>
+            Unloads an bank using the ID (ID is returned at the Add() of the bank)
+            </summary>
+            <param name="ID">BankID</param>
+            <returns></returns>
+        </member>
+        <member name="T:R2API.SoundAPI.SoundBanks.Bank">
+            <summary>
+            Class containing all the information of a bank
+            </summary>
+        </member>
+        <member name="F:R2API.SoundAPI.SoundBanks.Bank._bankIteration">
+            <summary>
+            Number keeping track of PublicID to give
+            </summary>
+        </member>
+        <member name="F:R2API.SoundAPI.SoundBanks.Bank.BankData">
+            <summary>
+            BankData supplied by the user
+            </summary>
+        </member>
+        <member name="F:R2API.SoundAPI.SoundBanks.Bank.PublicID">
+            <summary>
+            Identifier for the User
+            </summary>
+        </member>
+        <member name="F:R2API.SoundAPI.SoundBanks.Bank.Memory">
+            <summary>
+            Pointer for the wwise engine
+            </summary>
+        </member>
+        <member name="F:R2API.SoundAPI.SoundBanks.Bank.BankID">
+            <summary>
+            Identifier for the engine
+            </summary>
+        </member>
+        <member name="M:R2API.SoundAPI.SoundBanks.Bank.Load">
+            <summary>
+            Loads the bank into the wwise engine
+            </summary>
+        </member>
+        <member name="M:R2API.SoundAPI.SoundBanks.Bank.UnLoad">
+            <summary>
+            Unloads the bank from the wwise engine
+            </summary>
+            <returns>The AKRESULT of unloading itself</returns>
+        </member>
+        <member name="F:R2API.SoundAPI.SoundBanks.soundBanks">
+            <summary>
+            List of all the Banks
+            </summary>
+        </member>
+        <member name="P:R2API.SurvivorAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="M:R2API.SurvivorAPI.AddSurvivor(RoR2.SurvivorDef)">
+            <summary>
+            Add a SurvivorDef to the list of available survivors.
+            This must be called before the SurvivorCatalog inits, so before plugin.Start()
+            Value for SurvivorIndex is ignored by game code so can be left blank
+            If this is called after the SurvivorCatalog inits then this will return false and ignore the survivor
+            Can optionally specify a name for the survivor that will be logged with the mod info.
+            The survivor prefab must be non-null
+            </summary>
+            <param name="survivor">The survivor to add.</param>
+            <returns>true if survivor will be added</returns>
+        </member>
+        <member name="T:R2API.UnbundledResourcesProvider">
+            <summary>
+            This class allows loading of resources not stored in an assetbundle with Resources.Load. Primary use would be for generating an item icon in code.
+            </summary>
+        </member>
+        <member name="P:R2API.UnlockablesAPI.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="P:R2API.UnlockablesAPI.AbleToAdd">
+            <summary>
+            Returns true if AddUnlockable can be called
+            </summary>
+        </member>
+        <member name="M:R2API.UnlockablesAPI.AddUnlockable``1(System.Boolean)">
+            <summary>
+            Adds an unlockable type and queues it to be registered
+            In the vast majority of cases the type used should inherit from ModdedUnlockable, which handles most of the messy stuff for you
+            </summary>
+            <typeparam name="TUnlockable">The type that represents the achievement</typeparam>
+            <param name="serverTracked">True if the achievement tracking is host side, false if client side</param>
+        </member>
+        <member name="M:R2API.UnlockablesAPI.AddUnlockableOnly(System.String,System.Boolean,System.String,System.String)">
+            <summary>
+            Adds an unlockable without a corresponding achievement. Generally useful for adding behind the scenes unlockables similar to finding all newt altars and eclipse tracking
+            </summary>
+            <param name="identifier"></param>
+            <param name="hidden"></param>
+            <param name="nameToken"></param>
+            <param name="displayModelPath"></param>
+        </member>
+        <member name="T:R2API.Utils.R2APISubmoduleDependency">
+            <summary>
+            Attribute to have at the top of your BaseUnityPlugin class if you want to load a specific R2API Submodule.
+            Parameter(s) are the nameof the submodules.
+            e.g: [R2APISubmoduleDependency("SurvivorAPI", "ItemAPI")]
+            </summary>
+        </member>
+        <member name="T:R2API.Utils.APISubmoduleHandler">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:R2API.Utils.APISubmoduleHandler.IsLoaded(System.String)">
+            <summary>
+            Return true if the specified submodule is loaded.
+            </summary>
+            <param name="submodule">nameof the submodule</param>
+        </member>
+        <member name="M:R2API.Utils.EnumerableExtensions.ForEachTry``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0},System.Collections.Generic.IDictionary{``0,System.Exception})">
+            <summary>
+            ForEach but with a try catch in it.
+            </summary>
+            <param name="list">the enumerable object</param>
+            <param name="action">the action to do on it</param>
+            <param name="exceptions">the exception dictionary that will get filled, null by default if you simply want to silence the errors if any pop.</param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:R2API.Utils.ChatMessage.Send(System.String)">
+            <summary>
+            Send a message to the chat
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:R2API.Utils.ChatMessage.Send(System.String,System.String)">
+            <summary>
+            Send a message to the chat in the format "messageFrom: message"
+            </summary>
+            <param name="message"></param>
+            <param name="messageFrom"></param>
+        </member>
+        <member name="P:R2API.Utils.CommandHelper.Loaded">
+            <summary>
+            Return true if the submodule is loaded.
+            </summary>
+        </member>
+        <member name="M:R2API.Utils.CommandHelper.AddToConsoleWhenReady">
+            <summary>
+            Scans the calling assembly for ConCommand attributes and Convar fields and adds these to the console.
+            This method may be called at any time.
+            </summary>
+        </member>
+        <member name="M:R2API.Utils.CommandHelper.RegisterCommands(RoR2.Console)">
+            <summary>
+            Exactly the same as AddToConsoleWhenReady(): use that method instead.
+            </summary>
+        </member>
+        <member name="T:R2API.Utils.DirectMessage">
+            <summary>
+            Class for sending messages directly to singular clients. Mostly useful for Dedicated servers.
+            </summary>
+        </member>
+        <member name="M:R2API.Utils.DirectMessage.GetConnectionNetworkUsers(UnityEngine.Networking.NetworkConnection)">
+            <summary>
+            returns NetworkUsers associated  to a NetworkConnection
+            </summary>
+            <param name="conn"></param>
+            <returns>returns NetworkUsers associated  to a NetworkConnection</returns>
+        </member>
+        <member name="M:R2API.Utils.DirectMessage.ResolveUserToConnection(RoR2.NetworkUser)">
+            <summary>
+            Converts NetworkUser to NetworkConnection
+            </summary>
+            <param name="user"></param>
+            <returns>NetworkUser's NetworkConnection</returns>
+        </member>
+        <member name="M:R2API.Utils.DirectMessage.SendDirectMessage(System.String,UnityEngine.Networking.NetworkConnection)">
+            <summary>
+            Sends a string directly to a connection. Useful for when you don't want to take advantage of any preformatted string found in RoR2.Chat.
+            </summary>
+            <param name="message">The message to send</param>
+            <param name="connection">The network connection to send to.</param>
+        </member>
+        <member name="M:R2API.Utils.DirectMessage.SendDirectMessage(System.String,RoR2.NetworkUser)">
+            <summary>
+            Sends a string directly to a user. Useful for when you don't want to take advantage of any preformatted string found in RoR2.Chat.
+            </summary>
+            <param name="message">The message to send</param>
+            <param name="user">The network user to send to.</param>
+        </member>
+        <member name="M:R2API.Utils.DirectMessage.SendDirectMessage(RoR2.Chat.ChatMessageBase,UnityEngine.Networking.NetworkConnection)">
+            <summary>
+            Sends a ChatMessage directly to a connection. Checkout RoR2.Chat for possible chatmessage types.
+            </summary>
+            <param name="message">The message to send</param>
+            <param name="connection">The network connection to send to.</param>
+        </member>
+        <member name="T:R2API.Utils.CompatibilityLevel">
+            <summary>
+            Enum used for telling whether or not the mod should be needed by everyone in multiplayer games.
+            Also can specify if the mod does not work in multiplayer.
+            </summary>
+        </member>
+        <member name="T:R2API.Utils.VersionStrictness">
+            <summary>
+            Enum used for telling whether or not the same mod version should be used by both the server and the clients.
+            This enum is only useful if CompatibilityLevel.EveryoneMustHaveMod was chosen.
+            </summary>
+        </member>
+        <member name="T:R2API.Utils.NetworkCompatibility">
+            <summary>
+            Attribute to have at the top of your BaseUnityPlugin class if
+            you want to specify if the mod should be installed by everyone in multiplayer games or not.
+            If the mod is required to be installed by everyone, you'll need to also specify if the same mod version should be used by everyone or not.
+            By default, it's supposed that everyone needs the mod and the same version.
+            e.g: [NetworkCompatibility(CompatibilityLevel.NoNeedForSync)]
+            </summary>
+        </member>
+        <member name="P:R2API.Utils.NetworkCompatibility.CompatibilityLevel">
+            <summary>
+            Used for telling whether or not the mod should be needed by everyone in multiplayer games.
+            </summary>
+        </member>
+        <member name="P:R2API.Utils.NetworkCompatibility.VersionStrictness">
+            <summary>
+            Enum used for telling whether or not the same mod version should be used by both the server and the clients.
+            This enum is only useful if CompatibilityLevel.EveryoneMustHaveMod was chosen.
+            </summary>
+        </member>
+        <member name="T:R2API.Utils.ManualNetworkRegistrationAttribute">
+            <summary>
+            Forward declare this attribute in your plugin assembly
+            and use this one instead if you are already registering your plugin yourself
+            </summary>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetFieldCached``1(System.String)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.FieldInfo"/> of the type by name and caches it
+            </summary>
+            <typeparam name="T">The type to search</typeparam>
+            <param name="name">The name of the field to find</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetFieldCached(System.Type,System.String)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.FieldInfo" /> of the type by name and caches it
+            </summary>
+            <param name="T">The type to search</param>
+            <param name="name">The name of the field to find</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetFieldValue``1(System.Object,System.String)">
+            <summary>
+            Gets the value of the field on the object
+            </summary>
+            <typeparam name="TReturn">The type of the return value</typeparam>
+            <param name="fieldName">The name of the field to get the value of</param>
+            <param name="instance">The object to get the field's value from</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetFieldValue``1(System.Type,System.String)">
+            <summary>
+            Gets the value of the specified static field on the specified static type
+            </summary>
+            <typeparam name="TReturn">The return type</typeparam>
+            <param name="staticType">The name of the static field to get the value of</param>
+            <param name="fieldName">The type to get the specified static field's value on</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.SetFieldValue``1(System.Object,System.String,``0)">
+            <summary>
+            Sets the value of the specified field on the specified object; if the object is a struct use
+            <see cref="M:R2API.Utils.Reflection.SetStructFieldValue``2(``0@,System.String,``1)"/> instead
+            </summary>
+            <typeparam name="TValue">The type of the value to set</typeparam>
+            <param name="instance">The name of the field to set the value of</param>
+            <param name="fieldName">The type to set the specified field's value on</param>
+            <param name="value">The value to set</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.SetFieldValue``1(System.Type,System.String,``0)">
+            <summary>
+            Sets the value of the specified static field on the specified static type
+            </summary>
+            <typeparam name="TValue">The type of the value to set</typeparam>
+            <param name="staticType">The name of the static field to set the value of</param>
+            <param name="fieldName">The type to set the specified static field's value on</param>
+            <param name="value">The value to set</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.SetStructFieldValue``2(``0@,System.String,``1)">
+            <summary>
+            Sets the value of the specified field on the specified struct
+            </summary>
+            <typeparam name="TInstance">The type of the instance of the struct</typeparam>
+            <typeparam name="TValue">The type of the value to set</typeparam>
+            <param name="instance">The name of the field to set the value of</param>
+            <param name="fieldName">The type to set the specified field's value on</param>
+            <param name="value">The value to set the field to</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetFieldFull(System.Type,System.String)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.FieldInfo"/> on the specified <see cref="T:System.Type"/> and searches base types if not found.
+            </summary>
+            <param name="T">The <see cref="T:System.Type"/> to search and get base types from</param>
+            <param name="name">The name of the property to search for.</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetPropertyCached``1(System.String)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.PropertyInfo"/> of the type by name
+            </summary>
+            <typeparam name="T">The type on which to find the property</typeparam>
+            <param name="name">The name of the property to get</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetPropertyCached(System.Type,System.String)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.PropertyInfo"/> of the type by name
+            </summary>
+            <param name="T">The type to get the <see cref="T:System.Reflection.PropertyInfo"/> from</param>
+            <param name="name">The name of the property to get</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetPropertyValue``1(System.Object,System.String)">
+            <summary>
+            Gets the value of the property on the specified object; if the object is a struct use
+            <see cref="M:R2API.Utils.Reflection.GetStructPropertyValue``2(``0@,System.String)"></see> instead
+            </summary>
+            <typeparam name="TReturn">The type of the return value</typeparam>
+            <param name="instance">The object to get the property's value from</param>
+            <param name="propName">The name of the field to get the value of</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetPropertyValue``1(System.Type,System.String)">
+            <summary>
+            Gets the value of the static property on the specified static type
+            </summary>
+            <typeparam name="TReturn">The return type</typeparam>
+            <param name="staticType">The name of the static field to get the value of</param>
+            <param name="propName">The type to get the specified static property's value on</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.SetPropertyValue``1(System.Object,System.String,``0)">
+            <summary>
+            Sets the value of the property on the specified class; if you're setting the property on a
+            struct use <see cref="M:R2API.Utils.Reflection.SetStructPropertyValue``2(``0@,System.String,``1)"/> instead
+            </summary>
+            <typeparam name="TValue">The type of the value to set</typeparam>
+            <param name="instance">The name of the field to set the value of</param>
+            <param name="propName">The type to set the specified property's value on</param>
+            <param name="value">The value to set</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.SetPropertyValue``1(System.Type,System.String,``0)">
+            <summary>
+            Sets the value of the static property on the specified static class
+            </summary>
+            <typeparam name="TValue">The type of the value to set</typeparam>
+            <param name="staticType">The name of the static field to set the value of</param>
+            <param name="propName">The type to set the specified static property's value on</param>
+            <param name="value">The value to set the property to</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.SetStructPropertyValue``2(``0@,System.String,``1)">
+            <summary>
+            Sets the value of the specified property on the specified struct
+            </summary>
+            <typeparam name="TInstance">The type of the instance of the struct</typeparam>
+            <typeparam name="TValue">The type of the value to set</typeparam>
+            <param name="instance">The name of the field to set the value of</param>
+            <param name="propName">The type to set the specified property's value on</param>
+            <param name="value">The value to set the property to</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetStructPropertyValue``2(``0@,System.String)">
+            <summary>
+            Gets the value of the specified property on the specified struct
+            </summary>
+            <typeparam name="TInstance">The type of the struct</typeparam>
+            <typeparam name="TValue">The type of the value to set</typeparam>
+            <param name="instance">The name of the field to set the value of</param>
+            <param name="propName">The type to set the specified property's value on</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetMethodCached``1(System.String)">
+            <summary>
+            Gets the method on the specified type and caches it
+            </summary>
+            <typeparam name="T">The type to search</typeparam>
+            <param name="name">The name of the method to find</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetMethodCached(System.Type,System.String)">
+            <summary>
+            Gets the method on the specified static type and caches it
+            </summary>
+            <param name="T">The type to search</param>
+            <param name="name">The name of the method to find</param>
+            <returns>The found <see cref="T:System.Reflection.MethodInfo"/></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetMethodWithConstructedGenericParameter(System.Type,System.String,System.Type)">
+            <summary>
+            Gets the generic method of the specified type with the specified generic type definition parameter
+            </summary>
+            <param name="T">The type to search</param>
+            <param name="name">The name of the method to find</param>
+            <param name="genericTypeDefinition">The generic type definition parameter</param>
+            <returns>The found <see cref="T:System.Reflection.MethodInfo"/></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetMethodCached``1(System.String,System.Type[])">
+            <summary>
+            Gets the method on the specified type and caches it. This overload is used when the method is ambiguous
+            </summary>
+            <typeparam name="T">The type to search</typeparam>
+            <param name="name">The name of the method to find</param>
+            <param name="argumentTypes">The types of the argument</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetMethodCached(System.Type,System.String,System.Type[])">
+            <summary>
+            Gets the method on the specified static type and caches it. This overload is used when the method is ambiguous
+            </summary>
+            <param name="T">The type to search</param>
+            <param name="name">The name of the method to find</param>
+            <param name="argumentTypes">The types of the argument</param>
+        </member>
+        <member name="M:R2API.Utils.Reflection.InvokeMethod``1(System.Object,System.String)">
+            <summary>
+            Invoke a method on the specified object by name
+            </summary>
+            <typeparam name="TReturn">The return type of the method</typeparam>
+            <param name="instance">The object to invoke the method on</param>
+            <param name="methodName">The name of the method to invoke</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.InvokeMethod``1(System.Type,System.String)">
+            <summary>
+            Invoke a static method on the specified type by name
+            </summary>
+            <typeparam name="TReturn">The return type of the method</typeparam>
+            <param name="staticType">The static type to search</param>
+            <param name="methodName">The name of the method to invoke</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.InvokeMethod(System.Object,System.String)">
+            <summary>
+            Invoke a method on the specified object by name
+            </summary>
+            <param name="instance">The object to invoke the method on</param>
+            <param name="methodName">The name of the method to invoke</param>
+        </member>
+        <member name="M:R2API.Utils.Reflection.InvokeMethod(System.Type,System.String)">
+            <summary>
+            Invoke a static method on the specified type by name
+            </summary>
+            <param name="staticType">The static type to search</param>
+            <param name="methodName">The name of the method to invoke</param>
+        </member>
+        <member name="M:R2API.Utils.Reflection.InvokeMethod``1(System.Object,System.String,System.Object[])">
+            <summary>
+            Invoke a method on the specified object by name with parameters
+            </summary>
+            <typeparam name="TReturn">The return type of the method</typeparam>
+            <param name="instance">The object to invoke the method on</param>
+            <param name="methodName">The name of the method to invoke</param>
+            <param name="methodParams"></param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.InvokeMethod``1(System.Type,System.String,System.Object[])">
+            <summary>
+            Invoke a static method on the specified type by name with parameters
+            </summary>
+            <typeparam name="TReturn">The return type of the method</typeparam>
+            <param name="staticType">The static type to search</param>
+            <param name="methodName">The name of the method to invoke</param>
+            <param name="methodParams">The method parameters</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.InvokeMethod(System.Object,System.String,System.Object[])">
+            <summary>
+            Invoke a method on the specified object by name with parameters
+            </summary>
+            <param name="instance">The object to invoke the method on</param>
+            <param name="methodName">The name of the method to invoke</param>
+            <param name="methodParams"></param>
+        </member>
+        <member name="M:R2API.Utils.Reflection.InvokeMethod(System.Type,System.String,System.Object[])">
+            <summary>
+            Invoke a static method on the specified type by name with parameters
+            </summary>
+            <param name="staticType">The static type to search</param>
+            <param name="methodName">The name of the method to invoke</param>
+            <param name="methodParams"></param>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetConstructorCached``1(System.Type[])">
+            <summary>
+            Gets the constructor on the specified type with specified arguments and caches it
+            </summary>
+            <typeparam name="T">The type to search</typeparam>
+            <param name="argumentTypes">The types of the arguments on the constructor to find</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetConstructorCached(System.Type,System.Type[])">
+            <summary>
+            Gets the constructor on the specified static type with specified arguments and caches it
+            </summary>
+            <param name="T">The type to search</param>
+            <param name="argumentTypes">The types of the arguments on the constructor to find</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetNestedType``1(System.String)">
+            <summary>
+            Gets the nested type on the specified type
+            </summary>
+            <typeparam name="T">The type to search</typeparam>
+            <param name="name">The name of the nested type to find</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetNestedTypeCached``1(System.String)">
+            <summary>
+            Gets the nested type on the specified type
+            </summary>
+            <typeparam name="T">The type to search</typeparam>
+            <param name="name">The name of the nested type to find</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.GetNestedTypeCached(System.Type,System.String)">
+            <summary>
+            Gets the nested type on the specified static type
+            </summary>
+            <param name="T">The static type to search</param>
+            <param name="name">The name of the nested type to find</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.Instantiate(System.Type)">
+            <summary>
+            Instatiates the specified type
+            </summary>
+            <param name="type">The type to instantiate</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.Instantiate(System.Type,System.Object[])">
+            <summary>
+            Instatiates the specified type with specified constructor arguments
+            </summary>
+            <param name="type">The type to instantiate</param>
+            <param name="constructorArguments">The constructor arguments</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.InstantiateGeneric``1(System.Type)">
+            <summary>
+            Instantiates the specified generic type
+            </summary>
+            <typeparam name="TClass">The type to instantiate</typeparam>
+            <param name="typeArgument">The type of the generic type argument</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.InstantiateGeneric``1(System.Type[])">
+            <summary>
+            Instantiates the specified generic types
+            </summary>
+            <typeparam name="TClass">The type to instantiate</typeparam>
+            <param name="typeArgument">The types of the generic type arguments</param>
+            <returns></returns>
+        </member>
+        <member name="M:R2API.Utils.Reflection.InstantiateList(System.Type)">
+            <summary>
+            Instantiates a list of the specified generic type
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
