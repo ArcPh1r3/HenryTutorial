@@ -33,7 +33,7 @@ namespace HenryMod
         //   this shouldn't even have to be said
         public const string MODUID = "com.rob.HenryMod";
         public const string MODNAME = "HenryMod";
-        public const string MODVERSION = "0.0.1";
+        public const string MODVERSION = "0.0.2";
 
         // a prefix for name tokens to prevent conflicts
         public const string developerPrefix = "ROB";
