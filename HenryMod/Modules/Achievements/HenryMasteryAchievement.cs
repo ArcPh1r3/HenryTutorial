@@ -15,7 +15,7 @@ namespace HenryMod.Modules.Achievements
         public override String AchievementNameToken { get; } = HenryPlugin.developerPrefix + "_HENRY_BODY_MASTERYUNLOCKABLE_ACHIEVEMENT_NAME";
         public override String AchievementDescToken { get; } = HenryPlugin.developerPrefix + "_HENRY_BODY_MASTERYUNLOCKABLE_ACHIEVEMENT_DESC";
         public override String UnlockableNameToken { get; } = HenryPlugin.developerPrefix + "_HENRY_BODY_MASTERYUNLOCKABLE_UNLOCKABLE_NAME";
-        protected override CustomSpriteProvider SpriteProvider { get; } = new CustomSpriteProvider("@Henry:Assets/Henry/Icons/texMainSkin.png");
+        protected override CustomSpriteProvider SpriteProvider { get; } = new CustomSpriteProvider("@Henry:Assets/HenryAssets/Icons/texMasteryAchievement.png");
 
         public override int LookUpRequiredBodyIndex()
         {

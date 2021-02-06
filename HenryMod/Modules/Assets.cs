@@ -16,7 +16,7 @@ namespace HenryMod.Modules
         //internal static GameObject swordHitImpactEffect;
 
         // cache these and use to create our own materials
-        public static Shader hotpoo = Resources.Load<Shader>("shaders/deferred/hgstandard");
+        public static Shader hotpoo = Resources.Load<Shader>("Shaders/Deferred/HGStandard");
         public static Material commandoMat;
 
         internal static void PopulateAssets()

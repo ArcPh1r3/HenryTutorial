@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Modules\Survivors\Henry.cs~RF6221a098.TMP" />
     <None Remove="PleaseChangeThisNameInYourProjectOrElseYouWillCauseConflicts" />
   </ItemGroup>
 
@@ -103,10 +104,6 @@
     <Reference Include="Zio">
       <HintPath>..\libs\Zio.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="EntityStates\" />
   </ItemGroup>
 
 </Project>

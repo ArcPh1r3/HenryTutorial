@@ -1,10 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using R2API;
+using HenryMod.SkillStates;
+using HenryMod.SkillStates.BaseStates;
 
 namespace HenryMod.Modules
 {
-    class States
+    public static class States
     {
+        public static void RegisterStates()
+        {
+            LoadoutAPI.AddSkill(typeof(BaseMeleeAttack));
+            LoadoutAPI.AddSkill(typeof(SlashCombo));
+            LoadoutAPI.AddSkill(typeof(Shoot));
+            LoadoutAPI.AddSkill(typeof(Roll));
+            LoadoutAPI.AddSkill(typeof(ThrowBomb));
+        }
     }
 }

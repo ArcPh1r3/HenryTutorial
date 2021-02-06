@@ -303,7 +303,7 @@ namespace HenryMod.Modules
             aimAnimator.inputBank = prefab.GetComponent<InputBankTest>();
         }
 
-        private static void SetupHitbox(GameObject prefab, Transform hitboxTransform, string hitboxName)
+        internal static void SetupHitbox(GameObject prefab, Transform hitboxTransform, string hitboxName)
         {
             HitBoxGroup hitBoxGroup = prefab.AddComponent<HitBoxGroup>();
 

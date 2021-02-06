@@ -8,7 +8,7 @@ namespace HenryMod.SkillStates
     public class Roll : BaseSkillState
     {
         public static float duration = 0.5f;
-        public static float initialSpeedCoefficient = 7.5f;
+        public static float initialSpeedCoefficient = 5f;
         public static float finalSpeedCoefficient = 2.5f;
 
         public static string dodgeSoundString = EntityStates.Commando.DodgeState.dodgeSoundString;
@@ -49,7 +49,11 @@ namespace HenryMod.SkillStates
             base.PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", Roll.duration);
             Util.PlaySound(Roll.dodgeSoundString, base.gameObject);
 
-            if (NetworkServer.active) base.characterBody.AddTimedBuff(Modules.Buffs.armorBuff, 2f * Roll.duration);
+            if (NetworkServer.active)
+            {
+                base.characterBody.AddTimedBuff(Modules.Buffs.armorBuff, 3f * Roll.duration);
+                base.characterBody.AddBuff(BuffIndex.HiddenInvincibility);
+            }
         }
 
         private void RecalculateRollSpeed()
@@ -62,6 +66,7 @@ namespace HenryMod.SkillStates
             base.FixedUpdate();
             this.RecalculateRollSpeed();
 
+            if (base.characterDirection) base.characterDirection.forward = this.forwardDirection;
             if (base.cameraTargetParams) base.cameraTargetParams.fovOverride = Mathf.Lerp(Roll.dodgeFOV, 60f, base.fixedAge / Roll.duration);
 
             Vector3 normalized = (base.transform.position - this.previousPosition).normalized;
@@ -87,6 +92,8 @@ namespace HenryMod.SkillStates
         {
             if (base.cameraTargetParams) base.cameraTargetParams.fovOverride = -1f;
             base.OnExit();
+
+            if (NetworkServer.active) base.characterBody.RemoveBuff(BuffIndex.HiddenInvincibility);
         }
 
         public override void OnSerialize(NetworkWriter writer)

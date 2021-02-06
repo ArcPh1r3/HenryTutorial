@@ -15,7 +15,7 @@ namespace HenryMod.Modules.Achievements
         public override String AchievementNameToken { get; } = HenryPlugin.developerPrefix + "_HENRY_BODY_UNLOCKABLE_ACHIEVEMENT_NAME";
         public override String AchievementDescToken { get; } = HenryPlugin.developerPrefix + "_HENRY_BODY_UNLOCKABLE_ACHIEVEMENT_DESC";
         public override String UnlockableNameToken { get; } = HenryPlugin.developerPrefix + "_HENRY_BODY_UNLOCKABLE_UNLOCKABLE_NAME";
-        protected override CustomSpriteProvider SpriteProvider { get; } = new CustomSpriteProvider("@Henry:Assets/Henry/Icons/texMainSkin.png");
+        protected override CustomSpriteProvider SpriteProvider { get; } = new CustomSpriteProvider("@Henry:Assets/HenryAssets/Icons/texHenryAchievement.png");
 
         private void Check(On.RoR2.SceneDirector.orig_Start orig, SceneDirector self)
         {
