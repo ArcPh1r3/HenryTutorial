@@ -240,6 +240,12 @@ namespace HenryMod.Modules
             HurtBoxGroup hurtBoxGroup = model.AddComponent<HurtBoxGroup>();
             ChildLocator childLocator = model.GetComponent<ChildLocator>();
 
+            if (!childLocator.FindChild("MainHurtbox"))
+            {
+                Debug.LogError("Could not set up main hurtbox: make sure you have a transform pair in your prefab's ChildLocator component called 'MainHurtbox'");
+                return;
+            }
+
             HurtBox mainHurtbox = childLocator.FindChild("MainHurtbox").gameObject.AddComponent<HurtBox>();
             mainHurtbox.gameObject.layer = LayerIndex.entityPrecise.intVal;
             mainHurtbox.healthComponent = prefab.GetComponent<HealthComponent>();

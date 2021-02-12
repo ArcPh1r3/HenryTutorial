@@ -41,12 +41,13 @@ namespace HenryMod.SkillStates
             {
                 this.hasFired = true;
                 EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
+                Util.PlaySound("HenryBombThrow", base.gameObject);
 
                 if (base.isAuthority)
                 {
                     Ray aimRay = base.GetAimRay();
 
-                    ProjectileManager.instance.FireProjectile(Resources.Load<GameObject>("Prefabs/Projectiles/CommandoGrenadeProjectile"), 
+                    ProjectileManager.instance.FireProjectile(Modules.Projectiles.bombPrefab, 
                         aimRay.origin, 
                         Util.QuaternionSafeLookRotation(aimRay.direction), 
                         base.gameObject, 

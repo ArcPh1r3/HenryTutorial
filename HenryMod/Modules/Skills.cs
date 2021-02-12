@@ -131,6 +131,8 @@ namespace HenryMod.Modules
             skillDef.shootDelay = 0f;
             skillDef.stockToConsume = 0;
 
+            if (agile) skillDef.keywordTokens = new string[] { "KEYWORD_AGILE" };
+
             LoadoutAPI.AddSkillDef(skillDef);
 
             return skillDef;
@@ -163,6 +165,8 @@ namespace HenryMod.Modules
             skillDef.shootDelay = skillDefInfo.shootDelay;
             skillDef.stockToConsume = skillDefInfo.stockToConsume;
 
+            skillDef.keywordTokens = skillDefInfo.keywordTokens;
+
             LoadoutAPI.AddSkillDef(skillDef);
 
             return skillDef;
@@ -194,4 +198,6 @@ internal class SkillDefInfo
     public int requiredStock;
     public float shootDelay;
     public int stockToConsume;
+
+    public string[] keywordTokens;
 }

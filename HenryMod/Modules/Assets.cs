@@ -3,6 +3,9 @@ using R2API;
 using UnityEngine;
 using UnityEngine.Networking;
 using RoR2;
+using System.IO;
+using RoR2.Audio;
+using System.Collections.Generic;
 
 namespace HenryMod.Modules
 {
@@ -14,6 +17,10 @@ namespace HenryMod.Modules
         // particle effects
         //internal static GameObject swordSwingEffect;
         //internal static GameObject swordHitImpactEffect;
+
+        internal static GameObject bombExplosionEffect;
+
+        internal static NetworkSoundEventDef swordHitSoundEvent;
 
         // cache these and use to create our own materials
         public static Shader hotpoo = Resources.Load<Shader>("Shaders/Deferred/HGStandard");
@@ -31,8 +38,47 @@ namespace HenryMod.Modules
                 }
             }
 
+            using (Stream manifestResourceStream2 = Assembly.GetExecutingAssembly().GetManifestResourceStream("HenryMod.HenryBank.bnk"))
+            {
+                byte[] array = new byte[manifestResourceStream2.Length];
+                manifestResourceStream2.Read(array, 0, array.Length);
+                SoundAPI.SoundBanks.Add(array);
+            }
+
+            swordHitSoundEvent = CreateNetworkSoundEventDef("HenrySwordHit");
+
+            bombExplosionEffect = LoadEffect("BombExplosionEffect", "");
+
             //swordSwingEffect = Assets.LoadEffect("HenrySwingEffect");
             //swordHitImpactEffect = Assets.LoadEffect("HenrySwingImpactEffect");
+        }
+
+        internal static NetworkSoundEventDef CreateNetworkSoundEventDef(string eventName)
+        {
+            NetworkSoundEventDef networkSoundEventDef = ScriptableObject.CreateInstance<NetworkSoundEventDef>();
+            networkSoundEventDef.akId = AkSoundEngine.GetIDFromString(eventName);
+            networkSoundEventDef.eventName = eventName;
+
+            NetworkSoundEventCatalog.getSoundEventDefs += delegate (List<NetworkSoundEventDef> list)
+            {
+                list.Add(networkSoundEventDef);
+            };
+
+            return networkSoundEventDef;
+        }
+
+        internal static void ConvertAllRenderersToHopooShader(GameObject objectToConvert)
+        {
+            foreach (Renderer i in objectToConvert.GetComponentsInChildren<Renderer>())
+            {
+                if (i)
+                {
+                    if (i.material)
+                    {
+                        i.material.shader = hotpoo;
+                    }
+                }
+            }
         }
 
         internal static Texture LoadCharacterIcon(string characterName)

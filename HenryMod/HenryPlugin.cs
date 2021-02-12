@@ -33,7 +33,7 @@ namespace HenryMod
         //   this shouldn't even have to be said
         public const string MODUID = "com.rob.HenryMod";
         public const string MODNAME = "HenryMod";
-        public const string MODVERSION = "0.0.2";
+        public const string MODVERSION = "0.0.4";
 
         // a prefix for name tokens to prevent conflicts
         public const string developerPrefix = "ROB";
@@ -60,9 +60,9 @@ namespace HenryMod
 
             Modules.Survivors.Henry.CreateCharacter();
 
-            //Modules.States.RegisterStates(); // register states(not yet implemented)
+            Modules.States.RegisterStates(); // register states(not yet implemented)
             Modules.Buffs.RegisterBuffs(); // add and register custom buffs/debuffs
-            //Modules.Projectiles.RegisterProjectiles(); // add and register custom projectiles(not yet implemented)
+            Modules.Projectiles.RegisterProjectiles(); // add and register custom projectiles(not yet implemented)
             Modules.Unlockables.RegisterUnlockables(); // add unlockables
             Modules.Tokens.AddTokens(); // register name tokens
 
@@ -98,7 +98,7 @@ namespace HenryMod
 
         private void Hook()
         {
-            // run all hooks here, disabling one is as simple as commenting out the line
+            // run hooks here, disabling one is as simple as commenting out the line
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
         }
 

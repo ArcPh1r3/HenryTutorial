@@ -1,5 +1,6 @@
 ﻿using EntityStates;
 using RoR2;
+using RoR2.Audio;
 using System;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -30,6 +31,7 @@ namespace HenryMod.SkillStates.BaseStates
         protected string muzzleString = "SwingCenter";
         protected GameObject swingEffectPrefab;
         protected GameObject hitEffectPrefab;
+        protected NetworkSoundEventIndex impactSound;
 
         private float earlyExitTime;
         private float duration;
@@ -75,15 +77,18 @@ namespace HenryMod.SkillStates.BaseStates
             this.attack.pushAwayForce = this.pushForce;
             this.attack.hitBoxGroup = hitBoxGroup;
             this.attack.isCrit = base.RollCrit();
+            this.attack.impactSound = this.impactSound;
         }
 
         protected virtual void PlayAttackAnimation()
         {
-            base.PlayCrossfade("Gesture, Override", "Slash", "Slash.playbackRate", this.duration, 0.05f);
+            base.PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), "Slash.playbackRate", this.duration, 0.05f);
         }
 
         public override void OnExit()
         {
+            if (!this.hasFired) this.FireAttack();
+
             base.OnExit();
         }
 

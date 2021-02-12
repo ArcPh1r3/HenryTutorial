@@ -31,10 +31,10 @@ namespace HenryMod.Modules
             LanguageAPI.Add(prefix + "_HENRY_BODY_PASSIVE_DESCRIPTION", "Sample text.");
 
             LanguageAPI.Add(prefix + "_HENRY_BODY_PRIMARY_SLASH_NAME", "Sword");
-            LanguageAPI.Add(prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION", $"Swing forward for <style=cIsDamage>{100f * 3.5f}% damage</style>.");
+            LanguageAPI.Add(prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION", Helpers.agilePrefix + $"Swing forward for <style=cIsDamage>{100f * 3.5f}% damage</style>.");
 
             LanguageAPI.Add(prefix + "_HENRY_BODY_SECONDARY_GUN_NAME", "Pistol");
-            LanguageAPI.Add(prefix + "_HENRY_BODY_SECONDARY_GUN_DESCRIPTION", $"Fire your handgun for <style=cIsDamage>{100f * SkillStates.Shoot.damageCoefficient}% damage</style>.");
+            LanguageAPI.Add(prefix + "_HENRY_BODY_SECONDARY_GUN_DESCRIPTION", Helpers.agilePrefix + $"Fire your handgun for <style=cIsDamage>{100f * SkillStates.Shoot.damageCoefficient}% damage</style>.");
 
             LanguageAPI.Add(prefix + "_HENRY_BODY_UTILITY_ROLL_NAME", "Roll");
             LanguageAPI.Add(prefix + "_HENRY_BODY_UTILITY_ROLL_DESCRIPTION", "Roll a short distance, gaining <style=cIsUtility>300 armor</style>. <style=cIsUtility>You cannot be hit during the roll.</style>");

@@ -111,11 +111,12 @@ namespace HenryMod.Modules.Survivors
                 isBullets = false,
                 isCombatSkill = false,
                 mustKeyPress = false,
-                noSprint = true,
+                noSprint = false,
                 rechargeStock = 1,
                 requiredStock = 1,
                 shootDelay = 0f,
-                stockToConsume = 1
+                stockToConsume = 1,
+                keywordTokens = new string [] { "KEYWORD_AGILE" }
             });
 
             Modules.Skills.AddSecondarySkill(characterPrefab, shootSkillDef);
@@ -200,6 +201,26 @@ namespace HenryMod.Modules.Survivors
                 defaultRenderers,
                 mainRenderer,
                 model);
+
+            defaultSkin.meshReplacements = new SkinDef.MeshReplacement[]
+            {
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenrySword"),
+                    renderer = defaultRenderers[0].renderer
+                },
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenryGun"),
+                    renderer = defaultRenderers[1].renderer
+                },
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenry"),
+                    renderer = defaultRenderers[2].renderer
+                }
+            };
+
             skins.Add(defaultSkin);
             #endregion
 
@@ -218,6 +239,21 @@ namespace HenryMod.Modules.Survivors
                 mainRenderer,
                 model,
                 HenryPlugin.developerPrefix + "_HENRY_BODY_MASTERYUNLOCKABLE_REWARD_ID");
+
+            masterySkin.meshReplacements = new SkinDef.MeshReplacement[]
+            {
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenrySwordAlt"),
+                    renderer = defaultRenderers[0].renderer
+                },
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenryAlt"),
+                    renderer = defaultRenderers[2].renderer
+                }
+            };
+
             skins.Add(masterySkin);
             #endregion
 
@@ -229,9 +265,9 @@ namespace HenryMod.Modules.Survivors
             CharacterModel.RendererInfo[] newRendererInfos = new CharacterModel.RendererInfo[defaultRenderers.Length];
             defaultRenderers.CopyTo(newRendererInfos, 0);
 
-            newRendererInfos[0].defaultMaterial = Modules.Assets.CreateMaterial("matHenryAlt");
-            newRendererInfos[1].defaultMaterial = Modules.Assets.CreateMaterial("matHenryAlt");
-            newRendererInfos[2].defaultMaterial = Modules.Assets.CreateMaterial("matHenryAlt");
+            newRendererInfos[0].defaultMaterial = materials[0];
+            newRendererInfos[1].defaultMaterial = materials[1];
+            newRendererInfos[2].defaultMaterial = materials[2];
 
             return newRendererInfos;
         }

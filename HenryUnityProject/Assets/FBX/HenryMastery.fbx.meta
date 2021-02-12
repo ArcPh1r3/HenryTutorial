@@ -1,0 +1,201 @@
+fileFormatVersion: 2
+guid: d1a4d17630fd9bb4491bf028e34224f3
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Armature
+    100002: BandanaL
+    100004: BandanaL.001
+    100006: BandanaL.002
+    100008: BandanaL.003
+    100010: BandanaR.001
+    100012: BandanaR.002
+    100014: BandanaR.003
+    100016: BandanaR.004
+    100018: base
+    100020: calf.l
+    100022: calf.r
+    100024: chest
+    100026: ElbowIK.l
+    100028: ElbowIK.r
+    100030: foot.l
+    100032: foot.r
+    100034: FootIK.l
+    100036: FootIK.r
+    100038: GunBase
+    100040: GunTop
+    100042: hand.l
+    100044: hand.r
+    100046: HandIK.l
+    100048: HandIK.r
+    100050: head
+    100052: //RootNode
+    100054: KneeIK.l
+    100056: KneeIK.r
+    100058: lower_arm.l
+    100060: lower_arm.r
+    100062: meshHenry
+    100064: MeshHenryGun
+    100066: meshHenrySword
+    100068: ROOT
+    100070: stomach
+    100072: Sword.01
+    100074: Sword.02
+    100076: Sword.03
+    100078: Sword.04
+    100080: Sword.05
+    100082: Sword.06
+    100084: Sword.07
+    100086: SwordBase
+    100088: SwordTip
+    100090: thigh.l
+    100092: thigh.r
+    100094: upper_arm.l
+    100096: upper_arm.r
+    100098: Crimson Winter Scarf
+    400000: Armature
+    400002: BandanaL
+    400004: BandanaL.001
+    400006: BandanaL.002
+    400008: BandanaL.003
+    400010: BandanaR.001
+    400012: BandanaR.002
+    400014: BandanaR.003
+    400016: BandanaR.004
+    400018: base
+    400020: calf.l
+    400022: calf.r
+    400024: chest
+    400026: ElbowIK.l
+    400028: ElbowIK.r
+    400030: foot.l
+    400032: foot.r
+    400034: FootIK.l
+    400036: FootIK.r
+    400038: GunBase
+    400040: GunTop
+    400042: hand.l
+    400044: hand.r
+    400046: HandIK.l
+    400048: HandIK.r
+    400050: head
+    400052: //RootNode
+    400054: KneeIK.l
+    400056: KneeIK.r
+    400058: lower_arm.l
+    400060: lower_arm.r
+    400062: meshHenry
+    400064: MeshHenryGun
+    400066: meshHenrySword
+    400068: ROOT
+    400070: stomach
+    400072: Sword.01
+    400074: Sword.02
+    400076: Sword.03
+    400078: Sword.04
+    400080: Sword.05
+    400082: Sword.06
+    400084: Sword.07
+    400086: SwordBase
+    400088: SwordTip
+    400090: thigh.l
+    400092: thigh.r
+    400094: upper_arm.l
+    400096: upper_arm.r
+    400098: Crimson Winter Scarf
+    2100000: matHenry
+    4300000: meshHenry
+    4300002: meshHenrySword
+    4300004: MeshHenryGun
+    4300006: Crimson Winter Scarf
+    9500000: //RootNode
+    13700000: meshHenry
+    13700002: MeshHenryGun
+    13700004: meshHenrySword
+    13700006: Crimson Winter Scarf
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

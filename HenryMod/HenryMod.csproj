@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="HenryBank.bnk" />
     <None Remove="Modules\Survivors\Henry.cs~RF6221a098.TMP" />
     <None Remove="PleaseChangeThisNameInYourProjectOrElseYouWillCauseConflicts" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="HenryBank.bnk" />
     <EmbeddedResource Include="PleaseChangeThisNameInYourProjectOrElseYouWillCauseConflicts" />
   </ItemGroup>
 

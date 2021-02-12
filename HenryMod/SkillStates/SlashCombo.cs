@@ -23,11 +23,13 @@ namespace HenryMod.SkillStates
             this.attackRecoil = 0.5f;
             this.hitHopVelocity = 4f;
 
-            this.swingSoundString = EntityStates.Merc.GroundLight.comboAttackSoundString;
-            this.hitSoundString = EntityStates.Merc.GroundLight.hitSoundString;
+            this.swingSoundString = "HenrySwordSwing";
+            this.hitSoundString = "";
             this.muzzleString = "SwingCenter";
             this.swingEffectPrefab = EntityStates.Merc.GroundLight.comboSwingEffectPrefab;
             this.hitEffectPrefab = EntityStates.Merc.GroundLight.comboHitEffectPrefab;
+
+            this.impactSound = Modules.Assets.swordHitSoundEvent.index;
 
             base.OnEnter();
         }
@@ -49,7 +51,14 @@ namespace HenryMod.SkillStates
 
         protected override void SetNextState()
         {
-            this.outer.SetNextState(new SlashCombo());
+            int index = this.swingIndex;
+            if (index == 0) index = 1;
+            else index = 0;
+
+            this.outer.SetNextState(new SlashCombo
+            {
+                swingIndex = index
+            });
         }
 
         public override void OnExit()

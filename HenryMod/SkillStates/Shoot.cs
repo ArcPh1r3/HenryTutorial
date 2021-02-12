@@ -8,7 +8,7 @@ namespace HenryMod.SkillStates
     {
         public static float damageCoefficient = 4.8f;
         public static float procCoefficient = 1f;
-        public static float baseDuration = 0.5f;
+        public static float baseDuration = 0.6f;
         public static float force = 800f;
         public static float recoil = 3f;
         public static float range = 256f;
@@ -24,12 +24,12 @@ namespace HenryMod.SkillStates
         {
             base.OnEnter();
             this.duration = Shoot.baseDuration / this.attackSpeedStat;
-            this.fireTime = 0.1f * this.duration;
+            this.fireTime = 0.2f * this.duration;
             base.characterBody.SetAimTimer(2f);
             this.animator = base.GetModelAnimator();
             this.muzzleString = "Muzzle";
 
-            base.PlayAnimation("Gesture, Override", "ShootGun", "ShootGun.playbackRate", this.duration);
+            base.PlayAnimation("Gesture, Override", "ShootGun", "ShootGun.playbackRate", 2f * this.duration);
         }
 
         public override void OnExit()
@@ -45,7 +45,7 @@ namespace HenryMod.SkillStates
 
                 base.characterBody.AddSpreadBloom(1.5f);
                 EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
-                Util.PlaySound(EntityStates.Commando.CommandoWeapon.FireLightsOut.attackSoundString, base.gameObject);
+                Util.PlaySound("HenryShootPistol", base.gameObject);
 
                 if (base.isAuthority)
                 {
