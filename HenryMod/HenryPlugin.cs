@@ -33,7 +33,7 @@ namespace HenryMod
         //   this shouldn't even have to be said
         public const string MODUID = "com.rob.HenryMod";
         public const string MODNAME = "HenryMod";
-        public const string MODVERSION = "0.0.4";
+        public const string MODVERSION = "0.0.6";
 
         // a prefix for name tokens to prevent conflicts
         public const string developerPrefix = "ROB";
@@ -57,6 +57,8 @@ namespace HenryMod
             // load assets and read config
             Modules.Assets.PopulateAssets();
             Modules.Config.ReadConfig();
+
+            Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
 
             Modules.Survivors.Henry.CreateCharacter();
 

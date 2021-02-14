@@ -34,7 +34,7 @@ namespace HenryMod.SkillStates.BaseStates
         protected NetworkSoundEventIndex impactSound;
 
         private float earlyExitTime;
-        private float duration;
+        public float duration;
         private bool hasFired;
         private float hitPauseTimer;
         private OverlapAttack attack;

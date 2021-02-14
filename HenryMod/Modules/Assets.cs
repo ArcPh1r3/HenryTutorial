@@ -15,12 +15,15 @@ namespace HenryMod.Modules
         internal static AssetBundle mainAssetBundle;
 
         // particle effects
-        //internal static GameObject swordSwingEffect;
-        //internal static GameObject swordHitImpactEffect;
+        internal static GameObject swordSwingEffect;
+        internal static GameObject swordHitImpactEffect;
+
+        internal static GameObject punchImpactEffect;
 
         internal static GameObject bombExplosionEffect;
 
         internal static NetworkSoundEventDef swordHitSoundEvent;
+        internal static NetworkSoundEventDef punchHitSoundEvent;
 
         // cache these and use to create our own materials
         public static Shader hotpoo = Resources.Load<Shader>("Shaders/Deferred/HGStandard");
@@ -30,7 +33,7 @@ namespace HenryMod.Modules
         {
             if (mainAssetBundle == null)
             {
-                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("HenryMod.PleaseChangeThisNameInYourProjectOrElseYouWillCauseConflicts"))
+                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("HenryMod.pleasechangethisnameinyourprojectorelseyouwillcauseconflicts"))
                 {
                     mainAssetBundle = AssetBundle.LoadFromStream(assetStream);
                     var provider = new AssetBundleResourcesProvider("@Henry", mainAssetBundle);
@@ -46,11 +49,32 @@ namespace HenryMod.Modules
             }
 
             swordHitSoundEvent = CreateNetworkSoundEventDef("HenrySwordHit");
+            punchHitSoundEvent = CreateNetworkSoundEventDef("HenryPunchHit");
 
             bombExplosionEffect = LoadEffect("BombExplosionEffect", "");
 
-            //swordSwingEffect = Assets.LoadEffect("HenrySwingEffect");
-            //swordHitImpactEffect = Assets.LoadEffect("HenrySwingImpactEffect");
+            ShakeEmitter shakeEmitter = bombExplosionEffect.AddComponent<ShakeEmitter>();
+            shakeEmitter.amplitudeTimeDecay = true;
+            shakeEmitter.duration = 0.5f;
+            shakeEmitter.radius = 200f;
+            shakeEmitter.scaleShakeRadiusWithLocalScale = false;
+
+            shakeEmitter.wave = new Wave
+            {
+                amplitude = 1f,
+                frequency = 40f,
+                cycleOffset = 0f
+            };
+
+            swordSwingEffect = Assets.LoadEffect("HenrySwordSwingEffect");
+            swordHitImpactEffect = Assets.LoadEffect("ImpactHenrySlash");
+
+            //punchImpactEffect = Assets.LoadEffect("ImpactHenryPunch");
+            // on second thought my effect sucks so imma just clone loader's
+            punchImpactEffect = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Effects/OmniEffect/OmniImpactVFXLoader"), "ImpactHenryPunch");
+            punchImpactEffect.AddComponent<NetworkIdentity>();
+
+            EffectAPI.AddEffect(punchImpactEffect);
         }
 
         internal static NetworkSoundEventDef CreateNetworkSoundEventDef(string eventName)

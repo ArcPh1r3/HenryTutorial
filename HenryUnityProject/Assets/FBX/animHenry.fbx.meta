@@ -178,6 +178,14 @@ ModelImporter:
     7400130: Armature|Slash1
     7400132: Armature|Slash2
     7400134: Armature|meshHenry.001Action
+    7400136: Armature|Punch1
+    7400138: Armature|Punch2
+    7400140: Armature|AirPunch1
+    7400142: Armature|AirPunch2
+    7400144: Armature|AirPunch3
+    7400146: Armature|Punch3
+    7400148: Armature|PunchDashAir
+    7400150: Armature|PunchDashGround
     9500000: //RootNode
     13700000: meshHenry
     13700002: MeshHenryGun

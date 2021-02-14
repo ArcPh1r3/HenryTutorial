@@ -25,9 +25,9 @@ namespace HenryMod.SkillStates
 
             this.swingSoundString = "HenrySwordSwing";
             this.hitSoundString = "";
-            this.muzzleString = "SwingCenter";
-            this.swingEffectPrefab = EntityStates.Merc.GroundLight.comboSwingEffectPrefab;
-            this.hitEffectPrefab = EntityStates.Merc.GroundLight.comboHitEffectPrefab;
+            this.muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
+            this.swingEffectPrefab = Modules.Assets.swordSwingEffect;
+            this.hitEffectPrefab = Modules.Assets.swordHitImpactEffect;
 
             this.impactSound = Modules.Assets.swordHitSoundEvent.index;
 

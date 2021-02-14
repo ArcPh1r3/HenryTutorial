@@ -33,6 +33,9 @@ namespace HenryMod.Modules
             LanguageAPI.Add(prefix + "_HENRY_BODY_PRIMARY_SLASH_NAME", "Sword");
             LanguageAPI.Add(prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION", Helpers.agilePrefix + $"Swing forward for <style=cIsDamage>{100f * 3.5f}% damage</style>.");
 
+            LanguageAPI.Add(prefix + "_HENRY_BODY_PRIMARY_PUNCH_NAME", "Boxing Gloves");
+            LanguageAPI.Add(prefix + "_HENRY_BODY_PRIMARY_PUNCH_DESCRIPTION", Helpers.agilePrefix + $"Punch rapidly for <style=cIsDamage>{100f * 2.4f}% damage</style>. <style=cIsUtility>Ignores armor.</style>");
+
             LanguageAPI.Add(prefix + "_HENRY_BODY_SECONDARY_GUN_NAME", "Pistol");
             LanguageAPI.Add(prefix + "_HENRY_BODY_SECONDARY_GUN_DESCRIPTION", Helpers.agilePrefix + $"Fire your handgun for <style=cIsDamage>{100f * SkillStates.Shoot.damageCoefficient}% damage</style>.");
 
