@@ -266,7 +266,7 @@ Seriously, this section would've been a lot longer without that tool.
 
 Yeah. I'll streamline AI creation at some point but for now `Prefabs.CreateGenericDoppelganger` exists to easily copy an existing umbra's AI and create an umbra for your character.
 
-If you're looking for actual AI creation then `Enforcer` should serve as a [decent reference](https://github.com/GnomeModder/EnforcerMod/blob/master/EnforcerMod_VS/Nemesis/Nemforcer.cs#L1530) for now.
+If you're looking for actual AI creation then [`Enforcer`](https://github.com/GnomeModder/EnforcerMod/blob/master/EnforcerMod_VS/Nemesis/Nemforcer.cs#L1530) serves as a decent reference for now.
 
 ## Step 8 - Unlockables
 
