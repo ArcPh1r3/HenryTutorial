@@ -93,7 +93,7 @@ Navigate to this section:
 
 ![](https://cdn.discordapp.com/attachments/469291841859092488/814488992040615936/unknown.png) 
 
-Standard naming convention is `com.AuthorName.YourModName` so go ahead and fill in the fields accordingly. For the version, it's good practice to follow [Semantic Versioning](https://semver.org/). This isn't enforced but you'll probably made fun of if you don't follow it.
+Standard naming convention is `com.AuthorName.YourModName` so go ahead and fill in the fields accordingly. For the version, it's good practice to follow [Semantic Versioning](https://semver.org/). This isn't enforced but you'll probably be made fun of if you don't follow it.
 
 Now after this, open up `Tokens.cs`
 
