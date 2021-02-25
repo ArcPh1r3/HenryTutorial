@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using HenryMod.Modules.Misc;
 using R2API;
 using RoR2;
 using RoR2.Skills;
@@ -141,6 +142,40 @@ namespace HenryMod.Modules
         internal static SkillDef CreateSkillDef(SkillDefInfo skillDefInfo)
         {
             SkillDef skillDef = ScriptableObject.CreateInstance<SkillDef>();
+
+            skillDef.skillName = skillDefInfo.skillName;
+            skillDef.skillNameToken = skillDefInfo.skillNameToken;
+            skillDef.skillDescriptionToken = skillDefInfo.skillDescriptionToken;
+            skillDef.icon = skillDefInfo.skillIcon;
+
+            skillDef.activationState = skillDefInfo.activationState;
+            skillDef.activationStateMachineName = skillDefInfo.activationStateMachineName;
+            skillDef.baseMaxStock = skillDefInfo.baseMaxStock;
+            skillDef.baseRechargeInterval = skillDefInfo.baseRechargeInterval;
+            skillDef.beginSkillCooldownOnSkillEnd = skillDefInfo.beginSkillCooldownOnSkillEnd;
+            skillDef.canceledFromSprinting = skillDefInfo.canceledFromSprinting;
+            skillDef.forceSprintDuringState = skillDefInfo.forceSprintDuringState;
+            skillDef.fullRestockOnAssign = skillDefInfo.fullRestockOnAssign;
+            skillDef.interruptPriority = skillDefInfo.interruptPriority;
+            skillDef.isBullets = skillDefInfo.isBullets;
+            skillDef.isCombatSkill = skillDefInfo.isCombatSkill;
+            skillDef.mustKeyPress = skillDefInfo.mustKeyPress;
+            skillDef.noSprint = skillDefInfo.noSprint;
+            skillDef.rechargeStock = skillDefInfo.rechargeStock;
+            skillDef.requiredStock = skillDefInfo.requiredStock;
+            skillDef.shootDelay = skillDefInfo.shootDelay;
+            skillDef.stockToConsume = skillDefInfo.stockToConsume;
+
+            skillDef.keywordTokens = skillDefInfo.keywordTokens;
+
+            LoadoutAPI.AddSkillDef(skillDef);
+
+            return skillDef;
+        }
+
+        internal static SkillDef CreateTrackingSkillDef(SkillDefInfo skillDefInfo)
+        {
+            HenryTrackingSkillDef skillDef = ScriptableObject.CreateInstance<HenryTrackingSkillDef>();
 
             skillDef.skillName = skillDefInfo.skillName;
             skillDef.skillNameToken = skillDefInfo.skillNameToken;

@@ -18,6 +18,7 @@ namespace HenryMod.Modules
         internal static GameObject swordSwingEffect;
         internal static GameObject swordHitImpactEffect;
 
+        internal static GameObject punchSwingEffect;
         internal static GameObject punchImpactEffect;
 
         internal static GameObject bombExplosionEffect;
@@ -69,6 +70,7 @@ namespace HenryMod.Modules
             swordSwingEffect = Assets.LoadEffect("HenrySwordSwingEffect");
             swordHitImpactEffect = Assets.LoadEffect("ImpactHenrySlash");
 
+            punchSwingEffect = Assets.LoadEffect("HenryFistSwingEffect");
             //punchImpactEffect = Assets.LoadEffect("ImpactHenryPunch");
             // on second thought my effect sucks so imma just clone loader's
             punchImpactEffect = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Effects/OmniEffect/OmniImpactVFXLoader"), "ImpactHenryPunch");

@@ -26,7 +26,7 @@ namespace HenryMod.SkillStates
             this.swingSoundString = "HenryPunchSwing";
             this.hitSoundString = "";
             this.muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
-            this.swingEffectPrefab = Modules.Assets.swordSwingEffect;
+            this.swingEffectPrefab = Modules.Assets.punchSwingEffect;
             this.hitEffectPrefab = Modules.Assets.punchImpactEffect;
 
             this.impactSound = Modules.Assets.punchHitSoundEvent.index;

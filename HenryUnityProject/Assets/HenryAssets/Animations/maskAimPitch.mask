@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: maskAimPitch
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature
+    m_Weight: 0
+  - m_Path: Armature/ROOT
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/head
+    m_Weight: 1
+  - m_Path: Armature/ROOT/base/stomach/chest/head/BandanaL
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/head/BandanaL/BandanaL.002
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/head/BandanaL/BandanaL.002/BandanaL.001
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/head/BandanaL/BandanaL.002/BandanaL.001/BandanaL.003
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/head/BandanaR.001
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/head/BandanaR.001/BandanaR.003
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/head/BandanaR.001/BandanaR.003/BandanaR.002
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/head/BandanaR.001/BandanaR.003/BandanaR.002/BandanaR.004
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.l
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.l/lower_arm.l
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.l/lower_arm.l/GunBase
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.l/lower_arm.l/GunBase/GunTop
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.l/lower_arm.l/hand.l
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/hand.r
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/SwordBase
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/SwordBase/Sword.01
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/SwordBase/Sword.01/Sword.02
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/SwordBase/Sword.01/Sword.02/Sword.03
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/SwordBase/Sword.01/Sword.02/Sword.03/Sword.04
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/SwordBase/Sword.01/Sword.02/Sword.03/Sword.04/Sword.05
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/SwordBase/Sword.01/Sword.02/Sword.03/Sword.04/Sword.05/Sword.06
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/SwordBase/Sword.01/Sword.02/Sword.03/Sword.04/Sword.05/Sword.06/Sword.07
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/SwordBase/Sword.01/Sword.02/Sword.03/Sword.04/Sword.05/Sword.06/Sword.07/SwordTip
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/thigh.l
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/thigh.l/calf.l
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/thigh.l/calf.l/foot.l
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/thigh.r
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/thigh.r/calf.r
+    m_Weight: 0
+  - m_Path: Armature/ROOT/base/stomach/thigh.r/calf.r/foot.r
+    m_Weight: 0
+  - m_Path: Armature/ROOT/ElbowIK.l
+    m_Weight: 0
+  - m_Path: Armature/ROOT/ElbowIK.r
+    m_Weight: 0
+  - m_Path: Armature/ROOT/FootIK.l
+    m_Weight: 0
+  - m_Path: Armature/ROOT/FootIK.r
+    m_Weight: 0
+  - m_Path: Armature/ROOT/HandIK.l
+    m_Weight: 0
+  - m_Path: Armature/ROOT/HandIK.r
+    m_Weight: 0
+  - m_Path: Armature/ROOT/KneeIK.l
+    m_Weight: 0
+  - m_Path: Armature/ROOT/KneeIK.r
+    m_Weight: 0
+  - m_Path: meshHenry
+    m_Weight: 0
+  - m_Path: meshHenry.001
+    m_Weight: 0
+  - m_Path: MeshHenryGun
+    m_Weight: 0
+  - m_Path: meshHenrySword
+    m_Weight: 0

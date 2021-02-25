@@ -19,6 +19,7 @@ namespace HenryMod.SkillStates
 
             if (this.animator)
             {
+                // this is solely for the punch animation
                 float i = 1;
                 if (this.animator.GetBool("isGrounded")) i = 0;
                 this.animator.SetFloat("inAir", i);

@@ -123,6 +123,16 @@ namespace HenryMod.Modules
             return newPrefab;
         }
 
+        internal static void CreateGenericDoppelganger(GameObject bodyPrefab, string masterName, string masterToCopy)
+        {
+            GameObject newMaster = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterMasters/" + masterToCopy + "MonsterMaster"), masterName, true);
+
+            MasterCatalog.getAdditionalEntries += delegate (List<GameObject> list)
+            {
+                list.Add(newMaster);
+            };
+        }
+
         #region ModelSetup
         private static Transform SetupModel(GameObject prefab, Transform modelTransform)
         {
@@ -157,6 +167,12 @@ namespace HenryMod.Modules
             HenryPlugin.DestroyImmediate(main.transform.Find("ModelBase").gameObject);
             HenryPlugin.DestroyImmediate(main.transform.Find("CameraPivot").gameObject);
             HenryPlugin.DestroyImmediate(main.transform.Find("AimOrigin").gameObject);
+
+            if (Modules.Assets.mainAssetBundle.LoadAsset<GameObject>(modelName) == null)
+            {
+                Debug.LogError("Trying to load a null model- check to see if the name in your code matches the name of the object in Unity");
+                return null;
+            }
 
             return Modules.Assets.mainAssetBundle.LoadAsset<GameObject>(modelName);
         }

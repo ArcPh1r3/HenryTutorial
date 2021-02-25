@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using R2API;
 using RoR2;
 using RoR2.Skills;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ namespace HenryMod.Modules.Survivors
 
             if (characterEnabled.Value)
             {
+                CreateUnlockables();
+
                 #region Body
                 characterPrefab = Modules.Prefabs.CreatePrefab(bodyName, "mdlHenry", new BodyInfo
                 {
@@ -56,7 +59,7 @@ namespace HenryMod.Modules.Survivors
                 Material henryMat = Modules.Assets.CreateMaterial("matHenry"); // cache these as there's no reason to create more when they're all the same
                 Material boxingGloveMat = Modules.Assets.CreateMaterial("matBoxingGlove");
 
-                bodyRendererIndex = 4;
+                bodyRendererIndex = 5;
 
                 Modules.Prefabs.SetupCharacterModel(characterPrefab, new CustomRendererInfo[] {
                 new CustomRendererInfo
@@ -81,8 +84,13 @@ namespace HenryMod.Modules.Survivors
                 },
                 new CustomRendererInfo
                 {
+                    childName = "CoatModel",
+                    material = Modules.Assets.CreateMaterial("matVergil"),
+                },
+                new CustomRendererInfo
+                {
                     childName = "Model",
-                    material = henryMat,
+                    material = henryMat
                 }}, bodyRendererIndex);
                 #endregion
 
@@ -94,7 +102,22 @@ namespace HenryMod.Modules.Survivors
                 CreateSkills();
                 CreateSkins();
                 CreateItemDisplays();
+                CreateDoppelganger();
             }
+        }
+
+        private static void CreateUnlockables()
+        {
+            UnlockablesAPI.AddUnlockable<Achievements.HenryUnlockAchievement>(true);
+            UnlockablesAPI.AddUnlockable<Achievements.MasteryAchievement>(true);
+            if (HenryPlugin.starstormInstalled) UnlockablesAPI.AddUnlockable<Achievements.GrandMasteryAchievement>(true);
+        }
+
+        private static void CreateDoppelganger()
+        {
+            // helper method for creating a generic doppelganger- copies ai from an existing survivor
+            // hopefully i'll get around to streamlining proper ai creation sometime
+            Modules.Prefabs.CreateGenericDoppelganger(characterPrefab, "HenryMonsterMaster", "Merc");
         }
 
         private static void CreateHitboxes()
@@ -137,7 +160,7 @@ namespace HenryMod.Modules.Survivors
                 fullRestockOnAssign = true,
                 interruptPriority = EntityStates.InterruptPriority.Skill,
                 isBullets = false,
-                isCombatSkill = false,
+                isCombatSkill = true,
                 mustKeyPress = false,
                 noSprint = false,
                 rechargeStock = 1,
@@ -146,8 +169,33 @@ namespace HenryMod.Modules.Survivors
                 stockToConsume = 1,
                 keywordTokens = new string [] { "KEYWORD_AGILE" }
             });
+            SkillDef stingerSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = prefix + "_HENRY_BODY_SECONDARY_STINGER_NAME",
+                skillNameToken = prefix + "_HENRY_BODY_SECONDARY_STINGER_NAME",
+                skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_STINGER_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Stinger.StingerEntry)),
+                activationStateMachineName = "Weapon",
+                baseMaxStock = 1,
+                baseRechargeInterval = 3f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Any,
+                isBullets = false,
+                isCombatSkill = true,
+                mustKeyPress = false,
+                noSprint = false,
+                rechargeStock = 1,
+                requiredStock = 1,
+                shootDelay = 0f,
+                stockToConsume = 1,
+            });
 
             Modules.Skills.AddSecondarySkill(characterPrefab, shootSkillDef);
+            Modules.Skills.AddSecondarySkill(characterPrefab, stingerSkillDef);
             #endregion
 
             #region Utility
@@ -223,6 +271,8 @@ namespace HenryMod.Modules.Survivors
 
             List<SkinDef> skins = new List<SkinDef>();
 
+            GameObject coatObject = childLocator.FindChild("Coat").gameObject;
+
             #region DefaultSkin
             SkinDef defaultSkin = Modules.Skins.CreateSkinDef(HenryPlugin.developerPrefix + "_HENRY_BODY_DEFAULT_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMainSkin"),
@@ -246,6 +296,15 @@ namespace HenryMod.Modules.Survivors
                 {
                     mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenry"),
                     renderer = defaultRenderers[bodyRendererIndex].renderer
+                }
+            };
+
+            defaultSkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            {
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = coatObject,
+                    shouldActivate = false
                 }
             };
 
@@ -282,7 +341,61 @@ namespace HenryMod.Modules.Survivors
                 }
             };
 
+            masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            {
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = coatObject,
+                    shouldActivate = false
+                }
+            };
+
             skins.Add(masterySkin);
+            #endregion
+
+            #region GrandMasterySkin
+            if (HenryPlugin.starstormInstalled)
+            {
+                Material grandMasteryMat = Modules.Assets.CreateMaterial("matVergil");
+                CharacterModel.RendererInfo[] grandMasteryRendererInfos = SkinRendererInfos(defaultRenderers, new Material[]
+                {
+                grandMasteryMat,
+                grandMasteryMat,
+                grandMasteryMat
+                });
+
+                SkinDef grandMasterySkin = Modules.Skins.CreateSkinDef(HenryPlugin.developerPrefix + "_HENRY_BODY_TYPHOON_SKIN_NAME",
+                    Assets.mainAssetBundle.LoadAsset<Sprite>("texGrandMasteryAchievement"),
+                    grandMasteryRendererInfos,
+                    mainRenderer,
+                    model,
+                    HenryPlugin.developerPrefix + "_HENRY_BODY_TYPHOONUNLOCKABLE_REWARD_ID");
+
+                grandMasterySkin.meshReplacements = new SkinDef.MeshReplacement[]
+                {
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshYamato"),
+                    renderer = defaultRenderers[0].renderer
+                },
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshVergil"),
+                    renderer = defaultRenderers[bodyRendererIndex].renderer
+                }
+                };
+
+                grandMasterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
+                {
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = coatObject,
+                    shouldActivate = true
+                }
+                };
+
+                skins.Add(grandMasterySkin);
+            }
             #endregion
 
             skinController.skins = skins.ToArray();

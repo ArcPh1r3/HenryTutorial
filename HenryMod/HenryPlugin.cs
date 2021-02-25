@@ -10,6 +10,7 @@ using System.Security.Permissions;
 
 namespace HenryMod
 {
+    [BepInDependency("com.TeamMoonstorm.Starstorm2", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
@@ -33,10 +34,13 @@ namespace HenryMod
         //   this shouldn't even have to be said
         public const string MODUID = "com.rob.HenryMod";
         public const string MODNAME = "HenryMod";
-        public const string MODVERSION = "0.0.6";
+        public const string MODVERSION = "0.0.8";
 
         // a prefix for name tokens to prevent conflicts
         public const string developerPrefix = "ROB";
+
+        // soft dependency stuff
+        public static bool starstormInstalled = false;
 
         public static HenryPlugin instance;
 
@@ -54,6 +58,9 @@ namespace HenryMod
         {
             instance = this;
 
+            // check for soft dependencies
+            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.TeamMoonstorm.Starstorm2")) starstormInstalled = true;
+
             // load assets and read config
             Modules.Assets.PopulateAssets();
             Modules.Config.ReadConfig();
@@ -62,13 +69,10 @@ namespace HenryMod
 
             Modules.Survivors.Henry.CreateCharacter();
 
-            Modules.States.RegisterStates(); // register states(not yet implemented)
+            Modules.States.RegisterStates(); // register states for networking
             Modules.Buffs.RegisterBuffs(); // add and register custom buffs/debuffs
-            Modules.Projectiles.RegisterProjectiles(); // add and register custom projectiles(not yet implemented)
-            Modules.Unlockables.RegisterUnlockables(); // add unlockables
+            Modules.Projectiles.RegisterProjectiles(); // add and register custom projectiles
             Modules.Tokens.AddTokens(); // register name tokens
-
-            //CreateDoppelganger(); // artifact of vengeance(not yet implemented)
 
             Hook();
         }

@@ -29,7 +29,7 @@ namespace HenryMod.SkillStates
             this.animator = base.GetModelAnimator();
             this.muzzleString = "Muzzle";
 
-            base.PlayAnimation("Gesture, Override", "ShootGun", "ShootGun.playbackRate", 2f * this.duration);
+            base.PlayAnimation("LeftArm, Override", "ShootGun", "ShootGun.playbackRate", 2f * this.duration);
         }
 
         public override void OnExit()

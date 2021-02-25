@@ -54,6 +54,7 @@ namespace HenryMod.SkillStates.BaseStates
             this.animator = base.GetModelAnimator();
             base.StartAimMode(0.5f + this.duration, false);
             base.characterBody.outOfCombatStopwatch = 0f;
+            this.animator.SetBool("attacking", true);
 
             HitBoxGroup hitBoxGroup = null;
             Transform modelTransform = base.GetModelTransform();
@@ -90,6 +91,8 @@ namespace HenryMod.SkillStates.BaseStates
             if (!this.hasFired) this.FireAttack();
 
             base.OnExit();
+
+            this.animator.SetBool("attacking", false);
         }
 
         protected virtual void PlaySwingEffect()
