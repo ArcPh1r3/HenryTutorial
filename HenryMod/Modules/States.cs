@@ -2,6 +2,7 @@
 using HenryMod.SkillStates;
 using HenryMod.SkillStates.BaseStates;
 using HenryMod.SkillStates.Stinger;
+using HenryMod.SkillStates.Emotes;
 
 namespace HenryMod.Modules
 {
@@ -11,11 +12,16 @@ namespace HenryMod.Modules
         {
             LoadoutAPI.AddSkill(typeof(HenryMain));
 
+            LoadoutAPI.AddSkill(typeof(BaseEmote));
+            LoadoutAPI.AddSkill(typeof(Rest));
+            LoadoutAPI.AddSkill(typeof(Dance));
+
             LoadoutAPI.AddSkill(typeof(BaseMeleeAttack));
             LoadoutAPI.AddSkill(typeof(SlashCombo));
             LoadoutAPI.AddSkill(typeof(PunchCombo));
 
             LoadoutAPI.AddSkill(typeof(Shoot));
+            LoadoutAPI.AddSkill(typeof(ShootUzi));
 
             LoadoutAPI.AddSkill(typeof(Roll));
 

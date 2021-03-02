@@ -41,7 +41,7 @@ namespace HenryMod.SkillStates.BaseStates
         private bool inHitPause;
         private bool hasHopped;
         private float stopwatch;
-        private Animator animator;
+        protected Animator animator;
         private BaseState.HitStopCachedState hitStopCachedState;
         private Vector3 storedVelocity;
 

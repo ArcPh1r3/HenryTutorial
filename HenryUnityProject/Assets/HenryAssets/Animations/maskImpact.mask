@@ -22,7 +22,7 @@ AvatarMask:
   - m_Path: Armature/ROOT/base/stomach/chest
     m_Weight: 1
   - m_Path: Armature/ROOT/base/stomach/chest/head
-    m_Weight: 0
+    m_Weight: 1
   - m_Path: Armature/ROOT/base/stomach/chest/head/BandanaL
     m_Weight: 0
   - m_Path: Armature/ROOT/base/stomach/chest/head/BandanaL/BandanaL.002

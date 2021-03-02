@@ -1,12 +1,17 @@
 ﻿using BepInEx.Configuration;
+using UnityEngine;
 
 namespace HenryMod.Modules
 {
     public static class Config
     {
+        public static ConfigEntry<KeyCode> restKeybind;
+        public static ConfigEntry<KeyCode> danceKeybind;
+
         public static void ReadConfig()
         {
-            // there actually isn't any config right now but if you wanted to add some it would go here.
+            restKeybind = HenryPlugin.instance.Config.Bind<KeyCode>(new ConfigDefinition("Keybinds", "Rest"), KeyCode.Alpha1, new ConfigDescription("Keybind used to perform the Rest emote"));
+            danceKeybind = HenryPlugin.instance.Config.Bind<KeyCode>(new ConfigDefinition("Keybinds", "Dance"), KeyCode.Alpha3, new ConfigDescription("Keybind used to perform the Dance emote"));
         }
 
         // this helper automatically makes config entries for disabling survivors

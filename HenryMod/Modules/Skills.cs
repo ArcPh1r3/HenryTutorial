@@ -75,6 +75,14 @@ namespace HenryMod.Modules
             };
         }
 
+        internal static void AddSecondarySkills(GameObject targetPrefab, params SkillDef[] skillDefs)
+        {
+            foreach (SkillDef i in skillDefs)
+            {
+                AddSecondarySkill(targetPrefab, i);
+            }
+        }
+
         internal static void AddUtilitySkill(GameObject targetPrefab, SkillDef skillDef)
         {
             SkillLocator skillLocator = targetPrefab.GetComponent<SkillLocator>();
@@ -90,6 +98,14 @@ namespace HenryMod.Modules
             };
         }
 
+        internal static void AddUtilitySkills(GameObject targetPrefab, params SkillDef[] skillDefs)
+        {
+            foreach (SkillDef i in skillDefs)
+            {
+                AddUtilitySkill(targetPrefab, i);
+            }
+        }
+
         internal static void AddSpecialSkill(GameObject targetPrefab, SkillDef skillDef)
         {
             SkillLocator skillLocator = targetPrefab.GetComponent<SkillLocator>();
@@ -103,6 +119,14 @@ namespace HenryMod.Modules
                 unlockableName = "",
                 viewableNode = new ViewablesCatalog.Node(skillDef.skillNameToken, false, null)
             };
+        }
+
+        internal static void AddSpecialSkills(GameObject targetPrefab, params SkillDef[] skillDefs)
+        {
+            foreach (SkillDef i in skillDefs)
+            {
+                AddSpecialSkill(targetPrefab, i);
+            }
         }
 
         internal static SkillDef CreatePrimarySkillDef(SerializableEntityStateType state, string stateMachine, string skillNameToken, string skillDescriptionToken, Sprite skillIcon, bool agile)

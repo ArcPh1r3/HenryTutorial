@@ -22,6 +22,7 @@ namespace HenryMod.Modules
         internal static GameObject punchImpactEffect;
 
         internal static GameObject bombExplosionEffect;
+        internal static GameObject dustEffect;
 
         internal static NetworkSoundEventDef swordHitSoundEvent;
         internal static NetworkSoundEventDef punchHitSoundEvent;
@@ -52,7 +53,8 @@ namespace HenryMod.Modules
             swordHitSoundEvent = CreateNetworkSoundEventDef("HenrySwordHit");
             punchHitSoundEvent = CreateNetworkSoundEventDef("HenryPunchHit");
 
-            bombExplosionEffect = LoadEffect("BombExplosionEffect", "");
+            dustEffect = LoadEffect("HenryDustEffect");
+            bombExplosionEffect = LoadEffect("BombExplosionEffect");
 
             ShakeEmitter shakeEmitter = bombExplosionEffect.AddComponent<ShakeEmitter>();
             shakeEmitter.amplitudeTimeDecay = true;
@@ -107,9 +109,33 @@ namespace HenryMod.Modules
             }
         }
 
+        internal static CharacterModel.RendererInfo[] SetupRendererInfos(GameObject obj)
+        {
+            MeshRenderer[] meshes = obj.GetComponentsInChildren<MeshRenderer>();
+            CharacterModel.RendererInfo[] rendererInfos = new CharacterModel.RendererInfo[meshes.Length];
+
+            for (int i = 0; i < meshes.Length; i++)
+            {
+                rendererInfos[i] = new CharacterModel.RendererInfo
+                {
+                    defaultMaterial = meshes[i].material,
+                    renderer = meshes[i],
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    ignoreOverlays = false
+                };
+            }
+
+            return rendererInfos;
+        }
+
         internal static Texture LoadCharacterIcon(string characterName)
         {
             return mainAssetBundle.LoadAsset<Texture>("tex" + characterName + "Icon");
+        }
+
+        internal static GameObject LoadCrosshair(string crosshairName)
+        {
+            return Resources.Load<GameObject>("Prefabs/Crosshair/" + crosshairName + "Crosshair");
         }
 
         private static GameObject LoadEffect(string resourceName)

@@ -9,12 +9,14 @@ namespace HenryMod.Modules.Components
         private CharacterBody characterBody;
         private CharacterModel model;
         private ChildLocator childLocator;
+        private HenryTracker tracker;
 
         private void Awake()
         {
             this.characterBody = this.gameObject.GetComponent<CharacterBody>();
             this.childLocator = this.gameObject.GetComponentInChildren<ChildLocator>();
             this.model = this.GetComponentInChildren<CharacterModel>();
+            this.tracker = this.gameObject.GetComponent<HenryTracker>();
 
             Invoke("CheckWeapon", 0.2f);
         }
@@ -35,13 +37,22 @@ namespace HenryMod.Modules.Components
                     break;
             }
 
+            bool hasTrackingSkill = false;
+
             if (this.characterBody.skillLocator.secondary.skillDef.skillNameToken == HenryPlugin.developerPrefix + "_HENRY_BODY_SECONDARY_STINGER_NAME")
             {
                 this.childLocator.FindChild("GunModel").gameObject.SetActive(false);
+                this.childLocator.FindChild("Gun").gameObject.SetActive(false);
 
-                this.characterBody.gameObject.AddComponent<HenryTracker>();
-                this.characterBody.crosshairPrefab = Resources.Load<GameObject>("Prefabs/Crosshair/SimpleDotCrosshair");
+                this.characterBody.crosshairPrefab = Modules.Assets.LoadCrosshair("SimpleDot");
+                hasTrackingSkill = true;
             }
+            else if (this.characterBody.skillLocator.secondary.skillDef.skillNameToken == HenryPlugin.developerPrefix + "_HENRY_BODY_SECONDARY_UZI_NAME")
+            {
+                this.childLocator.FindChild("GunModel").GetComponent<SkinnedMeshRenderer>().sharedMesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshUzi");
+            }
+
+            if (!hasTrackingSkill && this.tracker) Destroy(this.tracker);
         }
     }
 }

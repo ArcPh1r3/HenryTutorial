@@ -6,7 +6,7 @@ namespace HenryMod.Modules.Components
 {
     public class HenryTracker : MonoBehaviour
     {
-        public float maxTrackingDistance = 25f;
+        public float maxTrackingDistance = 40f;
         public float maxTrackingAngle = 20f;
         public float trackerUpdateFrequency = 10f;
 
@@ -41,6 +41,11 @@ namespace HenryMod.Modules.Components
         }
 
         private void OnDisable()
+        {
+            this.indicator.active = false;
+        }
+
+        private void OnDestroy()
         {
             this.indicator.active = false;
         }

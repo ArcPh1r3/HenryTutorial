@@ -104,6 +104,7 @@ ModelImporter:
     400096: upper_arm.l
     400098: upper_arm.r
     2100000: matHenry
+    2100002: matHenry.001
     2300000: meshHenry.001
     3300000: meshHenry.001
     4300000: meshHenry
@@ -186,6 +187,17 @@ ModelImporter:
     7400146: Armature|Punch3
     7400148: Armature|PunchDashAir
     7400150: Armature|PunchDashGround
+    7400152: Armature|LightImpact
+    7400154: Armature|RestEmote
+    7400156: Armature|RestEmoteLoop
+    7400158: Armature|RestIdle
+    7400160: Armature|RestIdleIn
+    7400162: Armature|SprintL
+    7400164: Armature|SprintR
+    7400166: Armature|BazookaAim
+    7400168: Armature|ShootUzi
+    7400170: Armature|Dance
+    7400172: Armature|Taunt
     9500000: //RootNode
     13700000: meshHenry
     13700002: MeshHenryGun

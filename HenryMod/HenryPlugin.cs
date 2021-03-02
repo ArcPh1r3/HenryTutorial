@@ -11,6 +11,7 @@ using System.Security.Permissions;
 namespace HenryMod
 {
     [BepInDependency("com.TeamMoonstorm.Starstorm2", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
@@ -34,71 +35,66 @@ namespace HenryMod
         //   this shouldn't even have to be said
         public const string MODUID = "com.rob.HenryMod";
         public const string MODNAME = "HenryMod";
-        public const string MODVERSION = "0.0.8";
+        public const string MODVERSION = "1.0.0";
 
         // a prefix for name tokens to prevent conflicts
         public const string developerPrefix = "ROB";
 
         // soft dependency stuff
         public static bool starstormInstalled = false;
+        public static bool scepterInstalled = false;
 
         public static HenryPlugin instance;
 
         public static event Action awake;
         public static event Action start;
 
-        // plugin constructor, ignore this
-        public HenryPlugin()
-        {
-            awake += HenryPlugin_Load;
-            start += HenryPlugin_LoadStart;
-        }
-
-        private void HenryPlugin_Load()
+        private void HenryPlugin_Awake()
         {
             instance = this;
 
             // check for soft dependencies
             if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.TeamMoonstorm.Starstorm2")) starstormInstalled = true;
+            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.DestroyedClone.AncientScepter")) scepterInstalled = true;
 
             // load assets and read config
             Modules.Assets.PopulateAssets();
             Modules.Config.ReadConfig();
-
-            Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
-
-            Modules.Survivors.Henry.CreateCharacter();
-
             Modules.States.RegisterStates(); // register states for networking
             Modules.Buffs.RegisterBuffs(); // add and register custom buffs/debuffs
             Modules.Projectiles.RegisterProjectiles(); // add and register custom projectiles
             Modules.Tokens.AddTokens(); // register name tokens
+            Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
+
+            Modules.Survivors.Henry.CreateCharacter();
+            Modules.Enemies.MrGreen.CreateCharacter();
 
             Hook();
         }
 
-        private void HenryPlugin_LoadStart()
+        private void HenryPlugin_Start()
         {
             // any code you need to run in Start() goes here
+        }
+
+        // plugin constructor, ignore this
+        public HenryPlugin()
+        {
+            awake += HenryPlugin_Awake;
+            start += HenryPlugin_Start;
         }
 
         public void Awake()
         {
             Action awake = HenryPlugin.awake;
-            if (awake == null)
-            {
-                return;
-            }
+            if (awake == null) return;
             awake();
         }
 
         public void Start()
         {
             Action start = HenryPlugin.start;
-            if (start == null)
-            {
-                return;
-            }
+            if (start == null) return;
             start();
         }
 

@@ -53,6 +53,7 @@ ModelImporter:
     100094: GunTop
     100096: meshHenry.001
     100098: MeshHenryGun
+    100100: meshUzi
     400000: Armature
     400002: base
     400004: calf.l
@@ -103,13 +104,16 @@ ModelImporter:
     400094: GunTop
     400096: meshHenry.001
     400098: MeshHenryGun
+    400100: meshUzi
     2100000: matHenry
+    2100002: matHenry.001
     2300000: meshHenry.001
     3300000: meshHenry.001
     4300000: meshHenry
     4300002: meshHenrySword
     4300004: MeshHenryGun
     4300006: meshHenry.001
+    4300008: meshUzi
     7400000: SprintLFT
     7400002: SprintRHT
     7400004: Ascending
@@ -166,6 +170,7 @@ ModelImporter:
     13700000: meshHenry
     13700002: meshHenrySword
     13700004: MeshHenryGun
+    13700006: meshUzi
     2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
@@ -219,7 +224,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 0
-    previousCalculatedGlobalScale: 0.01
+    previousCalculatedGlobalScale: 1
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60

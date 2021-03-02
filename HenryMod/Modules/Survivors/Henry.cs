@@ -3,6 +3,7 @@ using R2API;
 using RoR2;
 using RoR2.Skills;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace HenryMod.Modules.Survivors
@@ -41,7 +42,7 @@ namespace HenryMod.Modules.Survivors
                     bodyName = bodyName,
                     bodyNameToken = HenryPlugin.developerPrefix + "_HENRY_BODY_NAME",
                     characterPortrait = Modules.Assets.LoadCharacterIcon("Henry"),
-                    crosshair = Resources.Load<GameObject>("Prefabs/Crosshair/StandardCrosshair"),
+                    crosshair = Modules.Assets.LoadCrosshair("Standard"),
                     damage = 12f,
                     healthGrowth = 33f,
                     healthRegen = 1.5f,
@@ -51,6 +52,7 @@ namespace HenryMod.Modules.Survivors
                     podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod")
                 });
                 characterPrefab.AddComponent<Modules.Components.HenryController>();
+                characterPrefab.AddComponent<Modules.Components.HenryTracker>();
 
                 characterPrefab.GetComponent<EntityStateMachine>().mainStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.HenryMain));
                 #endregion
@@ -103,6 +105,8 @@ namespace HenryMod.Modules.Survivors
                 CreateSkins();
                 CreateItemDisplays();
                 CreateDoppelganger();
+
+                if (HenryPlugin.scepterInstalled) CreateScepterSkills();
             }
         }
 
@@ -111,6 +115,7 @@ namespace HenryMod.Modules.Survivors
             UnlockablesAPI.AddUnlockable<Achievements.HenryUnlockAchievement>(true);
             UnlockablesAPI.AddUnlockable<Achievements.MasteryAchievement>(true);
             if (HenryPlugin.starstormInstalled) UnlockablesAPI.AddUnlockable<Achievements.GrandMasteryAchievement>(true);
+            UnlockablesAPI.AddUnlockable<Achievements.DanteAchievement>(true);
         }
 
         private static void CreateDoppelganger()
@@ -140,7 +145,7 @@ namespace HenryMod.Modules.Survivors
 
             #region Primary
             Modules.Skills.AddPrimarySkill(characterPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_SLASH_NAME", prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"), true));
-            Modules.Skills.AddPrimarySkill(characterPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.PunchCombo)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_PUNCH_NAME", prefix + "_HENRY_BODY_PRIMARY_PUNCH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"), true));
+            Modules.Skills.AddPrimarySkill(characterPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.PunchCombo)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_PUNCH_NAME", prefix + "_HENRY_BODY_PRIMARY_PUNCH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"), true));
             #endregion
 
             #region Secondary
@@ -151,7 +156,7 @@ namespace HenryMod.Modules.Survivors
                 skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_GUN_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
-                activationStateMachineName = "Weapon",
+                activationStateMachineName = "Slide",
                 baseMaxStock = 1,
                 baseRechargeInterval = 1f,
                 beginSkillCooldownOnSkillEnd = false,
@@ -167,14 +172,14 @@ namespace HenryMod.Modules.Survivors
                 requiredStock = 1,
                 shootDelay = 0f,
                 stockToConsume = 1,
-                keywordTokens = new string [] { "KEYWORD_AGILE" }
+                keywordTokens = new string[] { "KEYWORD_AGILE" }
             });
-            SkillDef stingerSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef stingerSkillDef = Modules.Skills.CreateTrackingSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_SECONDARY_STINGER_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_SECONDARY_STINGER_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_STINGER_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texStingerIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Stinger.StingerEntry)),
                 activationStateMachineName = "Weapon",
                 baseMaxStock = 1,
@@ -183,7 +188,7 @@ namespace HenryMod.Modules.Survivors
                 canceledFromSprinting = false,
                 forceSprintDuringState = false,
                 fullRestockOnAssign = true,
-                interruptPriority = EntityStates.InterruptPriority.Any,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
                 isBullets = false,
                 isCombatSkill = true,
                 mustKeyPress = false,
@@ -193,9 +198,32 @@ namespace HenryMod.Modules.Survivors
                 shootDelay = 0f,
                 stockToConsume = 1,
             });
+            SkillDef uziSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = prefix + "_HENRY_BODY_SECONDARY_UZI_NAME",
+                skillNameToken = prefix + "_HENRY_BODY_SECONDARY_UZI_NAME",
+                skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_UZI_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texUziIcon"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ShootUzi)),
+                activationStateMachineName = "Slide",
+                baseMaxStock = 32,
+                baseRechargeInterval = 4f,
+                beginSkillCooldownOnSkillEnd = true,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+                isBullets = true,
+                isCombatSkill = true,
+                mustKeyPress = false,
+                noSprint = true,
+                rechargeStock = 32,
+                requiredStock = 1,
+                shootDelay = 0f,
+                stockToConsume = 1,
+            });
 
-            Modules.Skills.AddSecondarySkill(characterPrefab, shootSkillDef);
-            Modules.Skills.AddSecondarySkill(characterPrefab, stingerSkillDef);
+            Modules.Skills.AddSecondarySkills(characterPrefab, shootSkillDef, uziSkillDef, stingerSkillDef);
             #endregion
 
             #region Utility
@@ -235,7 +263,7 @@ namespace HenryMod.Modules.Survivors
                 skillDescriptionToken = prefix + "_HENRY_BODY_SPECIAL_BOMB_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
-                activationStateMachineName = "Weapon",
+                activationStateMachineName = "Slide",
                 baseMaxStock = 1,
                 baseRechargeInterval = 8f,
                 beginSkillCooldownOnSkillEnd = false,
@@ -257,6 +285,39 @@ namespace HenryMod.Modules.Survivors
             #endregion
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        private static void CreateScepterSkills()
+        {
+            string prefix = HenryPlugin.developerPrefix;
+
+            SkillDef bombSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = prefix + "_HENRY_BODY_SPECIAL_SCEPBOMB_NAME",
+                skillNameToken = prefix + "_HENRY_BODY_SPECIAL_SCEPBOMB_NAME",
+                skillDescriptionToken = prefix + "_HENRY_BODY_SPECIAL_SCEPBOMB_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texScepterSpecialIcon"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
+                activationStateMachineName = "Weapon",
+                baseMaxStock = 4,
+                baseRechargeInterval = 4f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+                isBullets = false,
+                isCombatSkill = true,
+                mustKeyPress = false,
+                noSprint = true,
+                rechargeStock = 1,
+                requiredStock = 1,
+                shootDelay = 0f,
+                stockToConsume = 1
+            });
+
+            AncientScepter.AncientScepterItem.instance.RegisterScepterSkill(bombSkillDef, bodyName, SkillSlot.Special, 0);
+        }
+
         private static void CreateSkins()
         {
             GameObject model = characterPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
@@ -272,6 +333,7 @@ namespace HenryMod.Modules.Survivors
             List<SkinDef> skins = new List<SkinDef>();
 
             GameObject coatObject = childLocator.FindChild("Coat").gameObject;
+            GameObject swordTrail = childLocator.FindChild("SwordTrail").gameObject;
 
             #region DefaultSkin
             SkinDef defaultSkin = Modules.Skins.CreateSkinDef(HenryPlugin.developerPrefix + "_HENRY_BODY_DEFAULT_SKIN_NAME",
@@ -305,6 +367,11 @@ namespace HenryMod.Modules.Survivors
                 {
                     gameObject = coatObject,
                     shouldActivate = false
+                },
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = swordTrail,
+                    shouldActivate = false
                 }
             };
 
@@ -315,6 +382,7 @@ namespace HenryMod.Modules.Survivors
             Material masteryMat = Modules.Assets.CreateMaterial("matHenryAlt");
             CharacterModel.RendererInfo[] masteryRendererInfos = SkinRendererInfos(defaultRenderers, new Material[]
             {
+                masteryMat,
                 masteryMat,
                 masteryMat,
                 masteryMat
@@ -347,6 +415,11 @@ namespace HenryMod.Modules.Survivors
                 {
                     gameObject = coatObject,
                     shouldActivate = false
+                },
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = swordTrail,
+                    shouldActivate = false
                 }
             };
 
@@ -359,6 +432,7 @@ namespace HenryMod.Modules.Survivors
                 Material grandMasteryMat = Modules.Assets.CreateMaterial("matVergil");
                 CharacterModel.RendererInfo[] grandMasteryRendererInfos = SkinRendererInfos(defaultRenderers, new Material[]
                 {
+                grandMasteryMat,
                 grandMasteryMat,
                 grandMasteryMat,
                 grandMasteryMat
@@ -382,6 +456,11 @@ namespace HenryMod.Modules.Survivors
                 {
                     mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshVergil"),
                     renderer = defaultRenderers[bodyRendererIndex].renderer
+                },
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshVergilCoat"),
+                    renderer = defaultRenderers[4].renderer
                 }
                 };
 
@@ -391,11 +470,69 @@ namespace HenryMod.Modules.Survivors
                 {
                     gameObject = coatObject,
                     shouldActivate = true
+                },
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = swordTrail,
+                    shouldActivate = false
                 }
                 };
 
                 skins.Add(grandMasterySkin);
             }
+            #endregion
+
+            #region DanteSkin
+            Material danteMat = Modules.Assets.CreateMaterial("matDante");
+            CharacterModel.RendererInfo[] danteRendererInfos = SkinRendererInfos(defaultRenderers, new Material[]
+            {
+                Modules.Assets.CreateMaterial("matRebellion", 5f, Color.white),
+                danteMat,
+                danteMat,
+                danteMat
+            });
+
+            SkinDef danteSkin = Modules.Skins.CreateSkinDef(HenryPlugin.developerPrefix + "_HENRY_BODY_DANTE_SKIN_NAME",
+                Assets.mainAssetBundle.LoadAsset<Sprite>("texDanteAchievement"),
+                danteRendererInfos,
+                mainRenderer,
+                model,
+                HenryPlugin.developerPrefix + "_HENRY_BODY_DANTEUNLOCKABLE_REWARD_ID");
+
+            danteSkin.meshReplacements = new SkinDef.MeshReplacement[]
+            {
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRebellion"),
+                    renderer = defaultRenderers[0].renderer
+                },
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshDante"),
+                    renderer = defaultRenderers[bodyRendererIndex].renderer
+                },
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshDanteCoat"),
+                    renderer = defaultRenderers[4].renderer
+                }
+            };
+
+            danteSkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            {
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = coatObject,
+                    shouldActivate = true
+                },
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = swordTrail,
+                    shouldActivate = true
+                }
+            };
+
+            skins.Add(danteSkin);
             #endregion
 
             skinController.skins = skins.ToArray();
@@ -3043,6 +3180,7 @@ localScale = new Vector3(0.1233F, 0.1233F, 0.1233F),
             newRendererInfos[0].defaultMaterial = materials[0];
             newRendererInfos[1].defaultMaterial = materials[1];
             newRendererInfos[bodyRendererIndex].defaultMaterial = materials[2];
+            newRendererInfos[4].defaultMaterial = materials[3];
 
             return newRendererInfos;
         }
