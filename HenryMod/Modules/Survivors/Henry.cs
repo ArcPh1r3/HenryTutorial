@@ -17,8 +17,8 @@ namespace HenryMod.Modules.Survivors
 
         public const string bodyName = "RobHenryBody";
 
-        private static int bodyRendererIndex; // use this to store the rendererinfo index containing our character's body
-                                              // keep it last in the rendererinfos because teleporter particles for some reason require this. hopoo pls
+        public static int bodyRendererIndex; // use this to store the rendererinfo index containing our character's body
+                                             // keep it last in the rendererinfos because teleporter particles for some reason require this. hopoo pls
 
         // item display stuffs
         internal static ItemDisplayRuleSet itemDisplayRuleSet;

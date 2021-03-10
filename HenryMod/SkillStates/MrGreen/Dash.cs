@@ -1,5 +1,6 @@
 ﻿using EntityStates;
 using RoR2;
+using System.Linq;
 using UnityEngine;
 
 namespace HenryMod.SkillStates.MrGreen
@@ -34,9 +35,42 @@ namespace HenryMod.SkillStates.MrGreen
                 }
             }
 
+            this.SearchForAllies();
+
             if (base.isAuthority && base.fixedAge >= this.duration)
             {
                 this.outer.SetNextStateToMain();
+            }
+        }
+
+        private void SearchForAllies()
+        {
+            Ray aimRay = base.GetAimRay();
+
+            BullseyeSearch search = new BullseyeSearch
+            {
+                teamMaskFilter = TeamMask.none,
+                filterByLoS = false,
+                searchOrigin = base.transform.position,
+                searchDirection = Random.onUnitSphere,
+                sortMode = BullseyeSearch.SortMode.Distance,
+                maxDistanceFilter = 3f,
+                maxAngleFilter = 360f
+            };
+
+            search.teamMaskFilter.AddTeam(base.GetTeam());
+
+            search.RefreshCandidates();
+            search.FilterOutGameObject(base.gameObject);
+
+            HurtBox target = search.GetResults().FirstOrDefault<HurtBox>();
+            if (target)
+            {
+                if (target.healthComponent && target.healthComponent.body)
+                {
+                    this.outer.SetNextState(new PeoplesElbow());
+                    return;
+                }
             }
         }
 

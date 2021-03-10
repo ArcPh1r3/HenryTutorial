@@ -35,7 +35,7 @@ namespace HenryMod
         //   this shouldn't even have to be said
         public const string MODUID = "com.rob.HenryMod";
         public const string MODNAME = "HenryMod";
-        public const string MODVERSION = "1.0.0";
+        public const string MODVERSION = "1.0.1";
 
         // a prefix for name tokens to prevent conflicts
         public const string developerPrefix = "ROB";
@@ -46,10 +46,7 @@ namespace HenryMod
 
         public static HenryPlugin instance;
 
-        public static event Action awake;
-        public static event Action start;
-
-        private void HenryPlugin_Awake()
+        private void Awake()
         {
             instance = this;
 
@@ -67,35 +64,9 @@ namespace HenryMod
             Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
 
             Modules.Survivors.Henry.CreateCharacter();
-            Modules.Enemies.MrGreen.CreateCharacter();
+            new Modules.Enemies.MrGreen().CreateCharacter();
 
             Hook();
-        }
-
-        private void HenryPlugin_Start()
-        {
-            // any code you need to run in Start() goes here
-        }
-
-        // plugin constructor, ignore this
-        public HenryPlugin()
-        {
-            awake += HenryPlugin_Awake;
-            start += HenryPlugin_Start;
-        }
-
-        public void Awake()
-        {
-            Action awake = HenryPlugin.awake;
-            if (awake == null) return;
-            awake();
-        }
-
-        public void Start()
-        {
-            Action start = HenryPlugin.start;
-            if (start == null) return;
-            start();
         }
 
         private void Hook()

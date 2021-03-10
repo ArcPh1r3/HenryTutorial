@@ -1,4 +1,6 @@
 ﻿using BepInEx.Configuration;
+using HenryMod.Modules.Components;
+using HenryMod.SkillStates.MrGreen;
 using R2API;
 using RoR2;
 using RoR2.Skills;
@@ -8,16 +10,19 @@ using UnityEngine;
 
 namespace HenryMod.Modules.Enemies
 {
-    internal static class MrGreen
+    internal class MrGreen
     {
         internal static GameObject characterPrefab;
         internal static GameObject displayPrefab;
+
+        internal static GameObject clonePrefab;
+        internal static GameObject cloneMaster;
 
         internal static ConfigEntry<bool> characterEnabled;
 
         public const string bodyName = "MrGreenBody";
 
-        private static int bodyRendererIndex; // use this to store the rendererinfo index containing our character's body
+        public static int bodyRendererIndex; // use this to store the rendererinfo index containing our character's body
                                               // keep it last in the rendererinfos because teleporter particles for some reason require this. hopoo pls
 
         // item display stuffs
@@ -25,7 +30,10 @@ namespace HenryMod.Modules.Enemies
         internal static List<ItemDisplayRuleSet.NamedRuleGroup> itemRules;
         internal static List<ItemDisplayRuleSet.NamedRuleGroup> equipmentRules;
 
-        internal static void CreateCharacter()
+        const float baseHealth = 240f;
+        const float baseHealthGrowth = 66f;
+
+        internal void CreateCharacter()
         {
             // this creates a config option to enable the character- feel free to remove if the character is the only thing in your mod
             characterEnabled = Modules.Config.CharacterEnableConfig("Mr. Green");
@@ -40,15 +48,17 @@ namespace HenryMod.Modules.Enemies
                     bodyNameToken = HenryPlugin.developerPrefix + "_MRGREEN_BODY_NAME",
                     characterPortrait = Modules.Assets.LoadCharacterIcon("MrGreen"),
                     crosshair = Modules.Assets.LoadCrosshair("SimpleDot"),
-                    damage = 12f,
-                    healthGrowth = 33f,
-                    healthRegen = 1.5f,
+                    damage = 2f,
+                    healthGrowth = baseHealthGrowth,
+                    healthRegen = 0f,
                     jumpCount = 1,
-                    maxHealth = 110f,
+                    maxHealth = baseHealth,
                     subtitleNameToken = HenryPlugin.developerPrefix + "_MRGREEN_BODY_SUBTITLE",
                     podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod")
                 });
-                //characterPrefab.AddComponent<Modules.Components.HenryController>();
+
+                characterPrefab.AddComponent<HenryTracker>();
+                characterPrefab.AddComponent<MrGreenCloneTracker>().isRoot = true;
 
                 characterPrefab.GetComponent<EntityStateMachine>().mainStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.HenryMain));
                 #endregion
@@ -70,12 +80,69 @@ namespace HenryMod.Modules.Enemies
 
                 Modules.Prefabs.RegisterNewSurvivor(characterPrefab, displayPrefab, Color.grey, "MRGREEN");
 
-                CreateHitboxes();
-                CreateSkills();
+                CreateClonePrefab();
+
+                CreateHitboxes(characterPrefab);
+                CreateHitboxes(clonePrefab);
+                CreateSkills(characterPrefab);
+                CreateCloneSkills(clonePrefab);
                 CreateSkins();
                 CreateItemDisplays();
                 CreateDoppelganger();
+
+                On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
+                On.RoR2.CharacterMaster.OnBodyDeath += CharacterMaster_OnBodyDeath;
             }
+        }
+
+        private static void CreateClonePrefab()
+        {
+            #region Body
+            clonePrefab = Modules.Prefabs.CreatePrefab("MrGreenCloneBody", "mdlMrGreen", new BodyInfo
+            {
+                armor = 20f,
+                armorGrowth = 0f,
+                bodyName = "MrGreenCloneBody",
+                bodyNameToken = HenryPlugin.developerPrefix + "_MRGREEN_BODY_NAME",
+                characterPortrait = Modules.Assets.LoadCharacterIcon("MrGreen"),
+                crosshair = Modules.Assets.LoadCrosshair("SimpleDot"),
+                damage = 1f,
+                healthGrowth = baseHealthGrowth,
+                healthRegen = 0f,
+                jumpCount = 1,
+                maxHealth = baseHealth,
+                subtitleNameToken = HenryPlugin.developerPrefix + "_MRGREEN_BODY_SUBTITLE",
+                podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod")
+            });
+
+            clonePrefab.AddComponent<HenryTracker>();
+            clonePrefab.AddComponent<MrGreenCloneTracker>();
+
+            clonePrefab.GetComponent<EntityStateMachine>().mainStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.HenryMain));
+            clonePrefab.GetComponent<EntityStateMachine>().initialStateType = new EntityStates.SerializableEntityStateType(typeof(CloneSpawnState));
+            clonePrefab.GetComponent<CharacterDeathBehavior>().deathState = new EntityStates.SerializableEntityStateType(typeof(CloneFakeDeath));
+            #endregion
+
+            #region Model
+            Material bodyMat = Modules.Assets.CreateMaterial("matMrGreen");
+
+            Modules.Prefabs.SetupCharacterModel(clonePrefab, new CustomRendererInfo[] {
+                new CustomRendererInfo
+                {
+                    childName = "Model",
+                    material = bodyMat
+                }}, 0);
+            #endregion
+
+            #region Master
+            cloneMaster = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterMasters/MercMonsterMaster"), "MrGreenCloneMaster", true);
+            cloneMaster.GetComponent<CharacterMaster>().bodyPrefab = clonePrefab;
+
+            MasterCatalog.getAdditionalEntries += delegate (List<GameObject> list)
+            {
+                list.Add(cloneMaster);
+            };
+            #endregion
         }
 
         private static void CreateDoppelganger()
@@ -83,36 +150,36 @@ namespace HenryMod.Modules.Enemies
             Modules.Prefabs.CreateGenericDoppelganger(characterPrefab, "MrGreenMonsterMaster", "Merc");
         }
 
-        private static void CreateHitboxes()
+        private static void CreateHitboxes(GameObject prefab)
         {
-            ChildLocator childLocator = characterPrefab.GetComponentInChildren<ChildLocator>();
+            ChildLocator childLocator = prefab.GetComponentInChildren<ChildLocator>();
             GameObject model = childLocator.gameObject;
 
             Transform hitboxTransform = childLocator.FindChild("PunchHitbox");
             Modules.Prefabs.SetupHitbox(model, hitboxTransform, "Punch");
         }
 
-        private static void CreateSkills()
+        private static void CreateSkills(GameObject prefab)
         {
-            Modules.Skills.CreateSkillFamilies(characterPrefab);
+            Modules.Skills.CreateSkillFamilies(prefab);
 
             string prefix = HenryPlugin.developerPrefix;
 
             #region Primary
-            Modules.Skills.AddPrimarySkill(characterPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.PunchCombo)), "Body", prefix + "_MRGREEN_BODY_PRIMARY_PUNCH_NAME", prefix + "_MRGREEN_BODY_PRIMARY_PUNCH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"), true));
+            Modules.Skills.AddPrimarySkill(prefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.PunchCombo)), "Body", prefix + "_MRGREEN_BODY_PRIMARY_PUNCH_NAME", prefix + "_MRGREEN_BODY_PRIMARY_PUNCH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"), true));
             #endregion
 
             #region Secondary
-            SkillDef cloneThrowSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef stingerSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_SECONDARY_GUN_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_SECONDARY_GUN_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_GUN_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
-                activationStateMachineName = "Slide",
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Stinger.StingerEntry)),
+                activationStateMachineName = "Body",
                 baseMaxStock = 1,
-                baseRechargeInterval = 1f,
+                baseRechargeInterval = 2f,
                 beginSkillCooldownOnSkillEnd = false,
                 canceledFromSprinting = false,
                 forceSprintDuringState = false,
@@ -129,7 +196,7 @@ namespace HenryMod.Modules.Enemies
                 keywordTokens = new string[] { "KEYWORD_AGILE" }
             });
 
-            Modules.Skills.AddSecondarySkills(characterPrefab, cloneThrowSkillDef);
+            Modules.Skills.AddSecondarySkills(prefab, stingerSkillDef);
             #endregion
 
             #region Utility
@@ -140,7 +207,7 @@ namespace HenryMod.Modules.Enemies
                 skillDescriptionToken = prefix + "_MRGREEN_BODY_UTILITY_DASH_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.MrGreen.Dash)),
-                activationStateMachineName = "Body",
+                activationStateMachineName = "Weapon",
                 baseMaxStock = 1,
                 baseRechargeInterval = 8f,
                 beginSkillCooldownOnSkillEnd = false,
@@ -158,7 +225,7 @@ namespace HenryMod.Modules.Enemies
                 stockToConsume = 1
             });
 
-            Modules.Skills.AddUtilitySkill(characterPrefab, dashSkillDef);
+            Modules.Skills.AddUtilitySkill(prefab, dashSkillDef);
             #endregion
 
             #region Special
@@ -168,10 +235,10 @@ namespace HenryMod.Modules.Enemies
                 skillNameToken = prefix + "_MRGREEN_BODY_SPECIAL_RES_NAME",
                 skillDescriptionToken = prefix + "_MRGREEN_BODY_SPECIAL_RES_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(Resurrect)),
                 activationStateMachineName = "Body",
                 baseMaxStock = 1,
-                baseRechargeInterval = 8f,
+                baseRechargeInterval = 16f,
                 beginSkillCooldownOnSkillEnd = false,
                 canceledFromSprinting = false,
                 forceSprintDuringState = false,
@@ -187,7 +254,106 @@ namespace HenryMod.Modules.Enemies
                 stockToConsume = 1
             });
 
-            Modules.Skills.AddSpecialSkill(characterPrefab, resSkillDef);
+            Modules.Skills.AddSpecialSkill(prefab, resSkillDef);
+            #endregion
+        }
+
+        private static void CreateCloneSkills(GameObject prefab)
+        {
+            Modules.Skills.CreateSkillFamilies(prefab);
+
+            string prefix = HenryPlugin.developerPrefix;
+
+            #region Primary
+            Modules.Skills.AddPrimarySkill(prefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.PunchCombo)), "Body", prefix + "_MRGREEN_BODY_PRIMARY_PUNCH_NAME", prefix + "_MRGREEN_BODY_PRIMARY_PUNCH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"), true));
+            #endregion
+
+            #region Secondary
+            SkillDef stingerSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = prefix + "_HENRY_BODY_SECONDARY_GUN_NAME",
+                skillNameToken = prefix + "_HENRY_BODY_SECONDARY_GUN_NAME",
+                skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_GUN_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Stinger.StingerEntry)),
+                activationStateMachineName = "Body",
+                baseMaxStock = 1,
+                baseRechargeInterval = 8f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+                isBullets = false,
+                isCombatSkill = true,
+                mustKeyPress = false,
+                noSprint = false,
+                rechargeStock = 1,
+                requiredStock = 1,
+                shootDelay = 0f,
+                stockToConsume = 1,
+                keywordTokens = new string[] { "KEYWORD_AGILE" }
+            });
+
+            Modules.Skills.AddSecondarySkills(prefab, stingerSkillDef);
+            #endregion
+
+            #region Utility
+            SkillDef dashSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = prefix + "_MRGREEN_BODY_UTILITY_DASH_NAME",
+                skillNameToken = prefix + "_MRGREEN_BODY_UTILITY_DASH_NAME",
+                skillDescriptionToken = prefix + "_MRGREEN_BODY_UTILITY_DASH_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.MrGreen.Dash)),
+                activationStateMachineName = "Weapon",
+                baseMaxStock = 1,
+                baseRechargeInterval = 16f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = true,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+                isBullets = false,
+                isCombatSkill = false,
+                mustKeyPress = false,
+                noSprint = false,
+                rechargeStock = 1,
+                requiredStock = 1,
+                shootDelay = 0f,
+                stockToConsume = 1
+            });
+
+            Modules.Skills.AddUtilitySkill(prefab, dashSkillDef);
+            #endregion
+
+            #region Special
+            SkillDef resSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = prefix + "_MRGREEN_BODY_SPECIAL_RES_NAME",
+                skillNameToken = prefix + "_MRGREEN_BODY_SPECIAL_RES_NAME",
+                skillDescriptionToken = prefix + "_MRGREEN_BODY_SPECIAL_RES_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
+                activationStateMachineName = "Body",
+                baseMaxStock = 1,
+                baseRechargeInterval = 128f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = false,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+                isBullets = false,
+                isCombatSkill = true,
+                mustKeyPress = false,
+                noSprint = true,
+                rechargeStock = 1,
+                requiredStock = 2,
+                shootDelay = 0f,
+                stockToConsume = 1
+            });
+
+            Modules.Skills.AddSpecialSkill(prefab, resSkillDef);
             #endregion
         }
 
@@ -2860,6 +3026,74 @@ localScale = new Vector3(0.1233F, 0.1233F, 0.1233F),
             newRendererInfos[0].defaultMaterial = materials[0];
 
             return newRendererInfos;
+        }
+
+        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
+        {
+            float _storedDamage = 0f;
+
+            if (self != null && damageInfo != null)
+            {
+                if (self.body.baseNameToken == HenryPlugin.developerPrefix + "_MRGREEN_BODY_NAME")
+                {
+                    if (self.health != self.fullCombinedHealth)
+                    {
+                        MrGreenCloneTracker cloneTracker = self.gameObject.GetComponent<MrGreenCloneTracker>();
+                        if (cloneTracker)
+                        {
+                            if (cloneTracker.rootTracker)
+                            {
+                                if (cloneTracker.rootTracker.canSpawnClone)
+                                {
+                                    if (damageInfo.damage >= 0.1f * self.fullCombinedHealth)
+                                    {
+                                        _storedDamage = 0.9f * damageInfo.damage;
+                                        damageInfo.damage *= 0.1f;
+
+                                        self.GetComponent<EntityStateMachine>().SetNextState(new CloneDodge()
+                                        {
+                                            storedDamage = _storedDamage,
+                                            attacker = damageInfo.attacker,
+                                            tracker = cloneTracker.rootTracker
+                                        });
+                                    }
+                                }
+                            }
+                            else if (cloneTracker.isRoot && cloneTracker.canSpawnClone)
+                            {
+                                if (damageInfo.damage >= 0.1f * self.fullCombinedHealth)
+                                {
+                                    _storedDamage = 0.9f * damageInfo.damage;
+                                    damageInfo.damage *= 0.1f;
+
+                                    self.GetComponent<EntityStateMachine>().SetNextState(new CloneDodge()
+                                    {
+                                        storedDamage = _storedDamage,
+                                        attacker = damageInfo.attacker,
+                                        tracker = cloneTracker
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            orig(self, damageInfo);
+        }
+
+        private void CharacterMaster_OnBodyDeath(On.RoR2.CharacterMaster.orig_OnBodyDeath orig, CharacterMaster self, CharacterBody body)
+        {
+            if (self && body)
+            {
+                MrGreenCloneTracker cloneTracker = body.GetComponent<MrGreenCloneTracker>();
+                if (cloneTracker)
+                {
+                    if (cloneTracker.rootTracker) return;
+                }
+            }
+
+            orig(self, body);
         }
     }
 }

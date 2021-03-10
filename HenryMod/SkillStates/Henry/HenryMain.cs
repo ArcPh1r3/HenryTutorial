@@ -21,7 +21,7 @@ namespace HenryMod.SkillStates
         {
             base.Update();
 
-            //emotes
+            // emotes
             if (base.isAuthority && base.characterMotor.isGrounded && !this.localUser.isUIFocused)
             {
                 if (Input.GetKeyDown(Modules.Config.restKeybind.Value))

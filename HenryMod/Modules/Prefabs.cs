@@ -126,6 +126,7 @@ namespace HenryMod.Modules
         internal static void CreateGenericDoppelganger(GameObject bodyPrefab, string masterName, string masterToCopy)
         {
             GameObject newMaster = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterMasters/" + masterToCopy + "MonsterMaster"), masterName, true);
+            newMaster.GetComponent<CharacterMaster>().bodyPrefab = bodyPrefab;
 
             MasterCatalog.getAdditionalEntries += delegate (List<GameObject> list)
             {
@@ -174,7 +175,7 @@ namespace HenryMod.Modules
                 return null;
             }
 
-            return Modules.Assets.mainAssetBundle.LoadAsset<GameObject>(modelName);
+            return GameObject.Instantiate(Modules.Assets.mainAssetBundle.LoadAsset<GameObject>(modelName));
         }
 
         internal static void SetupCharacterModel(GameObject prefab, CustomRendererInfo[] rendererInfo, int mainRendererIndex)
