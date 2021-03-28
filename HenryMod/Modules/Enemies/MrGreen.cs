@@ -3,6 +3,8 @@ using HenryMod.Modules.Components;
 using HenryMod.SkillStates.MrGreen;
 using R2API;
 using RoR2;
+using RoR2.CharacterAI;
+using RoR2.Navigation;
 using RoR2.Skills;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -18,14 +20,15 @@ namespace HenryMod.Modules.Enemies
         internal static GameObject clonePrefab;
         internal static GameObject cloneMaster;
 
+        internal static GameObject bossMaster;
+        //internal static GameObject umbraMaster;
+
         internal static ConfigEntry<bool> characterEnabled;
 
         public const string bodyName = "MrGreenBody";
 
-        public static int bodyRendererIndex; // use this to store the rendererinfo index containing our character's body
-                                              // keep it last in the rendererinfos because teleporter particles for some reason require this. hopoo pls
+        public static int bodyRendererIndex;
 
-        // item display stuffs
         internal static ItemDisplayRuleSet itemDisplayRuleSet;
         internal static List<ItemDisplayRuleSet.NamedRuleGroup> itemRules;
         internal static List<ItemDisplayRuleSet.NamedRuleGroup> equipmentRules;
@@ -35,8 +38,7 @@ namespace HenryMod.Modules.Enemies
 
         internal void CreateCharacter()
         {
-            // this creates a config option to enable the character- feel free to remove if the character is the only thing in your mod
-            characterEnabled = Modules.Config.CharacterEnableConfig("Mr. Green");
+            characterEnabled = Modules.Config.EnemyEnableConfig("Mr. Green");
             if (characterEnabled.Value)
             {
                 #region Body
@@ -56,11 +58,13 @@ namespace HenryMod.Modules.Enemies
                     subtitleNameToken = HenryPlugin.developerPrefix + "_MRGREEN_BODY_SUBTITLE",
                     podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod")
                 });
+                characterPrefab.GetComponent<CharacterBody>().isChampion = true;
 
                 characterPrefab.AddComponent<HenryTracker>();
                 characterPrefab.AddComponent<MrGreenCloneTracker>().isRoot = true;
 
                 characterPrefab.GetComponent<EntityStateMachine>().mainStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.HenryMain));
+                characterPrefab.AddComponent<DeathRewards>();
                 #endregion
 
                 #region Model
@@ -78,7 +82,7 @@ namespace HenryMod.Modules.Enemies
 
                 displayPrefab = Modules.Prefabs.CreateDisplayPrefab("MrGreenDisplay", characterPrefab);
 
-                Modules.Prefabs.RegisterNewSurvivor(characterPrefab, displayPrefab, Color.grey, "MRGREEN");
+                //Modules.Prefabs.RegisterNewSurvivor(characterPrefab, displayPrefab, Color.grey, "MRGREEN");
 
                 CreateClonePrefab();
 
@@ -88,7 +92,11 @@ namespace HenryMod.Modules.Enemies
                 CreateCloneSkills(clonePrefab);
                 CreateSkins();
                 CreateItemDisplays();
-                CreateDoppelganger();
+
+                bossMaster = CreateMaster(characterPrefab, "MrGreenMaster", false);
+                //umbraMaster = CreateMaster(characterPrefab, "MrGreenMonsterMaster");
+
+                CreateSpawnCard();
 
                 On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
                 On.RoR2.CharacterMaster.OnBodyDeath += CharacterMaster_OnBodyDeath;
@@ -135,19 +143,215 @@ namespace HenryMod.Modules.Enemies
             #endregion
 
             #region Master
-            cloneMaster = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterMasters/MercMonsterMaster"), "MrGreenCloneMaster", true);
-            cloneMaster.GetComponent<CharacterMaster>().bodyPrefab = clonePrefab;
-
-            MasterCatalog.getAdditionalEntries += delegate (List<GameObject> list)
-            {
-                list.Add(cloneMaster);
-            };
+            cloneMaster = CreateMaster(clonePrefab, "MrGreenCloneMaster", true);
             #endregion
         }
 
-        private static void CreateDoppelganger()
+        private static void CreateSpawnCard()
         {
-            Modules.Prefabs.CreateGenericDoppelganger(characterPrefab, "MrGreenMonsterMaster", "Merc");
+            int minimumStageCount = HenryPlugin.instance.Config.Bind<int>(new ConfigDefinition("Mr. Green", "Minimum Stage Clear Count"), 0, new ConfigDescription("Number of stages that must be completed before this boss can spawn")).Value;
+            int spawnCost = HenryPlugin.instance.Config.Bind<int>(new ConfigDefinition("Mr. Green", "Spawn Cost"), 600, new ConfigDescription("How many director credits does this boss cost")).Value;
+
+            CharacterSpawnCard characterSpawnCard = ScriptableObject.CreateInstance<CharacterSpawnCard>();
+            characterSpawnCard.name = "cscMrGreen";
+            characterSpawnCard.prefab = bossMaster;
+            characterSpawnCard.sendOverNetwork = true;
+            characterSpawnCard.hullSize = HullClassification.Human;
+            characterSpawnCard.nodeGraphType = MapNodeGroup.GraphType.Ground;
+            characterSpawnCard.requiredFlags = NodeFlags.None;
+            characterSpawnCard.forbiddenFlags = NodeFlags.TeleporterOK;
+            characterSpawnCard.directorCreditCost = spawnCost;
+            characterSpawnCard.occupyPosition = false;
+            characterSpawnCard.loadout = new SerializableLoadout();
+            characterSpawnCard.noElites = false;
+            characterSpawnCard.forbiddenAsBoss = false;
+
+            DirectorCard card = new DirectorCard
+            {
+                spawnCard = characterSpawnCard,
+                selectionWeight = 1,
+                allowAmbushSpawn = true,
+                preventOverhead = false,
+                minimumStageCompletions = minimumStageCount,
+                requiredUnlockable = "",
+                forbiddenUnlockable = "",
+                spawnDistance = DirectorCore.MonsterSpawnDistance.Close
+            };
+
+            DirectorAPI.DirectorCardHolder bossCard = new DirectorAPI.DirectorCardHolder
+            {
+                Card = card,
+                MonsterCategory = DirectorAPI.MonsterCategory.Champions,
+                InteractableCategory = DirectorAPI.InteractableCategory.None
+            };
+
+            DirectorAPI.MonsterActions += delegate (List<DirectorAPI.DirectorCardHolder> list, DirectorAPI.StageInfo stage)
+            {
+                if (stage.stage == DirectorAPI.Stage.TitanicPlains || stage.stage == DirectorAPI.Stage.DistantRoost || stage.stage == DirectorAPI.Stage.GildedCoast || stage.stage == DirectorAPI.Stage.RallypointDelta || stage.stage == DirectorAPI.Stage.VoidCell || stage.stage == DirectorAPI.Stage.WetlandAspect)
+                {
+                    if (!list.Contains(bossCard))
+                    {
+                        list.Add(bossCard);
+                    }
+                }
+
+                if (stage.stage == DirectorAPI.Stage.Custom && stage.CustomStageName == "rootjungle")
+                {
+                    if (!list.Contains(bossCard))
+                    {
+                        list.Add(bossCard);
+                    }
+                }
+            };
+        }
+
+        private static GameObject CreateMaster(GameObject bodyPrefab, string masterName, bool isClone)
+        {
+            GameObject newMaster = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterMasters/LemurianMaster"), masterName, true);
+            newMaster.GetComponent<CharacterMaster>().bodyPrefab = bodyPrefab;
+
+            #region AI
+            foreach (AISkillDriver ai in newMaster.GetComponentsInChildren<AISkillDriver>())
+            {
+                HenryPlugin.DestroyImmediate(ai);
+            }
+
+            newMaster.GetComponent<BaseAI>().fullVision = true;
+
+            if (!isClone)
+            {
+                AISkillDriver resurrectDriver = newMaster.AddComponent<AISkillDriver>();
+                resurrectDriver.customName = "Resurrect";
+                resurrectDriver.movementType = AISkillDriver.MovementType.ChaseMoveTarget;
+                resurrectDriver.moveTargetType = AISkillDriver.TargetType.CurrentEnemy;
+                resurrectDriver.activationRequiresAimConfirmation = false;
+                resurrectDriver.activationRequiresTargetLoS = false;
+                resurrectDriver.selectionRequiresTargetLoS = false;
+                resurrectDriver.maxDistance = 64f;
+                resurrectDriver.minDistance = 0f;
+                resurrectDriver.requireSkillReady = true;
+                resurrectDriver.aimType = AISkillDriver.AimType.AtCurrentEnemy;
+                resurrectDriver.ignoreNodeGraph = true;
+                resurrectDriver.moveInputScale = 1f;
+                resurrectDriver.driverUpdateTimerOverride = 2.5f;
+                resurrectDriver.buttonPressType = AISkillDriver.ButtonPressType.Hold;
+                resurrectDriver.minTargetHealthFraction = Mathf.NegativeInfinity;
+                resurrectDriver.maxTargetHealthFraction = Mathf.Infinity;
+                resurrectDriver.minUserHealthFraction = Mathf.NegativeInfinity;
+                resurrectDriver.maxUserHealthFraction = 0.5f;
+                resurrectDriver.skillSlot = SkillSlot.Special;
+            }
+
+            AISkillDriver dashDriver = newMaster.AddComponent<AISkillDriver>();
+            dashDriver.customName = "Dash";
+            dashDriver.movementType = AISkillDriver.MovementType.ChaseMoveTarget;
+            dashDriver.moveTargetType = AISkillDriver.TargetType.CurrentEnemy;
+            dashDriver.activationRequiresAimConfirmation = true;
+            dashDriver.activationRequiresTargetLoS = false;
+            dashDriver.selectionRequiresTargetLoS = true;
+            dashDriver.maxDistance = 24f;
+            dashDriver.minDistance = 0f;
+            dashDriver.requireSkillReady = true;
+            dashDriver.aimType = AISkillDriver.AimType.AtCurrentEnemy;
+            dashDriver.ignoreNodeGraph = true;
+            dashDriver.moveInputScale = 0.4f;
+            dashDriver.driverUpdateTimerOverride = 0.5f;
+            dashDriver.buttonPressType = AISkillDriver.ButtonPressType.Hold;
+            dashDriver.minTargetHealthFraction = Mathf.NegativeInfinity;
+            dashDriver.maxTargetHealthFraction = Mathf.Infinity;
+            dashDriver.minUserHealthFraction = Mathf.NegativeInfinity;
+            dashDriver.maxUserHealthFraction = Mathf.Infinity;
+            dashDriver.skillSlot = SkillSlot.Utility;
+
+            AISkillDriver dashPunchDriver = newMaster.AddComponent<AISkillDriver>();
+            dashPunchDriver.customName = "DashPunch";
+            dashPunchDriver.movementType = AISkillDriver.MovementType.ChaseMoveTarget;
+            dashPunchDriver.moveTargetType = AISkillDriver.TargetType.CurrentEnemy;
+            dashPunchDriver.activationRequiresAimConfirmation = true;
+            dashPunchDriver.activationRequiresTargetLoS = false;
+            dashPunchDriver.selectionRequiresTargetLoS = true;
+            dashPunchDriver.maxDistance = 32f;
+            dashPunchDriver.minDistance = 0f;
+            dashPunchDriver.requireSkillReady = true;
+            dashPunchDriver.aimType = AISkillDriver.AimType.AtCurrentEnemy;
+            dashPunchDriver.ignoreNodeGraph = true;
+            dashPunchDriver.moveInputScale = 0.4f;
+            dashPunchDriver.driverUpdateTimerOverride = 0.5f;
+            dashPunchDriver.buttonPressType = AISkillDriver.ButtonPressType.Hold;
+            dashPunchDriver.minTargetHealthFraction = Mathf.NegativeInfinity;
+            dashPunchDriver.maxTargetHealthFraction = Mathf.Infinity;
+            dashPunchDriver.minUserHealthFraction = Mathf.NegativeInfinity;
+            dashPunchDriver.maxUserHealthFraction = Mathf.Infinity;
+            dashPunchDriver.skillSlot = SkillSlot.Secondary;
+
+            AISkillDriver punchDriver = newMaster.AddComponent<AISkillDriver>();
+            punchDriver.customName = "Punch";
+            punchDriver.movementType = AISkillDriver.MovementType.ChaseMoveTarget;
+            punchDriver.moveTargetType = AISkillDriver.TargetType.CurrentEnemy;
+            punchDriver.activationRequiresAimConfirmation = true;
+            punchDriver.activationRequiresTargetLoS = false;
+            punchDriver.selectionRequiresTargetLoS = true;
+            punchDriver.maxDistance = 6f;
+            punchDriver.minDistance = 0f;
+            punchDriver.requireSkillReady = true;
+            punchDriver.aimType = AISkillDriver.AimType.AtCurrentEnemy;
+            punchDriver.ignoreNodeGraph = true;
+            punchDriver.moveInputScale = 1f;
+            punchDriver.driverUpdateTimerOverride = 0.5f;
+            punchDriver.buttonPressType = AISkillDriver.ButtonPressType.Hold;
+            punchDriver.minTargetHealthFraction = Mathf.NegativeInfinity;
+            punchDriver.maxTargetHealthFraction = Mathf.Infinity;
+            punchDriver.minUserHealthFraction = Mathf.NegativeInfinity;
+            punchDriver.maxUserHealthFraction = Mathf.Infinity;
+            punchDriver.skillSlot = SkillSlot.Primary;
+
+            AISkillDriver followCloseDriver = newMaster.AddComponent<AISkillDriver>();
+            followCloseDriver.customName = "ChaseClose";
+            followCloseDriver.movementType = AISkillDriver.MovementType.ChaseMoveTarget;
+            followCloseDriver.moveTargetType = AISkillDriver.TargetType.CurrentEnemy;
+            followCloseDriver.activationRequiresAimConfirmation = false;
+            followCloseDriver.activationRequiresTargetLoS = false;
+            followCloseDriver.maxDistance = 12f;
+            followCloseDriver.minDistance = 0f;
+            followCloseDriver.aimType = AISkillDriver.AimType.AtMoveTarget;
+            followCloseDriver.ignoreNodeGraph = true;
+            followCloseDriver.moveInputScale = 1f;
+            followCloseDriver.driverUpdateTimerOverride = -1f;
+            followCloseDriver.buttonPressType = AISkillDriver.ButtonPressType.Hold;
+            followCloseDriver.minTargetHealthFraction = Mathf.NegativeInfinity;
+            followCloseDriver.maxTargetHealthFraction = Mathf.Infinity;
+            followCloseDriver.minUserHealthFraction = Mathf.NegativeInfinity;
+            followCloseDriver.maxUserHealthFraction = Mathf.Infinity;
+            followCloseDriver.skillSlot = SkillSlot.None;
+
+            AISkillDriver followDriver = newMaster.AddComponent<AISkillDriver>();
+            followDriver.customName = "Chase";
+            followDriver.movementType = AISkillDriver.MovementType.ChaseMoveTarget;
+            followDriver.moveTargetType = AISkillDriver.TargetType.CurrentEnemy;
+            followDriver.activationRequiresAimConfirmation = false;
+            followDriver.activationRequiresTargetLoS = false;
+            followDriver.maxDistance = Mathf.Infinity;
+            followDriver.minDistance = 0f;
+            followDriver.aimType = AISkillDriver.AimType.AtMoveTarget;
+            followDriver.ignoreNodeGraph = false;
+            followDriver.moveInputScale = 1f;
+            followDriver.driverUpdateTimerOverride = -1f;
+            followDriver.buttonPressType = AISkillDriver.ButtonPressType.Hold;
+            followDriver.minTargetHealthFraction = Mathf.NegativeInfinity;
+            followDriver.maxTargetHealthFraction = Mathf.Infinity;
+            followDriver.minUserHealthFraction = Mathf.NegativeInfinity;
+            followDriver.maxUserHealthFraction = Mathf.Infinity;
+            followDriver.skillSlot = SkillSlot.None;
+            followDriver.shouldSprint = true;
+            #endregion
+
+            /*MasterCatalog.getAdditionalEntries += delegate (List<GameObject> list)
+            {
+                list.Add(newMaster);
+            };*/
+            Modules.Prefabs.masterPrefabs.Add(newMaster);
+
+            return newMaster;
         }
 
         private static void CreateHitboxes(GameObject prefab)
@@ -179,19 +383,18 @@ namespace HenryMod.Modules.Enemies
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Stinger.StingerEntry)),
                 activationStateMachineName = "Body",
                 baseMaxStock = 1,
-                baseRechargeInterval = 2f,
+                baseRechargeInterval = 3f,
                 beginSkillCooldownOnSkillEnd = false,
                 canceledFromSprinting = false,
                 forceSprintDuringState = false,
                 fullRestockOnAssign = true,
                 interruptPriority = EntityStates.InterruptPriority.Skill,
-                isBullets = false,
+                resetCooldownTimerOnUse = false,
                 isCombatSkill = true,
                 mustKeyPress = false,
-                noSprint = false,
+                cancelSprintingOnActivation = false,
                 rechargeStock = 1,
                 requiredStock = 1,
-                shootDelay = 0f,
                 stockToConsume = 1,
                 keywordTokens = new string[] { "KEYWORD_AGILE" }
             });
@@ -215,13 +418,12 @@ namespace HenryMod.Modules.Enemies
                 forceSprintDuringState = true,
                 fullRestockOnAssign = true,
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
-                isBullets = false,
+                resetCooldownTimerOnUse = false,
                 isCombatSkill = false,
                 mustKeyPress = false,
-                noSprint = false,
+                cancelSprintingOnActivation = false,
                 rechargeStock = 1,
                 requiredStock = 1,
-                shootDelay = 0f,
                 stockToConsume = 1
             });
 
@@ -244,13 +446,12 @@ namespace HenryMod.Modules.Enemies
                 forceSprintDuringState = false,
                 fullRestockOnAssign = true,
                 interruptPriority = EntityStates.InterruptPriority.Skill,
-                isBullets = false,
+                resetCooldownTimerOnUse = false,
                 isCombatSkill = true,
                 mustKeyPress = false,
-                noSprint = true,
+                cancelSprintingOnActivation = true,
                 rechargeStock = 1,
                 requiredStock = 1,
-                shootDelay = 0f,
                 stockToConsume = 1
             });
 
@@ -271,9 +472,9 @@ namespace HenryMod.Modules.Enemies
             #region Secondary
             SkillDef stingerSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = prefix + "_HENRY_BODY_SECONDARY_GUN_NAME",
-                skillNameToken = prefix + "_HENRY_BODY_SECONDARY_GUN_NAME",
-                skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_GUN_DESCRIPTION",
+                skillName = prefix + "_HENRY_BODY_SECONDARY_STINGER_NAME",
+                skillNameToken = prefix + "_HENRY_BODY_SECONDARY_STINGER_NAME",
+                skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_STINGER_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Stinger.StingerEntry)),
                 activationStateMachineName = "Body",
@@ -284,13 +485,12 @@ namespace HenryMod.Modules.Enemies
                 forceSprintDuringState = false,
                 fullRestockOnAssign = true,
                 interruptPriority = EntityStates.InterruptPriority.Skill,
-                isBullets = false,
+                resetCooldownTimerOnUse = false,
                 isCombatSkill = true,
                 mustKeyPress = false,
-                noSprint = false,
+                cancelSprintingOnActivation = false,
                 rechargeStock = 1,
                 requiredStock = 1,
-                shootDelay = 0f,
                 stockToConsume = 1,
                 keywordTokens = new string[] { "KEYWORD_AGILE" }
             });
@@ -314,13 +514,12 @@ namespace HenryMod.Modules.Enemies
                 forceSprintDuringState = true,
                 fullRestockOnAssign = true,
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
-                isBullets = false,
+                resetCooldownTimerOnUse = false,
                 isCombatSkill = false,
                 mustKeyPress = false,
-                noSprint = false,
+                cancelSprintingOnActivation = false,
                 rechargeStock = 1,
                 requiredStock = 1,
-                shootDelay = 0f,
                 stockToConsume = 1
             });
 
@@ -343,13 +542,12 @@ namespace HenryMod.Modules.Enemies
                 forceSprintDuringState = false,
                 fullRestockOnAssign = true,
                 interruptPriority = EntityStates.InterruptPriority.Skill,
-                isBullets = false,
+                resetCooldownTimerOnUse = false,
                 isCombatSkill = true,
                 mustKeyPress = false,
-                noSprint = true,
+                cancelSprintingOnActivation = true,
                 rechargeStock = 1,
                 requiredStock = 2,
-                shootDelay = 0f,
                 stockToConsume = 1
             });
 

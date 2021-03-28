@@ -7,7 +7,7 @@ namespace HenryMod.SkillStates.MrGreen
 {
     public class Resurrect : BaseSkillState
     {
-        public static float baseDuration = 2f;
+        public static float baseDuration = 3f;
 
         private float duration;
 
@@ -15,6 +15,8 @@ namespace HenryMod.SkillStates.MrGreen
         {
             base.OnEnter();
             this.duration = Resurrect.baseDuration / this.attackSpeedStat;
+
+            base.PlayAnimation("FullBody, Override", "CastResurrect", "CastResurrect.playbackRate", this.duration);
         }
 
         private void CompleteResurrection()
@@ -36,7 +38,7 @@ namespace HenryMod.SkillStates.MrGreen
                                 {
                                     if (!cloneBody.healthComponent.alive)
                                     {
-                                        cloneMaster.Respawn(cloneBody.footPosition, cloneBody.transform.rotation, true);
+                                        cloneMaster.Respawn(cloneBody.footPosition, cloneBody.transform.rotation);
                                     }
                                 }
                             }

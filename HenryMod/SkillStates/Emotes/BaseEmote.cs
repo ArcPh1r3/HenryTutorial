@@ -102,12 +102,12 @@ namespace HenryMod.SkillStates.Emotes
             {
                 if (Input.GetKeyDown(Modules.Config.restKeybind.Value))
                 {
-                    this.outer.SetInterruptState(EntityState.Instantiate(new SerializableEntityStateType(typeof(Rest))), InterruptPriority.Any);
+                    this.outer.SetInterruptState(new Rest(), InterruptPriority.Any);
                     return;
                 }
                 else if (Input.GetKeyDown(Modules.Config.danceKeybind.Value))
                 {
-                    this.outer.SetInterruptState(EntityState.Instantiate(new SerializableEntityStateType(typeof(Dance))), InterruptPriority.Any);
+                    this.outer.SetInterruptState(new Dance(), InterruptPriority.Any);
                     return;
                 }
             }

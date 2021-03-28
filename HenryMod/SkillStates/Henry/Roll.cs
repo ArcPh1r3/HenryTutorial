@@ -52,7 +52,7 @@ namespace HenryMod.SkillStates
             if (NetworkServer.active)
             {
                 base.characterBody.AddTimedBuff(Modules.Buffs.armorBuff, 3f * Roll.duration);
-                base.characterBody.AddBuff(BuffIndex.HiddenInvincibility);
+                base.characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.5f * Roll.duration);
             }
         }
 
@@ -93,7 +93,7 @@ namespace HenryMod.SkillStates
             if (base.cameraTargetParams) base.cameraTargetParams.fovOverride = -1f;
             base.OnExit();
 
-            if (NetworkServer.active) base.characterBody.RemoveBuff(BuffIndex.HiddenInvincibility);
+            base.characterMotor.disableAirControlUntilCollision = false;
         }
 
         public override void OnSerialize(NetworkWriter writer)

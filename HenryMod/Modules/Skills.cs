@@ -4,12 +4,16 @@ using R2API;
 using RoR2;
 using RoR2.Skills;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace HenryMod.Modules
 {
     internal static class Skills
     {
+        internal static List<SkillFamily> skillFamilies = new List<SkillFamily>();
+        internal static List<SkillDef> skillDefs = new List<SkillDef>();
+
         internal static void CreateSkillFamilies(GameObject targetPrefab)
         {
             foreach (GenericSkill obj in targetPrefab.GetComponentsInChildren<GenericSkill>())
@@ -21,27 +25,32 @@ namespace HenryMod.Modules
 
             skillLocator.primary = targetPrefab.AddComponent<GenericSkill>();
             SkillFamily primaryFamily = ScriptableObject.CreateInstance<SkillFamily>();
+            (primaryFamily as ScriptableObject).name = targetPrefab.name + "PrimaryFamily";
             primaryFamily.variants = new SkillFamily.Variant[0];
             skillLocator.primary._skillFamily = primaryFamily;
-            LoadoutAPI.AddSkillFamily(primaryFamily);
 
             skillLocator.secondary = targetPrefab.AddComponent<GenericSkill>();
             SkillFamily secondaryFamily = ScriptableObject.CreateInstance<SkillFamily>();
+            (secondaryFamily as ScriptableObject).name = targetPrefab.name + "SecondaryFamily";
             secondaryFamily.variants = new SkillFamily.Variant[0];
             skillLocator.secondary._skillFamily = secondaryFamily;
-            LoadoutAPI.AddSkillFamily(secondaryFamily);
 
             skillLocator.utility = targetPrefab.AddComponent<GenericSkill>();
             SkillFamily utilityFamily = ScriptableObject.CreateInstance<SkillFamily>();
+            (utilityFamily as ScriptableObject).name = targetPrefab.name + "UtilityFamily";
             utilityFamily.variants = new SkillFamily.Variant[0];
             skillLocator.utility._skillFamily = utilityFamily;
-            LoadoutAPI.AddSkillFamily(utilityFamily);
 
             skillLocator.special = targetPrefab.AddComponent<GenericSkill>();
             SkillFamily specialFamily = ScriptableObject.CreateInstance<SkillFamily>();
+            (specialFamily as ScriptableObject).name = targetPrefab.name + "SpecialFamily";
             specialFamily.variants = new SkillFamily.Variant[0];
             skillLocator.special._skillFamily = specialFamily;
-            LoadoutAPI.AddSkillFamily(specialFamily);
+
+            skillFamilies.Add(primaryFamily);
+            skillFamilies.Add(secondaryFamily);
+            skillFamilies.Add(utilityFamily);
+            skillFamilies.Add(specialFamily);
         }
 
         // this could all be a lot cleaner but at least it's simple and easy to work with
@@ -55,7 +64,6 @@ namespace HenryMod.Modules
             skillFamily.variants[skillFamily.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDef,
-                unlockableName = "",
                 viewableNode = new ViewablesCatalog.Node(skillDef.skillNameToken, false, null)
             };
         }
@@ -70,7 +78,6 @@ namespace HenryMod.Modules
             skillFamily.variants[skillFamily.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDef,
-                unlockableName = "",
                 viewableNode = new ViewablesCatalog.Node(skillDef.skillNameToken, false, null)
             };
         }
@@ -93,7 +100,6 @@ namespace HenryMod.Modules
             skillFamily.variants[skillFamily.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDef,
-                unlockableName = "",
                 viewableNode = new ViewablesCatalog.Node(skillDef.skillNameToken, false, null)
             };
         }
@@ -116,7 +122,6 @@ namespace HenryMod.Modules
             skillFamily.variants[skillFamily.variants.Length - 1] = new SkillFamily.Variant
             {
                 skillDef = skillDef,
-                unlockableName = "",
                 viewableNode = new ViewablesCatalog.Node(skillDef.skillNameToken, false, null)
             };
         }
@@ -147,18 +152,17 @@ namespace HenryMod.Modules
             skillDef.forceSprintDuringState = false;
             skillDef.fullRestockOnAssign = true;
             skillDef.interruptPriority = InterruptPriority.Any;
-            skillDef.isBullets = false;
+            skillDef.resetCooldownTimerOnUse = false;
             skillDef.isCombatSkill = true;
             skillDef.mustKeyPress = false;
-            skillDef.noSprint = !agile;
+            skillDef.cancelSprintingOnActivation = !agile;
             skillDef.rechargeStock = 1;
             skillDef.requiredStock = 0;
-            skillDef.shootDelay = 0f;
             skillDef.stockToConsume = 0;
 
             if (agile) skillDef.keywordTokens = new string[] { "KEYWORD_AGILE" };
 
-            LoadoutAPI.AddSkillDef(skillDef);
+            skillDefs.Add(skillDef);
 
             return skillDef;
         }
@@ -181,18 +185,17 @@ namespace HenryMod.Modules
             skillDef.forceSprintDuringState = skillDefInfo.forceSprintDuringState;
             skillDef.fullRestockOnAssign = skillDefInfo.fullRestockOnAssign;
             skillDef.interruptPriority = skillDefInfo.interruptPriority;
-            skillDef.isBullets = skillDefInfo.isBullets;
+            skillDef.resetCooldownTimerOnUse = skillDefInfo.resetCooldownTimerOnUse;
             skillDef.isCombatSkill = skillDefInfo.isCombatSkill;
             skillDef.mustKeyPress = skillDefInfo.mustKeyPress;
-            skillDef.noSprint = skillDefInfo.noSprint;
+            skillDef.cancelSprintingOnActivation = skillDefInfo.cancelSprintingOnActivation;
             skillDef.rechargeStock = skillDefInfo.rechargeStock;
             skillDef.requiredStock = skillDefInfo.requiredStock;
-            skillDef.shootDelay = skillDefInfo.shootDelay;
             skillDef.stockToConsume = skillDefInfo.stockToConsume;
 
             skillDef.keywordTokens = skillDefInfo.keywordTokens;
 
-            LoadoutAPI.AddSkillDef(skillDef);
+            skillDefs.Add(skillDef);
 
             return skillDef;
         }
@@ -215,18 +218,83 @@ namespace HenryMod.Modules
             skillDef.forceSprintDuringState = skillDefInfo.forceSprintDuringState;
             skillDef.fullRestockOnAssign = skillDefInfo.fullRestockOnAssign;
             skillDef.interruptPriority = skillDefInfo.interruptPriority;
-            skillDef.isBullets = skillDefInfo.isBullets;
+            skillDef.resetCooldownTimerOnUse = skillDefInfo.resetCooldownTimerOnUse;
             skillDef.isCombatSkill = skillDefInfo.isCombatSkill;
             skillDef.mustKeyPress = skillDefInfo.mustKeyPress;
-            skillDef.noSprint = skillDefInfo.noSprint;
+            skillDef.cancelSprintingOnActivation = skillDefInfo.cancelSprintingOnActivation;
             skillDef.rechargeStock = skillDefInfo.rechargeStock;
             skillDef.requiredStock = skillDefInfo.requiredStock;
-            skillDef.shootDelay = skillDefInfo.shootDelay;
             skillDef.stockToConsume = skillDefInfo.stockToConsume;
 
             skillDef.keywordTokens = skillDefInfo.keywordTokens;
 
-            LoadoutAPI.AddSkillDef(skillDef);
+            skillDefs.Add(skillDef);
+
+            return skillDef;
+        }
+
+        internal static SkillDef CreateEnergySkillDef(SkillDefInfo skillDefInfo)
+        {
+            NemryEnergySkillDef skillDef = ScriptableObject.CreateInstance<NemryEnergySkillDef>();
+
+            skillDef.skillName = skillDefInfo.skillName;
+            skillDef.skillNameToken = skillDefInfo.skillNameToken;
+            skillDef.skillDescriptionToken = skillDefInfo.skillDescriptionToken;
+            skillDef.icon = skillDefInfo.skillIcon;
+
+            skillDef.activationState = skillDefInfo.activationState;
+            skillDef.activationStateMachineName = skillDefInfo.activationStateMachineName;
+            skillDef.baseMaxStock = skillDefInfo.baseMaxStock;
+            skillDef.baseRechargeInterval = skillDefInfo.baseRechargeInterval;
+            skillDef.beginSkillCooldownOnSkillEnd = skillDefInfo.beginSkillCooldownOnSkillEnd;
+            skillDef.canceledFromSprinting = skillDefInfo.canceledFromSprinting;
+            skillDef.forceSprintDuringState = skillDefInfo.forceSprintDuringState;
+            skillDef.fullRestockOnAssign = skillDefInfo.fullRestockOnAssign;
+            skillDef.interruptPriority = skillDefInfo.interruptPriority;
+            skillDef.resetCooldownTimerOnUse = skillDefInfo.resetCooldownTimerOnUse;
+            skillDef.isCombatSkill = skillDefInfo.isCombatSkill;
+            skillDef.mustKeyPress = skillDefInfo.mustKeyPress;
+            skillDef.cancelSprintingOnActivation = skillDefInfo.cancelSprintingOnActivation;
+            skillDef.rechargeStock = skillDefInfo.rechargeStock;
+            skillDef.requiredStock = skillDefInfo.requiredStock;
+            skillDef.stockToConsume = skillDefInfo.stockToConsume;
+
+            skillDef.keywordTokens = skillDefInfo.keywordTokens;
+
+            skillDefs.Add(skillDef);
+
+            return skillDef;
+        }
+
+        internal static SkillDef CreateTrackingEnergySkillDef(SkillDefInfo skillDefInfo)
+        {
+            TrackingEnergySkillDef skillDef = ScriptableObject.CreateInstance<TrackingEnergySkillDef>();
+
+            skillDef.skillName = skillDefInfo.skillName;
+            skillDef.skillNameToken = skillDefInfo.skillNameToken;
+            skillDef.skillDescriptionToken = skillDefInfo.skillDescriptionToken;
+            skillDef.icon = skillDefInfo.skillIcon;
+
+            skillDef.activationState = skillDefInfo.activationState;
+            skillDef.activationStateMachineName = skillDefInfo.activationStateMachineName;
+            skillDef.baseMaxStock = skillDefInfo.baseMaxStock;
+            skillDef.baseRechargeInterval = skillDefInfo.baseRechargeInterval;
+            skillDef.beginSkillCooldownOnSkillEnd = skillDefInfo.beginSkillCooldownOnSkillEnd;
+            skillDef.canceledFromSprinting = skillDefInfo.canceledFromSprinting;
+            skillDef.forceSprintDuringState = skillDefInfo.forceSprintDuringState;
+            skillDef.fullRestockOnAssign = skillDefInfo.fullRestockOnAssign;
+            skillDef.interruptPriority = skillDefInfo.interruptPriority;
+            skillDef.resetCooldownTimerOnUse = skillDefInfo.resetCooldownTimerOnUse;
+            skillDef.isCombatSkill = skillDefInfo.isCombatSkill;
+            skillDef.mustKeyPress = skillDefInfo.mustKeyPress;
+            skillDef.cancelSprintingOnActivation = skillDefInfo.cancelSprintingOnActivation;
+            skillDef.rechargeStock = skillDefInfo.rechargeStock;
+            skillDef.requiredStock = skillDefInfo.requiredStock;
+            skillDef.stockToConsume = skillDefInfo.stockToConsume;
+
+            skillDef.keywordTokens = skillDefInfo.keywordTokens;
+
+            skillDefs.Add(skillDef);
 
             return skillDef;
         }
@@ -249,13 +317,12 @@ internal class SkillDefInfo
     public bool forceSprintDuringState;
     public bool fullRestockOnAssign;
     public InterruptPriority interruptPriority;
-    public bool isBullets;
+    public bool resetCooldownTimerOnUse;
     public bool isCombatSkill;
     public bool mustKeyPress;
-    public bool noSprint;
+    public bool cancelSprintingOnActivation;
     public int rechargeStock;
     public int requiredStock;
-    public float shootDelay;
     public int stockToConsume;
 
     public string[] keywordTokens;

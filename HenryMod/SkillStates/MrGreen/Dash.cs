@@ -35,7 +35,7 @@ namespace HenryMod.SkillStates.MrGreen
                 }
             }
 
-            this.SearchForAllies();
+            //this.SearchForAllies();
 
             if (base.isAuthority && base.fixedAge >= this.duration)
             {

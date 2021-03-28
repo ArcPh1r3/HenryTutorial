@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 using EntityStates;
 using RoR2;
+using HenryMod.Modules.Components;
+using HenryMod.SkillStates.Emotes;
 
 namespace HenryMod.SkillStates
 {
     public class HenryMain : GenericCharacterMain
     {
         private Animator animator;
+        private HenryController henryController;
+        protected EntityStateMachine weaponStateMachine;
 
         public LocalUser localUser;
 
@@ -14,7 +18,19 @@ namespace HenryMod.SkillStates
         {
             base.OnEnter();
             this.animator = base.GetModelAnimator();
+            this.henryController = base.GetComponent<HenryController>();
             this.localUser = LocalUserManager.readOnlyLocalUsersList[0];
+
+            foreach (EntityStateMachine i in base.gameObject.GetComponents<EntityStateMachine>())
+            {
+                if (i)
+                {
+                    if (i.customName == "Weapon")
+                    {
+                        this.weaponStateMachine = i;
+                    }
+                }
+            }
         }
 
         public override void Update()
@@ -26,12 +42,12 @@ namespace HenryMod.SkillStates
             {
                 if (Input.GetKeyDown(Modules.Config.restKeybind.Value))
                 {
-                    this.outer.SetInterruptState(EntityState.Instantiate(new SerializableEntityStateType(typeof(Emotes.Rest))), InterruptPriority.Any);
+                    this.outer.SetInterruptState(new Rest(), InterruptPriority.Any);
                     return;
                 }
                 else if (Input.GetKeyDown(Modules.Config.danceKeybind.Value))
                 {
-                    this.outer.SetInterruptState(EntityState.Instantiate(new SerializableEntityStateType(typeof(Emotes.Dance))), InterruptPriority.Any);
+                    this.outer.SetInterruptState(new Dance(), InterruptPriority.Any);
                     return;
                 }
             }
@@ -50,6 +66,18 @@ namespace HenryMod.SkillStates
 
                 // rest idle
                 this.animator.SetBool("inCombat", (!base.characterBody.outOfCombat || !base.characterBody.outOfDanger));
+            }
+
+            if (this.henryController)
+            {
+                this.animator.SetBool("inBazooka", this.henryController.hasBazookaReady);
+
+                // bazooka stuff
+                if (this.henryController.hasBazookaReady)
+                {
+                    base.characterBody.isSprinting = false;
+                    base.StartAimMode(0.5f, false);
+                }
             }
         }
     }

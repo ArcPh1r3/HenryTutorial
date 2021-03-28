@@ -13,7 +13,7 @@ namespace HenryMod.SkillStates.Stinger
 
         public static float damageCoefficient = 5f;
         public static float procCoefficient = 1f;
-        public static float pushForce = 2500f;
+        public static float pushForce = 250f;
 
         public static GameObject hitEffectPrefab = Modules.Assets.punchImpactEffect;
         public static NetworkSoundEventDef impactSound = Modules.Assets.punchHitSoundEvent;
@@ -42,7 +42,7 @@ namespace HenryMod.SkillStates.Stinger
 
             if (modelTransform)
             {
-                hitBoxGroup = Array.Find<HitBoxGroup>(modelTransform.GetComponents<HitBoxGroup>(), (HitBoxGroup element) => element.groupName == "Sword");
+                hitBoxGroup = Array.Find<HitBoxGroup>(modelTransform.GetComponents<HitBoxGroup>(), (HitBoxGroup element) => element.groupName == "Punch");
             }
 
             this.attack = new OverlapAttack();

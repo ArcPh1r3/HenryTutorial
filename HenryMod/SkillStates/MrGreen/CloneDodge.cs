@@ -29,7 +29,7 @@ namespace HenryMod.SkillStates.MrGreen
 
             if (NetworkServer.active)
             {
-                base.characterBody.AddBuff(BuffIndex.HiddenInvincibility);
+                //base.characterBody.AddBuff(BuffIndex.HiddenInvincibility);
 
                 CharacterMaster newCloneMaster = new MasterSummon
                 {
@@ -42,12 +42,12 @@ namespace HenryMod.SkillStates.MrGreen
 
                 Inventory inventory = newCloneMaster.inventory;
                 inventory.CopyItemsFrom(base.characterBody.master.inventory);
-                inventory.ResetItem(ItemIndex.WardOnLevel);
+                /*inventory.ResetItem(ItemIndex.WardOnLevel);
                 inventory.ResetItem(ItemIndex.BeetleGland);
                 inventory.ResetItem(ItemIndex.CrippleWardOnLevel);
                 inventory.ResetItem(ItemIndex.TPHealingNova);
                 inventory.ResetItem(ItemIndex.FocusConvergence);
-                inventory.ResetItem(ItemIndex.TitanGoldDuringTP);
+                inventory.ResetItem(ItemIndex.TitanGoldDuringTP);*/
 
                 var delayedDamage = newCloneMaster.gameObject.AddComponent<Modules.Components.DelayedDamageOnSpawn>();
                 delayedDamage.attacker = this.attacker;
@@ -81,7 +81,7 @@ namespace HenryMod.SkillStates.MrGreen
             base.characterMotor.velocity *= 0.1f;
             base.OnExit();
 
-            if (NetworkServer.active) base.characterBody.RemoveBuff(BuffIndex.HiddenInvincibility);
+            //if (NetworkServer.active) base.characterBody.RemoveBuff(BuffIndex.HiddenInvincibility);
 
             base.gameObject.layer = LayerIndex.defaultLayer.intVal;
             base.characterMotor.Motor.RebuildCollidableLayers();

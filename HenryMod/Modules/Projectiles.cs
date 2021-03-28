@@ -12,16 +12,52 @@ namespace HenryMod.Modules
     internal static class Projectiles
     {
         internal static GameObject bombPrefab;
+        internal static GameObject bazookaRocketPrefab;
+
+        internal static GameObject voidBlastPrefab;
 
         internal static void RegisterProjectiles()
         {
             // only separating into separate methods for my sanity
             CreateBomb();
+            CreateBazookaRocket();
 
-            ProjectileCatalog.getAdditionalEntries += list =>
+            CreateVoidBlast();
+
+            Modules.Prefabs.projectilePrefabs.Add(bombPrefab);
+            Modules.Prefabs.projectilePrefabs.Add(bazookaRocketPrefab);
+            Modules.Prefabs.projectilePrefabs.Add(voidBlastPrefab);
+            /*ProjectileCatalog.getAdditionalEntries += list =>
             {
                 list.Add(bombPrefab);
-            };
+                list.Add(bazookaRocketPrefab);
+                list.Add(voidBlastPrefab);
+            };*/
+        }
+
+        private static void CreateVoidBlast()
+        {
+            voidBlastPrefab = CloneProjectilePrefab("CommandoGrenadeProjectile", "NemryVoidBlastProjectile");
+
+            ProjectileImpactExplosion bombImpactExplosion = voidBlastPrefab.GetComponent<ProjectileImpactExplosion>();
+            InitializeImpactExplosion(bombImpactExplosion);
+
+            bombImpactExplosion.blastRadius = 8f;
+            bombImpactExplosion.destroyOnEnemy = true;
+            bombImpactExplosion.lifetime = 12f;
+            bombImpactExplosion.impactEffect = Resources.Load<GameObject>("Prefabs/Effects/NullifierExplosion");
+            //bombImpactExplosion.lifetimeExpiredSound = Modules.Assets.CreateNetworkSoundEventDef("HenryBombExplosion");
+            bombImpactExplosion.timerAfterImpact = true;
+            bombImpactExplosion.lifetimeAfterImpact = 0.1f;
+
+            ProjectileDamage bombDamage = voidBlastPrefab.GetComponent<ProjectileDamage>();
+            bombDamage.damageType = DamageType.Nullify;
+
+            ProjectileController bombController = voidBlastPrefab.GetComponent<ProjectileController>();
+            bombController.ghostPrefab = Resources.Load<GameObject>("Prefabs/ProjectileGhosts/NullifierPreBombGhost");
+            bombController.startSound = "";
+
+            voidBlastPrefab.GetComponent<Rigidbody>().useGravity = false;
         }
 
         private static void CreateBomb()
@@ -35,13 +71,39 @@ namespace HenryMod.Modules
             bombImpactExplosion.destroyOnEnemy = true;
             bombImpactExplosion.lifetime = 12f;
             bombImpactExplosion.impactEffect = Modules.Assets.bombExplosionEffect;
-            bombImpactExplosion.explosionSoundString = "HenryBombExplosion";
+            //bombImpactExplosion.lifetimeExpiredSound = Modules.Assets.CreateNetworkSoundEventDef("HenryBombExplosion");
             bombImpactExplosion.timerAfterImpact = true;
             bombImpactExplosion.lifetimeAfterImpact = 0.1f;
 
             ProjectileController bombController = bombPrefab.GetComponent<ProjectileController>();
             bombController.ghostPrefab = CreateGhostPrefab("HenryBombGhost");
             bombController.startSound = "";
+        }
+
+        private static void CreateBazookaRocket()
+        {
+            bazookaRocketPrefab = CloneProjectilePrefab("CommandoGrenadeProjectile", "HenryBazookaRocketProjectile");
+            bazookaRocketPrefab.AddComponent<Modules.Components.BazookaRotation>();
+            bazookaRocketPrefab.transform.localScale *= 2f;
+
+            ProjectileImpactExplosion bazookaImpactExplosion = bazookaRocketPrefab.GetComponent<ProjectileImpactExplosion>();
+            InitializeImpactExplosion(bazookaImpactExplosion);
+
+            bazookaImpactExplosion.blastRadius = 8f;
+            bazookaImpactExplosion.destroyOnEnemy = true;
+            bazookaImpactExplosion.lifetime = 12f;
+            bazookaImpactExplosion.impactEffect = Modules.Assets.bazookaExplosionEffect;
+            //bazookaImpactExplosion.lifetimeExpiredSound = Modules.Assets.CreateNetworkSoundEventDef("HenryBazookaExplosion");
+            bazookaImpactExplosion.timerAfterImpact = true;
+            bazookaImpactExplosion.lifetimeAfterImpact = 0f;
+
+            ProjectileController bazookaController = bazookaRocketPrefab.GetComponent<ProjectileController>();
+
+            GameObject bazookaGhost = CreateGhostPrefab("HenryBazookaRocketGhost");
+            bazookaGhost.GetComponentInChildren<ParticleSystem>().gameObject.AddComponent<Modules.Components.DetachOnDestroy>();
+
+            bazookaController.ghostPrefab = bazookaGhost;
+            bazookaController.startSound = "";
         }
 
         private static void InitializeImpactExplosion(ProjectileImpactExplosion projectileImpactExplosion)
@@ -72,8 +134,8 @@ namespace HenryMod.Modules
         private static GameObject CreateGhostPrefab(string ghostName)
         {
             GameObject ghostPrefab = Modules.Assets.mainAssetBundle.LoadAsset<GameObject>(ghostName);
-            ghostPrefab.AddComponent<NetworkIdentity>();
-            ghostPrefab.AddComponent<ProjectileGhostController>();
+            if (!ghostPrefab.GetComponent<NetworkIdentity>()) ghostPrefab.AddComponent<NetworkIdentity>();
+            if (!ghostPrefab.GetComponent<ProjectileGhostController>()) ghostPrefab.AddComponent<ProjectileGhostController>();
 
             Modules.Assets.ConvertAllRenderersToHopooShader(ghostPrefab);
 

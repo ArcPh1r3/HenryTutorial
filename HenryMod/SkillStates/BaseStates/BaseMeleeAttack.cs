@@ -25,6 +25,7 @@ namespace HenryMod.SkillStates.BaseStates
         protected float hitStopDuration = 0.012f;
         protected float attackRecoil = 0.75f;
         protected float hitHopVelocity = 4f;
+        protected bool cancelled = false;
 
         protected string swingSoundString = "";
         protected string hitSoundString = "";
@@ -38,9 +39,9 @@ namespace HenryMod.SkillStates.BaseStates
         private bool hasFired;
         private float hitPauseTimer;
         private OverlapAttack attack;
-        private bool inHitPause;
+        protected bool inHitPause;
         private bool hasHopped;
-        private float stopwatch;
+        protected float stopwatch;
         protected Animator animator;
         private BaseState.HitStopCachedState hitStopCachedState;
         private Vector3 storedVelocity;
@@ -88,7 +89,7 @@ namespace HenryMod.SkillStates.BaseStates
 
         public override void OnExit()
         {
-            if (!this.hasFired) this.FireAttack();
+            if (!this.hasFired && !this.cancelled) this.FireAttack();
 
             base.OnExit();
 
@@ -106,7 +107,7 @@ namespace HenryMod.SkillStates.BaseStates
 
             if (!this.hasHopped)
             {
-                if (base.characterMotor && !base.characterMotor.isGrounded)
+                if (base.characterMotor && !base.characterMotor.isGrounded && this.hitHopVelocity > 0f)
                 {
                     base.SmallHop(base.characterMotor, this.hitHopVelocity);
                 }
@@ -114,7 +115,7 @@ namespace HenryMod.SkillStates.BaseStates
                 this.hasHopped = true;
             }
 
-            if (!this.inHitPause)
+            if (!this.inHitPause && this.hitStopDuration > 0f)
             {
                 this.storedVelocity = base.characterMotor.velocity;
                 this.hitStopCachedState = base.CreateHitStopCachedState(base.characterMotor, this.animator, "Slash.playbackRate");
@@ -128,7 +129,7 @@ namespace HenryMod.SkillStates.BaseStates
             if (!this.hasFired)
             {
                 this.hasFired = true;
-                Util.PlayScaledSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
+                Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
 
                 if (base.isAuthority)
                 {
@@ -186,7 +187,7 @@ namespace HenryMod.SkillStates.BaseStates
                 this.FireAttack();
             }
 
-            if (base.fixedAge >= (this.duration - this.earlyExitTime) && base.isAuthority)
+            if (this.stopwatch >= (this.duration - this.earlyExitTime) && base.isAuthority)
             {
                 if (base.inputBank.skill1.down)
                 {
@@ -196,7 +197,7 @@ namespace HenryMod.SkillStates.BaseStates
                 }
             }
 
-            if (base.fixedAge >= this.duration && base.isAuthority)
+            if (this.stopwatch >= this.duration && base.isAuthority)
             {
                 this.outer.SetNextStateToMain();
                 return;
