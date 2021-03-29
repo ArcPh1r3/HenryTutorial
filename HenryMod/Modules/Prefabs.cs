@@ -13,23 +13,33 @@ namespace HenryMod.Modules
         // cache this just to give our ragdolls the same physic material as vanilla stuff
         private static PhysicMaterial ragdollMaterial;
 
-        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix, string unlockString)
-        {
-            SurvivorDef survivorDef = new SurvivorDef
-            {
-                name = HenryPlugin.developerPrefix + "_" + namePrefix + "_BODY_NAME",
-                unlockableName = unlockString,
-                descriptionToken = HenryPlugin.developerPrefix + "_" + namePrefix + "_BODY_DESCRIPTION",
-                primaryColor = charColor,
-                bodyPrefab = bodyPrefab,
-                displayPrefab = displayPrefab,
-                outroFlavorToken = HenryPlugin.developerPrefix + "_" + namePrefix + "_BODY_OUTRO_FLAVOR",
-            };
+        internal static List<SurvivorDef> survivorDefinitions = new List<SurvivorDef>();
+        internal static List<GameObject> bodyPrefabs = new List<GameObject>();
+        internal static List<GameObject> masterPrefabs = new List<GameObject>();
+        internal static List<GameObject> projectilePrefabs = new List<GameObject>();
 
-            SurvivorAPI.AddSurvivor(survivorDef);
+        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix, UnlockableDef unlockableDef)
+        {
+            string fullNameString = HenryPlugin.developerPrefix + "_" + namePrefix + "_BODY_NAME";
+            string fullDescString = HenryPlugin.developerPrefix + "_" + namePrefix + "_BODY_DESCRIPTION";
+            string fullOutroString = HenryPlugin.developerPrefix + "_" + namePrefix + "_BODY_OUTRO_FLAVOR";
+            string fullFailureString = HenryPlugin.developerPrefix + "_" + namePrefix + "_BODY_OUTRO_FAILURE";
+
+            SurvivorDef survivorDef = ScriptableObject.CreateInstance<SurvivorDef>();
+            survivorDef.bodyPrefab = bodyPrefab;
+            survivorDef.displayPrefab = displayPrefab;
+            survivorDef.primaryColor = charColor;
+            survivorDef.displayNameToken = fullNameString;
+            survivorDef.descriptionToken = fullDescString;
+            survivorDef.outroFlavorToken = fullOutroString;
+            survivorDef.mainEndingEscapeFailureFlavorToken = fullFailureString;
+            survivorDef.desiredSortPosition = 100f;
+            survivorDef.unlockableDef = unlockableDef;
+
+            survivorDefinitions.Add(survivorDef);
         }
 
-        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, namePrefix, ""); }
+        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, namePrefix, null); }
 
         internal static GameObject CreateDisplayPrefab(string modelName, GameObject prefab)
         {
@@ -39,6 +49,8 @@ namespace HenryMod.Modules
             Transform modelBaseTransform = SetupModel(newPrefab, model.transform);
 
             model.AddComponent<CharacterModel>().baseRendererInfos = prefab.GetComponentInChildren<CharacterModel>().baseRendererInfos;
+
+            Modules.Assets.ConvertAllRenderersToHopooShader(model);
 
             return model.gameObject;
         }
@@ -53,7 +65,6 @@ namespace HenryMod.Modules
             #region CharacterBody
             CharacterBody bodyComponent = newPrefab.GetComponent<CharacterBody>();
 
-            bodyComponent.bodyIndex = -1;
             bodyComponent.name = bodyInfo.bodyName;
             bodyComponent.baseNameToken = bodyInfo.bodyNameToken;
             bodyComponent.subtitleNameToken = bodyInfo.subtitleNameToken;
@@ -103,6 +114,8 @@ namespace HenryMod.Modules
             bodyComponent.preferredPodPrefab = bodyInfo.podPrefab;
 
             bodyComponent.isChampion = false;
+
+            bodyComponent.bodyColor = bodyInfo.bodyColor;
             #endregion
 
             SetupCharacterDirection(newPrefab, modelBaseTransform, model.transform);
@@ -115,10 +128,7 @@ namespace HenryMod.Modules
             SetupRagdoll(model);
             SetupAimAnimator(newPrefab, model);
 
-            BodyCatalog.getAdditionalEntries += delegate (List<GameObject> list)
-            {
-                list.Add(newPrefab);
-            };
+            bodyPrefabs.Add(newPrefab);
 
             return newPrefab;
         }
@@ -128,10 +138,7 @@ namespace HenryMod.Modules
             GameObject newMaster = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterMasters/" + masterToCopy + "MonsterMaster"), masterName, true);
             newMaster.GetComponent<CharacterMaster>().bodyPrefab = bodyPrefab;
 
-            MasterCatalog.getAdditionalEntries += delegate (List<GameObject> list)
-            {
-                list.Add(newMaster);
-            };
+            masterPrefabs.Add(newMaster);
         }
 
         #region ModelSetup
@@ -151,7 +158,7 @@ namespace HenryMod.Modules
 
             GameObject aimOrigin = new GameObject("AimOrigin");
             aimOrigin.transform.parent = modelBase.transform;
-            aimOrigin.transform.localPosition = new Vector3(0f, 2.2f, 0f);
+            aimOrigin.transform.localPosition = new Vector3(0f, 1.8f, 0f);
             aimOrigin.transform.localRotation = Quaternion.identity;
             aimOrigin.transform.localScale = Vector3.one;
             prefab.GetComponent<CharacterBody>().aimOriginTransform = aimOrigin.transform;
@@ -340,6 +347,23 @@ namespace HenryMod.Modules
 
             hitBoxGroup.groupName = hitboxName;
         }
+
+        internal static void SetupHitbox(GameObject prefab, string hitboxName, params Transform[] hitboxTransforms)
+        {
+            HitBoxGroup hitBoxGroup = prefab.AddComponent<HitBoxGroup>();
+            List<HitBox> hitBoxes = new List<HitBox>();
+
+            foreach (Transform i in hitboxTransforms)
+            {
+                HitBox hitBox = i.gameObject.AddComponent<HitBox>();
+                i.gameObject.layer = LayerIndex.projectile.intVal;
+                hitBoxes.Add(hitBox);
+            }
+
+            hitBoxGroup.hitBoxes = hitBoxes.ToArray();
+
+            hitBoxGroup.groupName = hitboxName;
+        }
         #endregion
     }
 }
@@ -384,6 +408,8 @@ internal class BodyInfo
     internal float critGrowth = 0f;
 
     internal int jumpCount = 1;
+
+    internal Color bodyColor = Color.grey;
 }
 
 // for simplifying rendererinfo creation

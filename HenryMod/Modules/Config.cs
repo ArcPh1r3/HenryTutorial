@@ -19,5 +19,10 @@ namespace HenryMod.Modules
         {
             return HenryPlugin.instance.Config.Bind<bool>(new ConfigDefinition(characterName, "Enabled"), true, new ConfigDescription("Set to false to disable this character"));
         }
+
+        internal static ConfigEntry<bool> EnemyEnableConfig(string characterName)
+        {
+            return HenryPlugin.instance.Config.Bind<bool>(new ConfigDefinition(characterName, "Enabled"), true, new ConfigDescription("Set to false to disable this enemy"));
+        }
     }
 }

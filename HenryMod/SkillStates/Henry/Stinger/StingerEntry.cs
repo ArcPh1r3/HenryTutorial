@@ -27,8 +27,28 @@ namespace HenryMod.SkillStates.Stinger
             }
             else
             {
-                // i don't feel like coding the punch rn
-                this.outer.SetNextState(new DashPunch());
+                float desiredDist = 10f;
+                if (!this.isGrounded) desiredDist = 7f;
+
+                float dist = Vector3.Distance(base.transform.position, this.tracker.GetTrackingTarget().transform.position);
+                if (dist <= desiredDist)
+                {
+                    if (this.isGrounded)
+                    {
+                        this.outer.SetNextState(new Uppercut());
+                        return;
+                    }
+                    else
+                    {
+                        this.outer.SetNextState(new AirSlam());
+                        return;
+                    }
+                }
+                else
+                {
+                    this.outer.SetNextState(new DashPunch());
+                    return;
+                }
             }
         }
 

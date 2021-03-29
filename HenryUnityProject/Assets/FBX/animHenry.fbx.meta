@@ -198,6 +198,36 @@ ModelImporter:
     7400168: Armature|ShootUzi
     7400170: Armature|Dance
     7400172: Armature|Taunt
+    7400174: Armature|BazookaAimD
+    7400176: Armature|BazookaAimF
+    7400178: Armature|BazookaAimL
+    7400180: Armature|BazookaAimR
+    7400182: Armature|BazookaAimU
+    7400184: Armature|BazookaFire
+    7400186: Armature|BazookaExit
+    7400188: Armature|BazookaFireCharged
+    7400190: Armature|ShootGunAlt
+    7400192: Armature|WalkBOLD
+    7400194: Armature|WalkROLD
+    7400196: Armature|AirSlam
+    7400198: Armature|FastAirPunch1
+    7400200: Armature|FastAirPunch2
+    7400202: Armature|FastAirPunch3
+    7400204: Armature|FastPunch1
+    7400206: Armature|FastPunch2
+    7400208: Armature|FastPunch3
+    7400210: Armature|PunchUppercut
+    7400212: Armature|SprintAltF
+    7400214: Armature|SprintAltL
+    7400216: Armature|SprintAltR
+    7400218: Armature|BazookaAimScepter
+    7400220: Armature|BazookaExitScepter
+    7400222: Armature|BazookaFireChargedScepter
+    7400224: Armature|BazookaFireScepter
+    7400226: Armature|ShotgunBlastDown
+    7400228: Armature|ShotgunBlastUp
+    7400230: Armature|CastResurrect
+    7400232: Armature|Respawn
     9500000: //RootNode
     13700000: meshHenry
     13700002: MeshHenryGun

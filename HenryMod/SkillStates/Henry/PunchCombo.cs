@@ -11,7 +11,7 @@ namespace HenryMod.SkillStates
             this.hitboxName = "Punch";
 
             this.damageType = DamageType.BypassArmor;
-            this.damageCoefficient = 2.8f;
+            this.damageCoefficient = 2.4f;
             this.procCoefficient = 1f;
             this.pushForce = 500f;
             this.bonusForce = Vector3.zero;
@@ -63,10 +63,20 @@ namespace HenryMod.SkillStates
             int index = this.swingIndex + 1;
             if (index == 3) index = 1;
 
-            this.outer.SetNextState(new PunchCombo
+            if (this.attackSpeedStat >= 5f)
             {
-                swingIndex = index
-            });
+                this.outer.SetNextState(new FistBarrage
+                {
+                    swingIndex = index
+                });
+            }
+            else
+            {
+                this.outer.SetNextState(new PunchCombo
+                {
+                    swingIndex = index
+                });
+            }
         }
 
         public override void OnExit()

@@ -1,0 +1,207 @@
+fileFormatVersion: 2
+guid: aa333713d31c5014cb69939517dc3101
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: arm_smear.r
+    100002: Armature
+    100004: BandanaL
+    100006: BandanaL.001
+    100008: BandanaL.002
+    100010: BandanaL.003
+    100012: BandanaR.001
+    100014: BandanaR.002
+    100016: BandanaR.003
+    100018: BandanaR.004
+    100020: base
+    100022: calf.l
+    100024: calf.r
+    100026: chest
+    100028: ElbowIK.l
+    100030: ElbowIK.r
+    100032: foot.l
+    100034: foot.r
+    100036: FootIK.l
+    100038: FootIK.r
+    100040: GunBase
+    100042: GunTop
+    100044: hand.l
+    100046: hand.r
+    100048: HandIK.l
+    100050: HandIK.r
+    100052: head
+    100054: KneeIK.l
+    100056: KneeIK.r
+    100058: lower_arm.l
+    100060: lower_arm.r
+    100062: meshHenrySword
+    100064: meshNemry
+    100066: //RootNode
+    100068: ROOT
+    100070: Spear.01
+    100072: Spear.02
+    100074: Spear.03
+    100076: Spear.04
+    100078: Spear.05
+    100080: Spear.06
+    100082: Spear.07
+    100084: SpearBase
+    100086: SpearCloth
+    100088: SpearCloth.001
+    100090: SpearCloth.002
+    100092: SpearCloth.003
+    100094: SpearTip
+    100096: SpearTipSmear
+    100098: SpearTipSmear.001
+    100100: stomach
+    100102: thigh.l
+    100104: thigh.r
+    100106: upper_arm.l
+    100108: upper_arm.r
+    400000: arm_smear.r
+    400002: Armature
+    400004: BandanaL
+    400006: BandanaL.001
+    400008: BandanaL.002
+    400010: BandanaL.003
+    400012: BandanaR.001
+    400014: BandanaR.002
+    400016: BandanaR.003
+    400018: BandanaR.004
+    400020: base
+    400022: calf.l
+    400024: calf.r
+    400026: chest
+    400028: ElbowIK.l
+    400030: ElbowIK.r
+    400032: foot.l
+    400034: foot.r
+    400036: FootIK.l
+    400038: FootIK.r
+    400040: GunBase
+    400042: GunTop
+    400044: hand.l
+    400046: hand.r
+    400048: HandIK.l
+    400050: HandIK.r
+    400052: head
+    400054: KneeIK.l
+    400056: KneeIK.r
+    400058: lower_arm.l
+    400060: lower_arm.r
+    400062: meshHenrySword
+    400064: meshNemry
+    400066: //RootNode
+    400068: ROOT
+    400070: Spear.01
+    400072: Spear.02
+    400074: Spear.03
+    400076: Spear.04
+    400078: Spear.05
+    400080: Spear.06
+    400082: Spear.07
+    400084: SpearBase
+    400086: SpearCloth
+    400088: SpearCloth.001
+    400090: SpearCloth.002
+    400092: SpearCloth.003
+    400094: SpearTip
+    400096: SpearTipSmear
+    400098: SpearTipSmear.001
+    400100: stomach
+    400102: thigh.l
+    400104: thigh.r
+    400106: upper_arm.l
+    400108: upper_arm.r
+    2100000: matNemry
+    4300000: meshNemry
+    4300002: meshHenrySword
+    9500000: //RootNode
+    13700000: meshHenrySword
+    13700002: meshNemry
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

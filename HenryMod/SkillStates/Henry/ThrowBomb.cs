@@ -16,7 +16,6 @@ namespace HenryMod.SkillStates
         private float fireTime;
         private bool hasFired;
         private Animator animator;
-        private string muzzleString;
 
         public override void OnEnter()
         {
@@ -25,7 +24,6 @@ namespace HenryMod.SkillStates
             this.fireTime = 0.35f * this.duration;
             base.characterBody.SetAimTimer(2f);
             this.animator = base.GetModelAnimator();
-            this.muzzleString = "Muzzle";
 
             base.PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", this.duration);
         }
@@ -40,7 +38,7 @@ namespace HenryMod.SkillStates
             if (!this.hasFired)
             {
                 this.hasFired = true;
-                EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
+                //EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FirePistol2.muzzleEffectPrefab, base.gameObject, this.muzzleString, false);
                 Util.PlaySound("HenryBombThrow", base.gameObject);
 
                 if (base.isAuthority)

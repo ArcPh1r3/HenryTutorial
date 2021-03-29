@@ -15,7 +15,6 @@ namespace HenryMod.SkillStates
         public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerCommandoDefault");
 
         private float duration;
-        private Animator animator;
         private string muzzleString;
 
         public override void OnEnter()
@@ -23,7 +22,6 @@ namespace HenryMod.SkillStates
             base.OnEnter();
             this.duration = ShootUzi.baseDuration / this.attackSpeedStat;
             base.characterBody.SetAimTimer(2f);
-            this.animator = base.GetModelAnimator();
             this.muzzleString = "Muzzle";
 
             base.PlayAnimation("LeftArm, Override", "ShootUzi", "ShootGun.playbackRate", 5f * this.duration);
@@ -39,7 +37,7 @@ namespace HenryMod.SkillStates
         private void Fire()
         {
             base.characterBody.AddSpreadBloom(0.5f);
-            EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
+            EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FirePistol2.muzzleEffectPrefab, base.gameObject, this.muzzleString, false);
             Util.PlaySound("HenryShootUzi", base.gameObject);
 
             if (base.isAuthority)
@@ -75,7 +73,7 @@ namespace HenryMod.SkillStates
                     spreadPitchScale = 0.5f,
                     spreadYawScale = 0.5f,
                     queryTriggerInteraction = QueryTriggerInteraction.UseGlobal,
-                    hitEffectPrefab = EntityStates.Commando.CommandoWeapon.FirePistol.hitEffectPrefab,
+                    hitEffectPrefab = EntityStates.Commando.CommandoWeapon.FirePistol2.hitEffectPrefab,
                 }.Fire();
             }
         }

@@ -6,7 +6,7 @@ namespace HenryMod.SkillStates
 {
     public class Shoot : BaseSkillState
     {
-        public static float damageCoefficient = 4.8f;
+        public static float damageCoefficient = 4.2f;
         public static float procCoefficient = 1f;
         public static float baseDuration = 0.6f;
         public static float force = 800f;
@@ -17,7 +17,6 @@ namespace HenryMod.SkillStates
         private float duration;
         private float fireTime;
         private bool hasFired;
-        private Animator animator;
         private string muzzleString;
 
         public override void OnEnter()
@@ -26,10 +25,9 @@ namespace HenryMod.SkillStates
             this.duration = Shoot.baseDuration / this.attackSpeedStat;
             this.fireTime = 0.2f * this.duration;
             base.characterBody.SetAimTimer(2f);
-            this.animator = base.GetModelAnimator();
             this.muzzleString = "Muzzle";
 
-            base.PlayAnimation("LeftArm, Override", "ShootGun", "ShootGun.playbackRate", 3f * this.duration);
+            base.PlayAnimation("LeftArm, Override", "ShootGun", "ShootGun.playbackRate", 1.8f);// 3f * this.duration);
         }
 
         public override void OnExit()
@@ -44,7 +42,7 @@ namespace HenryMod.SkillStates
                 this.hasFired = true;
 
                 base.characterBody.AddSpreadBloom(1.5f);
-                EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
+                EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FirePistol2.muzzleEffectPrefab, base.gameObject, this.muzzleString, false);
                 Util.PlaySound("HenryShootPistol", base.gameObject);
 
                 if (base.isAuthority)
@@ -80,7 +78,7 @@ namespace HenryMod.SkillStates
                         spreadPitchScale = 0f,
                         spreadYawScale = 0f,
                         queryTriggerInteraction = QueryTriggerInteraction.UseGlobal,
-                        hitEffectPrefab = EntityStates.Commando.CommandoWeapon.FirePistol.hitEffectPrefab,
+                        hitEffectPrefab = EntityStates.Commando.CommandoWeapon.FirePistol2.hitEffectPrefab,
                     }.Fire();
                 }
             }

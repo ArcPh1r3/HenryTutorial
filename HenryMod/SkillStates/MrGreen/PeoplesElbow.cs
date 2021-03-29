@@ -30,7 +30,7 @@ namespace HenryMod.SkillStates.MrGreen
             base.characterMotor.jumpCount = base.characterBody.maxJumpCount;
 
             //base.PlayAnimation("FullBody, Override", "PeoplesElbow", "HighJump.playbackRate", PeoplesElbow.jumpDuration);
-            Util.PlayScaledSound(EntityStates.Croco.Leap.leapSoundString, base.gameObject, 1.5f);
+            Util.PlayAttackSpeedSound(EntityStates.Croco.Leap.leapSoundString, base.gameObject, 1.5f);
 
             base.characterMotor.Motor.ForceUnground();
             base.characterMotor.velocity = Vector3.zero;
