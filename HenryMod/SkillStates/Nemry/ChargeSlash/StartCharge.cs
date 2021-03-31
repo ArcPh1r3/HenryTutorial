@@ -49,7 +49,7 @@ namespace HenryMod.SkillStates.Nemry.ChargeSlash
             this.chargeEffectInstance.transform.parent = muzzleTransform;
             this.chargeEffectInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = this.chargeDuration;
 
-            if (base.cameraTargetParams) base.cameraTargetParams.aimMode = CameraTargetParams.AimType.OverTheShoulder;
+            //if (base.cameraTargetParams) base.cameraTargetParams.aimMode = CameraTargetParams.AimType.OverTheShoulder;
         }
 
         public override void FixedUpdate()

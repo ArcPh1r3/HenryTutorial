@@ -1,81 +1,44 @@
 ﻿using BepInEx.Configuration;
 using RoR2;
 using RoR2.Skills;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace HenryMod.Modules.Survivors
 {
-    public static class Henry
+    internal class Henry : SurvivorBase
     {
-        internal static GameObject characterPrefab;
-        internal static GameObject displayPrefab;
+        internal override string bodyName { get; set; } = "Henry";
 
-        internal static ConfigEntry<bool> characterEnabled;
+        internal override GameObject bodyPrefab { get; set; }
+        internal override GameObject displayPrefab { get; set; }
 
-        public const string bodyName = "RobHenryBody";
+        internal override ConfigEntry<bool> characterEnabled { get; set; }
 
-        public static int bodyRendererIndex; // use this to store the rendererinfo index containing our character's body
-                                             // keep it last in the rendererinfos because teleporter particles for some reason require this. hopoo pls
-
-        // item display stuffs
-        internal static ItemDisplayRuleSet itemDisplayRuleSet;
-        internal static List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules;
-
-        // bazooka skill overrides
-        internal static SkillDef bazookaFireSkillDef;
-        internal static SkillDef bazookaCancelSkillDef;
-
-        internal static SkillDef bazookaFireSkillDefScepter;
-        internal static SkillDef bazookaCancelSkillDefScepter;
-
-        // unlockabledefs
-        internal static UnlockableDef characterUnlockableDef;
-        internal static UnlockableDef masterySkinUnlockableDef;
-        private static UnlockableDef grandMasterySkinUnlockableDef;
-        private static UnlockableDef danteSkinUnlockableDef;
-        private static UnlockableDef vergilSkinUnlockableDef;
-
-        internal static void CreateCharacter()
+        internal override BodyInfo bodyInfo { get; set; } = new BodyInfo
         {
-            // this creates a config option to enable the character- feel free to remove if the character is the only thing in your mod
-            characterEnabled = Modules.Config.CharacterEnableConfig("Henry");
+            armor = 20f,
+            armorGrowth = 0f,
+            bodyName = instance.bodyName + "Body",
+            bodyNameToken = HenryPlugin.developerPrefix + "_HENRY_BODY_NAME",
+            bodyColor = Color.grey,
+            characterPortrait = Modules.Assets.LoadCharacterIcon("Henry"),
+            crosshair = Modules.Assets.LoadCrosshair("Standard"),
+            damage = 12f,
+            healthGrowth = 33f,
+            healthRegen = 1.5f,
+            jumpCount = 1,
+            maxHealth = 110f,
+            subtitleNameToken = HenryPlugin.developerPrefix + "_HENRY_BODY_SUBTITLE",
+            podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod")
+        };
 
-            if (characterEnabled.Value)
-            {
-                CreateUnlockables();
+        internal static Material henryMat = Modules.Assets.CreateMaterial("matHenry");
+        internal static Material boxingGloveMat = Modules.Assets.CreateMaterial("matBoxingGlove");
+        internal override int mainRendererIndex { get; set; } = 9;
 
-                #region Body
-                characterPrefab = Modules.Prefabs.CreatePrefab(bodyName, "mdlHenry", new BodyInfo
-                {
-                    armor = 20f,
-                    armorGrowth = 0f,
-                    bodyName = bodyName,
-                    bodyNameToken = HenryPlugin.developerPrefix + "_HENRY_BODY_NAME",
-                    bodyColor = Color.grey,
-                    characterPortrait = Modules.Assets.LoadCharacterIcon("Henry"),
-                    crosshair = Modules.Assets.LoadCrosshair("Standard"),
-                    damage = 12f,
-                    healthGrowth = 33f,
-                    healthRegen = 1.5f,
-                    jumpCount = 1,
-                    maxHealth = 110f,
-                    subtitleNameToken = HenryPlugin.developerPrefix + "_HENRY_BODY_SUBTITLE",
-                    podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod")
-                });
-                characterPrefab.AddComponent<Modules.Components.HenryController>();
-                characterPrefab.AddComponent<Modules.Components.HenryTracker>();
-
-                characterPrefab.GetComponent<EntityStateMachine>().mainStateType = new EntityStates.SerializableEntityStateType(typeof(SkillStates.HenryMain));
-                #endregion
-
-                #region Model
-                Material henryMat = Modules.Assets.CreateMaterial("matHenry"); // cache these as there's no reason to create more when they're all the same
-                Material boxingGloveMat = Modules.Assets.CreateMaterial("matBoxingGlove");
-
-                bodyRendererIndex = 9;
-
-                Modules.Prefabs.SetupCharacterModel(characterPrefab, new CustomRendererInfo[] {
+        internal override CustomRendererInfo[] customRendererInfos { get; set; } = new CustomRendererInfo[] {
                 new CustomRendererInfo
                 {
                     childName = "SwordModel",
@@ -125,26 +88,37 @@ namespace HenryMod.Modules.Survivors
                 {
                     childName = "Model",
                     material = henryMat
-                }}, bodyRendererIndex);
-                #endregion
+                }};
 
-                displayPrefab = Modules.Prefabs.CreateDisplayPrefab("HenryDisplay", characterPrefab);
+        internal override Type characterMainState { get; set; } = typeof(SkillStates.HenryMain);
 
-                Modules.Prefabs.RegisterNewSurvivor(characterPrefab, displayPrefab, Color.grey, "HENRY", characterUnlockableDef);
+        // item display stuffs
+        internal override ItemDisplayRuleSet itemDisplayRuleSet { get; set; }
+        internal override List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules { get; set; }
 
-                CreateHitboxes();
-                CreateSkills();
-                CreateSkins();
-                InitializeItemDisplays();
-                CreateDoppelganger();
+        // bazooka skill overrides
+        internal static SkillDef bazookaFireSkillDef;
+        internal static SkillDef bazookaCancelSkillDef;
 
-                //if (HenryPlugin.scepterInstalled) CreateScepterSkills();
-            }
+        internal static SkillDef bazookaFireSkillDefScepter;
+        internal static SkillDef bazookaCancelSkillDefScepter;
+
+        internal override UnlockableDef characterUnlockableDef { get; set; }
+        private static UnlockableDef masterySkinUnlockableDef;
+        private static UnlockableDef grandMasterySkinUnlockableDef;
+        private static UnlockableDef danteSkinUnlockableDef;
+        private static UnlockableDef vergilSkinUnlockableDef;
+
+        internal override void InitializeCharacter()
+        {
+            base.InitializeCharacter();
+
+            this.bodyPrefab.AddComponent<Components.HenryController>();
+            this.bodyPrefab.AddComponent<Components.HenryTracker>();
         }
 
-        private static void CreateUnlockables()
+        internal override void InitializeUnlockables()
         {
-            Modules.Unlockables.AddUnlockable<Achievements.NemryAchievement>(true);
             characterUnlockableDef = Modules.Unlockables.AddUnlockable<Achievements.HenryUnlockAchievement>(true);
             masterySkinUnlockableDef = Modules.Unlockables.AddUnlockable<Achievements.MasteryAchievement>(true);
             //Modules.Unlockables.AddUnlockable<Achievements.GrandMasteryAchievement>(true);
@@ -152,16 +126,14 @@ namespace HenryMod.Modules.Survivors
             vergilSkinUnlockableDef = Modules.Unlockables.AddUnlockable<Achievements.VergilAchievement>(true);
         }
 
-        private static void CreateDoppelganger()
+        internal override void InitializeDoppelganger()
         {
-            // helper method for creating a generic doppelganger- copies ai from an existing survivor
-            // hopefully i'll get around to streamlining proper ai creation sometime
-            Modules.Prefabs.CreateGenericDoppelganger(characterPrefab, "HenryMonsterMaster", "Merc");
+            base.InitializeDoppelganger();
         }
 
-        private static void CreateHitboxes()
+        internal override void InitializeHitboxes()
         {
-            ChildLocator childLocator = characterPrefab.GetComponentInChildren<ChildLocator>();
+            ChildLocator childLocator = bodyPrefab.GetComponentInChildren<ChildLocator>();
             GameObject model = childLocator.gameObject;
 
             Transform hitboxTransform = childLocator.FindChild("SwordHitbox");
@@ -171,16 +143,16 @@ namespace HenryMod.Modules.Survivors
             Modules.Prefabs.SetupHitbox(model, hitboxTransform, "Punch");
         }
 
-        private static void CreateSkills()
+        internal override void InitializeSkills()
         {
-            Modules.Skills.CreateSkillFamilies(characterPrefab);
+            Modules.Skills.CreateSkillFamilies(bodyPrefab);
 
             string prefix = HenryPlugin.developerPrefix;
 
             #region Primary
-            Modules.Skills.AddPrimarySkill(characterPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_SLASH_NAME", prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"), true));
-            Modules.Skills.AddPrimarySkill(characterPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.PunchCombo)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_PUNCH_NAME", prefix + "_HENRY_BODY_PRIMARY_PUNCH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"), true));
-            Modules.Skills.AddPrimarySkill(characterPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.ShootAlt)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_GUN_NAME", prefix + "_HENRY_BODY_PRIMARY_GUN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"), true));
+            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_SLASH_NAME", prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"), true));
+            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.PunchCombo)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_PUNCH_NAME", prefix + "_HENRY_BODY_PRIMARY_PUNCH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"), true));
+            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.ShootAlt)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_GUN_NAME", prefix + "_HENRY_BODY_PRIMARY_GUN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"), true));
             #endregion
 
             #region Secondary
@@ -208,6 +180,7 @@ namespace HenryMod.Modules.Survivors
                 stockToConsume = 1,
                 keywordTokens = new string[] { "KEYWORD_AGILE" }
             });
+
             SkillDef stingerSkillDef = Modules.Skills.CreateTrackingSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_SECONDARY_STINGER_NAME",
@@ -231,6 +204,7 @@ namespace HenryMod.Modules.Survivors
                 requiredStock = 1,
                 stockToConsume = 1,
             });
+
             SkillDef uziSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_SECONDARY_UZI_NAME",
@@ -255,7 +229,7 @@ namespace HenryMod.Modules.Survivors
                 stockToConsume = 1,
             });
 
-            Modules.Skills.AddSecondarySkills(characterPrefab, shootSkillDef, uziSkillDef, stingerSkillDef);
+            Modules.Skills.AddSecondarySkills(bodyPrefab, shootSkillDef, uziSkillDef, stingerSkillDef);
             #endregion
 
             #region Utility
@@ -307,7 +281,7 @@ namespace HenryMod.Modules.Survivors
                 stockToConsume = 1
             });
 
-            Modules.Skills.AddUtilitySkills(characterPrefab, rollSkillDef, shotgunSkillDef);
+            Modules.Skills.AddUtilitySkills(bodyPrefab, rollSkillDef, shotgunSkillDef);
             #endregion
 
             #region Special
@@ -407,7 +381,7 @@ namespace HenryMod.Modules.Survivors
                 stockToConsume = 1
             });
 
-            Modules.Skills.AddSpecialSkills(characterPrefab, bombSkillDef, bazookaSkillDef);
+            Modules.Skills.AddSpecialSkills(bodyPrefab, bombSkillDef, bazookaSkillDef);
             #endregion
         }
 
@@ -521,9 +495,9 @@ namespace HenryMod.Modules.Survivors
             AncientScepter.AncientScepterItem.instance.RegisterScepterSkill(bazookaSkillDef, bodyName, SkillSlot.Special, 1);
         }*/
 
-        private static void CreateSkins()
+        internal override void InitializeSkins()
         {
-            GameObject model = characterPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
+            GameObject model = bodyPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
             CharacterModel characterModel = model.GetComponent<CharacterModel>();
 
             ModelSkinController skinController = model.AddComponent<ModelSkinController>();
@@ -560,7 +534,7 @@ namespace HenryMod.Modules.Survivors
                 new SkinDef.MeshReplacement
                 {
                     mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenry"),
-                    renderer = defaultRenderers[bodyRendererIndex].renderer
+                    renderer = defaultRenderers[instance.mainRendererIndex].renderer
                 }
             };
 
@@ -608,7 +582,7 @@ namespace HenryMod.Modules.Survivors
                 new SkinDef.MeshReplacement
                 {
                     mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenryAlt"),
-                    renderer = defaultRenderers[bodyRendererIndex].renderer
+                    renderer = defaultRenderers[instance.mainRendererIndex].renderer
                 }
             };
 
@@ -658,7 +632,7 @@ namespace HenryMod.Modules.Survivors
                 new SkinDef.MeshReplacement
                 {
                     mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenryNeo"),
-                    renderer = defaultRenderers[bodyRendererIndex].renderer
+                    renderer = defaultRenderers[instance.mainRendererIndex].renderer
                 },
                 new SkinDef.MeshReplacement
                 {
@@ -712,7 +686,7 @@ namespace HenryMod.Modules.Survivors
                 new SkinDef.MeshReplacement
                 {
                     mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshVergil"),
-                    renderer = defaultRenderers[bodyRendererIndex].renderer
+                    renderer = defaultRenderers[instance.mainRendererIndex].renderer
                 },
                 new SkinDef.MeshReplacement
                 {
@@ -765,7 +739,7 @@ namespace HenryMod.Modules.Survivors
                 new SkinDef.MeshReplacement
                 {
                     mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshDante"),
-                    renderer = defaultRenderers[bodyRendererIndex].renderer
+                    renderer = defaultRenderers[instance.mainRendererIndex].renderer
                 },
                 new SkinDef.MeshReplacement
                 {
@@ -794,17 +768,7 @@ namespace HenryMod.Modules.Survivors
             skinController.skins = skins.ToArray();
         }
 
-        private static void InitializeItemDisplays()
-        {
-            CharacterModel characterModel = characterPrefab.GetComponentInChildren<CharacterModel>();
-
-            itemDisplayRuleSet = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
-            itemDisplayRuleSet.name = "idrsHenry";
-
-            characterModel.itemDisplayRuleSet = itemDisplayRuleSet;
-        }
-
-        internal static void SetItemDisplays()
+        internal override void SetItemDisplays()
         {
             itemDisplayRules = new List<ItemDisplayRuleSet.KeyAssetRuleGroup>();
 
@@ -3434,7 +3398,7 @@ localScale = new Vector3(0.1233F, 0.1233F, 0.1233F),
 
             newRendererInfos[0].defaultMaterial = materials[0];
             newRendererInfos[1].defaultMaterial = materials[1];
-            newRendererInfos[bodyRendererIndex].defaultMaterial = materials[2];
+            newRendererInfos[instance.mainRendererIndex].defaultMaterial = materials[2];
             newRendererInfos[4].defaultMaterial = materials[3];
 
             return newRendererInfos;

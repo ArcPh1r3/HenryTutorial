@@ -39,7 +39,7 @@ namespace HenryMod.Modules.Achievements
 
             if (runReport.gameEnding.isWin)
             {
-                if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "moon")
+                if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "moon2")
                 {
                     if (base.meetsBodyRequirement && base.isUserAlive)
                     {

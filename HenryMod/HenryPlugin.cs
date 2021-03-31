@@ -29,7 +29,7 @@ namespace HenryMod
         //   this shouldn't even have to be said
         public const string MODUID = "com.rob.HenryMod";
         public const string MODNAME = "HenryMod";
-        public const string MODVERSION = "1.2.2";
+        public const string MODVERSION = "1.2.3";
 
         // a prefix for name tokens to prevent conflicts
         public const string developerPrefix = "ROB";
@@ -59,7 +59,8 @@ namespace HenryMod
             Modules.Tokens.AddTokens(); // register name tokens
             Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
 
-            Modules.Survivors.Henry.CreateCharacter();
+            new Modules.Survivors.Henry().Initialize();
+            new Modules.Survivors.SimpleCharacter().Initialize();
             //new Modules.Enemies.MrGreen().CreateCharacter();
 
             // nemry leak? if you're reading this keep quiet about it please.
@@ -73,7 +74,7 @@ namespace HenryMod
 
         private void Start()
         {
-            Modules.Survivors.Henry.SetItemDisplays();
+            Modules.Survivors.Henry.instance.SetItemDisplays();
         }
 
         private void Hook()
