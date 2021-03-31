@@ -8,13 +8,13 @@ namespace HenryMod.SkillStates.Nemry.Beam
 {
     public class FireBeam : BaseNemrySkillState
     {
-        public static float damageCoefficient = 0.4f;
+        public static float damageCoefficient = 2f;
         public static float force = 1000f;
         public static float minSpread = 0f;
         public static float maxSpread = 0f;
         public static float bulletRadius = 4f;
         public static uint bulletCount = 1;
-        public static float fireFrequency = 0.4f;
+        public static float fireFrequency = 0.05f;
         public static float maxDistance = 256f;
         public static float procCoefficientPerTick = 0.25f;
 
@@ -23,7 +23,6 @@ namespace HenryMod.SkillStates.Nemry.Beam
         private Ray aimRay;
         private Transform modelTransform;
         private GameObject beamEffectInstance;
-        private ChildLocator laserChildLocator;
         private ChildLocator childLocator;
         protected Transform muzzleTransform;
 
@@ -56,6 +55,8 @@ namespace HenryMod.SkillStates.Nemry.Beam
             if (this.beamEffectInstance) EntityState.Destroy(this.beamEffectInstance);
             base.characterBody.SetAimTimer(0.2f);
 
+            if (base.cameraTargetParams) base.cameraTargetParams.aimMode = CameraTargetParams.AimType.Standard;
+
             base.OnExit();
         }
 
@@ -64,13 +65,14 @@ namespace HenryMod.SkillStates.Nemry.Beam
             base.FixedUpdate();
             this.fireStopwatch += Time.fixedDeltaTime;
             this.stopwatch += Time.fixedDeltaTime;
-            base.inputBank.aimDirection = this.aimRay.direction;
+            this.aimRay = base.GetAimRay();
 
-            bool fired = false;
-            if (this.fireStopwatch > this.attackSpeedStat / FireBeam.fireFrequency)
+            bool fired = true;
+            if (this.fireStopwatch > FireBeam.fireFrequency)
             {
+                fired = false;
                 this.FireBullet(this.modelTransform, this.aimRay, "Muzzle", FireBeam.maxDistance);
-                this.fireStopwatch -= 1f / FireBeam.fireFrequency;
+                this.fireStopwatch = 0f;
                 fired = this.SpendEnergy(5f, SkillSlot.Special);
             }
 
@@ -111,7 +113,8 @@ namespace HenryMod.SkillStates.Nemry.Beam
                     procCoefficient = FireBeam.procCoefficientPerTick,
                     HitEffectNormal = false,
                     radius = FireBeam.bulletRadius,
-                    maxDistance = maxDistance
+                    maxDistance = maxDistance,
+                    stopperMask = LayerIndex.world.mask
                 }.Fire();
             }
         }

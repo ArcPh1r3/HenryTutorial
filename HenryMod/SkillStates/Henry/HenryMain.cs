@@ -52,10 +52,11 @@ namespace HenryMod.SkillStates
                 }
             }
 
-            if (base.isAuthority && Input.GetKeyDown("z"))
+            // debug
+            /*if (base.isAuthority && Input.GetKeyDown("z"))
             {
                 base.characterBody.master.inventory.GiveItem(RoR2Content.Items.Syringe, 5);
-            }
+            }*/
         }
 
         public override void FixedUpdate()

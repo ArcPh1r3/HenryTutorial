@@ -69,12 +69,12 @@ namespace HenryMod.Modules.Components
 
         public bool SpendEnergy(float amount, SkillSlot skillSlot)
         {
-            /*if (this.characterBody.HasBuff(BuffIndex.NoCooldowns)) return true;
+            if (this.characterBody.HasBuff(RoR2Content.Buffs.NoCooldowns)) return true;
             //
-            int alienHeadCount = this.characterMaster.inventory.GetItemCount(ItemIndex.AlienHead);
-            int purityCount = this.characterMaster.inventory.GetItemCount(ItemIndex.LunarBadLuck);
-            int backupMagCount = this.characterMaster.inventory.GetItemCount(ItemIndex.SecondarySkillMagazine);
-            int afterburnerCount = this.characterMaster.inventory.GetItemCount(ItemIndex.UtilitySkillMagazine);
+            int alienHeadCount = this.characterMaster.inventory.GetItemCount(RoR2Content.Items.AlienHead);
+            int purityCount = this.characterMaster.inventory.GetItemCount(RoR2Content.Items.LunarBadLuck);
+            int backupMagCount = this.characterMaster.inventory.GetItemCount(RoR2Content.Items.SecondarySkillMagazine);
+            int afterburnerCount = this.characterMaster.inventory.GetItemCount(RoR2Content.Items.UtilitySkillMagazine);
 
             for (int i = 0; i < alienHeadCount; i++)
             {
@@ -97,7 +97,7 @@ namespace HenryMod.Modules.Components
                 }
             }
 
-            amount = Mathf.Clamp(amount - (purityCount * 20f), 0, Mathf.Infinity);*/
+            amount = Mathf.Clamp(amount - (purityCount * 20f), 0, Mathf.Infinity);
             //
 
             if (this.currentEnergy < amount) return false;

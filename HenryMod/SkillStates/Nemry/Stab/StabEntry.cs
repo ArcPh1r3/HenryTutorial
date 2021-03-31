@@ -14,8 +14,8 @@ namespace HenryMod.SkillStates.Nemry.Stab
         {
             this.hitboxName = "Sword";
 
-            this.damageType = DamageType.Generic;
-            this.damageCoefficient = 16f;
+            this.damageType = DamageType.PoisonOnHit;
+            this.damageCoefficient = 28f;
             this.procCoefficient = 1f;
             this.pushForce = -500f;
             this.baseDuration = 0.6f;

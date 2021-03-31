@@ -13,8 +13,8 @@ namespace HenryMod.SkillStates.Nemry.ChargeSlash
         public static float dashSpeed = 120f;
         public static float hopForce = 10f;
 
-        public static float maxDamageCoefficient = 4f;
-        public static float minDamageCoefficient = 12f;
+        public static float maxDamageCoefficient = 12f;
+        public static float minDamageCoefficient = 6f;
         public static float procCoefficient = 1f;
         public static float pushForce = 200f;
 

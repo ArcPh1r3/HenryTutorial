@@ -80,7 +80,7 @@ namespace HenryMod.SkillStates.Nemry.ChargeSlash
                 if (base.cameraTargetParams) base.cameraTargetParams.aimMode = CameraTargetParams.AimType.Aura;
             }
 
-            if (base.isAuthority && base.inputBank.skill3.down && base.skillLocator.utility.CanExecute())
+            if (base.isAuthority && base.inputBank.skill3.justPressed && base.skillLocator.utility.CanExecute())
             {
                 base.skillLocator.utility.ExecuteIfReady();
             }

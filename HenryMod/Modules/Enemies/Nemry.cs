@@ -72,7 +72,7 @@ namespace HenryMod.Modules.Enemies
 
                 displayPrefab = Modules.Prefabs.CreateDisplayPrefab("NemryDisplay", characterPrefab);
 
-                Modules.Prefabs.RegisterNewSurvivor(characterPrefab, displayPrefab, Color.green, "NEMRY", characterUnlockableDef);
+                Modules.Prefabs.RegisterNewSurvivor(characterPrefab, displayPrefab, Color.green, "NEMRY");
 
                 umbraMaster = CreateMaster(characterPrefab, "NemryMonsterMaster");
                 #endregion
@@ -96,7 +96,7 @@ namespace HenryMod.Modules.Enemies
                 invasionBossMaster = CreateMaster(invasionBossPrefab, "NemryInvasionMaster");
                 #endregion
 
-                //On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
+                On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
                 On.RoR2.MapZone.TryZoneStart += MapZone_TryZoneStart;
                 On.RoR2.HealthComponent.Suicide += HealthComponent_Suicide;
                 On.RoR2.CharacterSelectBarController.Start += CharacterSelectBarController_Start;
@@ -482,7 +482,7 @@ namespace HenryMod.Modules.Enemies
                 canceledFromSprinting = false,
                 forceSprintDuringState = false,
                 fullRestockOnAssign = true,
-                interruptPriority = EntityStates.InterruptPriority.Skill,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
                 resetCooldownTimerOnUse = false,
                 isCombatSkill = true,
                 mustKeyPress = false,
@@ -582,7 +582,7 @@ namespace HenryMod.Modules.Enemies
                 canceledFromSprinting = false,
                 forceSprintDuringState = true,
                 fullRestockOnAssign = true,
-                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+                interruptPriority = EntityStates.InterruptPriority.Pain,
                 resetCooldownTimerOnUse = false,
                 isCombatSkill = false,
                 mustKeyPress = true,
@@ -603,7 +603,7 @@ namespace HenryMod.Modules.Enemies
                 skillDescriptionToken = prefix + "_NEMRY_BODY_SPECIAL_STAB_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texNemStabIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Nemry.Stab.StabEntry)),
-                activationStateMachineName = "Weapon",
+                activationStateMachineName = "Body",
                 baseMaxStock = 1,
                 baseRechargeInterval = 0f,
                 beginSkillCooldownOnSkillEnd = false,
@@ -627,7 +627,7 @@ namespace HenryMod.Modules.Enemies
                 skillDescriptionToken = prefix + "_NEMRY_BODY_SPECIAL_STABCSS_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texNemStabIconPreview"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Nemry.Stab.StabEntry)),
-                activationStateMachineName = "Weapon",
+                activationStateMachineName = "Body",
                 baseMaxStock = 1,
                 baseRechargeInterval = 0f,
                 beginSkillCooldownOnSkillEnd = false,
@@ -658,7 +658,7 @@ namespace HenryMod.Modules.Enemies
                 canceledFromSprinting = false,
                 forceSprintDuringState = false,
                 fullRestockOnAssign = true,
-                interruptPriority = EntityStates.InterruptPriority.Skill,
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
                 resetCooldownTimerOnUse = false,
                 isCombatSkill = true,
                 mustKeyPress = false,
@@ -3395,6 +3395,7 @@ localScale = new Vector3(0.1233F, 0.1233F, 0.1233F),
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
             bool isSweetSpot = false;
+            bool isHealing = false;
 
             if (self != null && damageInfo != null && damageInfo.attacker != null)
             {
@@ -3428,6 +3429,11 @@ localScale = new Vector3(0.1233F, 0.1233F, 0.1233F),
                                 damageInfo.damageType = DamageType.Generic;
                             }*/
                         }
+                        else if (damageInfo.damageType.HasFlag(DamageType.PoisonOnHit))
+                        {
+                            damageInfo.damageType = DamageType.Generic;
+                            isHealing = true;
+                        }
                     }
                 }
             }
@@ -3437,6 +3443,12 @@ localScale = new Vector3(0.1233F, 0.1233F, 0.1233F),
             if (isSweetSpot)
             {
                 damageInfo.attacker.GetComponent<HealthComponent>().Heal(0.2f * damageInfo.damage, default(ProcChainMask));
+            }
+
+            if (isHealing && !damageInfo.rejected)
+            {
+                damageInfo.attacker.gameObject.GetComponent<HealthComponent>().Heal(damageInfo.damage * 0.5f, default(ProcChainMask));
+                self.body.AddTimedBuff(RoR2Content.Buffs.Nullified, 12f);
             }
         }
 

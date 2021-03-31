@@ -8,7 +8,7 @@ namespace HenryMod.SkillStates.Nemry
     public class Burst : BaseNemrySkillState
     {
         public static float baseDuration = 0.2f;
-        public static float damageCoefficient = 1.4f;
+        public static float damageCoefficient = 6.8f;
         public static float procCoefficient = 1f;
         public static float blastForce = 2500f;
         public static float pushForce = 100f;
@@ -46,7 +46,7 @@ namespace HenryMod.SkillStates.Nemry
                 base.AddRecoil(-1f * Burst.recoil, -2f * Burst.recoil, -0.5f * Burst.recoil, 0.5f * Burst.recoil);
 
                 BlastAttack blastAttack = new BlastAttack();
-                blastAttack.radius = 6f;
+                blastAttack.radius = 10f;
                 blastAttack.procCoefficient = 1f;
                 blastAttack.position = aimRay.origin + 2 * aimRay.direction;
                 blastAttack.attacker = base.gameObject;
@@ -61,9 +61,9 @@ namespace HenryMod.SkillStates.Nemry
 
                 EffectData effectData = new EffectData();
                 effectData.origin = aimRay.origin + 2 * aimRay.direction;
-                effectData.scale = 4;
+                effectData.scale = 8;
 
-                EffectManager.SpawnEffect(Modules.Assets.energyBurstEffect, effectData, true);
+                EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/ImpactEffects/FusionCellExplosion"), effectData, true);
             }
         }
 

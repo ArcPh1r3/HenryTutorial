@@ -8,8 +8,8 @@
 
         internal const float gunDamageCoefficient = 4.2f;
 
-        internal const float uziDamageCoefficient = 0.6f;
-        internal const float uziProcCoefficient = 0.5f;
+        internal const float uziDamageCoefficient = 0.75f;
+        internal const float uziProcCoefficient = 0.75f;
 
         internal const float stingerDamageCoefficient = 4.5f;
 

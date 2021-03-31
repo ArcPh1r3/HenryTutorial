@@ -10,7 +10,7 @@ namespace HenryMod.SkillStates.Nemry.Torrent
     {
         public static GameObject bulletTracerEffectPrefab = Modules.Assets.energyTracer;
 
-        public static float damageCoefficient = 1.8f;
+        public static float damageCoefficient = 2.1f;
         public static float baseFireInterval = 0.09f;
         public static float bulletRecoil = 0.5f;
         public static float hopHeight = 22f;
@@ -158,7 +158,7 @@ namespace HenryMod.SkillStates.Nemry.Torrent
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Pain;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace HenryMod.SkillStates.Nemry
             this.hitboxName = "Sword";
 
             this.damageType = DamageType.Generic;
-            this.damageCoefficient = 2.8f;
+            this.damageCoefficient = 3.8f;
             this.procCoefficient = 1f;
             this.pushForce = 300f;
             this.bonusForce = Vector3.zero;

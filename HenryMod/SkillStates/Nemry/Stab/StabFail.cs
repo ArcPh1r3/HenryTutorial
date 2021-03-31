@@ -13,7 +13,7 @@ namespace HenryMod.SkillStates.Nemry.Stab
         public override void OnEnter()
         {
             base.OnEnter();
-            base.PlayAnimation("FullBody, Override", "StabFail", "StabFail.playbackRate", 2f * StabFail.duration);
+            base.PlayAnimation("FullBody, Override", "StabFail", "Stab.playbackRate", 1.25f * StabFail.duration);
         }
 
         public override void FixedUpdate()

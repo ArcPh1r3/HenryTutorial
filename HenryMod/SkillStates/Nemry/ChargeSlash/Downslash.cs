@@ -8,7 +8,7 @@ namespace HenryMod.SkillStates.Nemry.ChargeSlash
     public class Downslash : BaseMeleeAttack
     {
         public static float maxDamageCoefficient = 12f;
-        public static float minDamageCoefficient = 4f;
+        public static float minDamageCoefficient = 6f;
 
         public float charge;
 

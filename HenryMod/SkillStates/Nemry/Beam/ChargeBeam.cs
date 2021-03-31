@@ -28,17 +28,6 @@ namespace HenryMod.SkillStates.Nemry.Beam
             this.zoomin = false;
             base.characterBody.hideCrosshair = true;
 
-            foreach (EntityStateMachine i in base.gameObject.GetComponents<EntityStateMachine>())
-            {
-                if (i)
-                {
-                    if (i.customName == "Weapon" || i.customName == "Slide")
-                    {
-                        i.SetNextStateToMain();
-                    }
-                }
-            }
-
             //base.PlayAnimation("FullBody, Override", "Charge", "Charge.playbackRate", this.chargeDuration);
             this.chargePlayID = Util.PlaySound("NemryChargeBeam", base.gameObject);
 
@@ -75,9 +64,10 @@ namespace HenryMod.SkillStates.Nemry.Beam
                 //Util.PlaySound("NemmandoDecisiveStrikeReady", base.gameObject);
             }
 
-            if (base.isAuthority && (base.fixedAge >= 1.25f * this.chargeDuration || !base.inputBank.skill2.down && base.fixedAge >= this.chargeDuration))
+            if (base.isAuthority && (base.fixedAge >= 1.25f * this.chargeDuration || (!base.inputBank.skill2.down && base.fixedAge >= this.chargeDuration)))
             {
                 this.outer.SetNextState(new FireBeam());
+                return;
             }
         }
 

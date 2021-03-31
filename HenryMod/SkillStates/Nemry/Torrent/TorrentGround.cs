@@ -10,11 +10,11 @@ namespace HenryMod.SkillStates.Nemry.Torrent
     {
         public static GameObject bulletTracerEffectPrefab = Modules.Assets.energyTracer;
 
-        public static float damageCoefficient = 1.2f;
+        public static float damageCoefficient = 2.1f;
         public static float procCoefficient = 0.8f;
         public static float baseFireInterval = 0.09f;
         public static float bulletRecoil = 0.45f;
-        public static float baseStartDuration = 0.4f;
+        public static float baseStartDuration = 0.6f;
         public static float bulletForce = 50f;
 
         private float startDuration;
@@ -44,8 +44,9 @@ namespace HenryMod.SkillStates.Nemry.Torrent
         {
             base.OnExit();
             base.PlayAnimation("FullBody, Override", "BufferEmpty");
-            base.PlayAnimation("Gesture, Override", "GroundTorrentExit", "Torrent.playbackRate", 0.5f);
+            base.PlayAnimation("Gesture, Override", "GroundTorrentExit", "Torrent.playbackRate", 0.75f);
             Util.PlaySound("HenryBazookaUnequip", base.gameObject);
+            this.spinningWeaponEffect.SetActive(false);
 
             base.characterMotor.jumpCount = this.startingJumpCount;
         }
@@ -113,7 +114,7 @@ namespace HenryMod.SkillStates.Nemry.Torrent
             {
                 this.spinningWeaponEffect.SetActive(false);
 
-                if (this.SpendEnergy(1))
+                if (this.SpendEnergy(2))
                 {
                     this.fireStopwatch = this.fireInterval;
                     this.FireBullet();
@@ -134,7 +135,7 @@ namespace HenryMod.SkillStates.Nemry.Torrent
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Pain;
         }
     }
 }

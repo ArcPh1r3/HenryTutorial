@@ -21,7 +21,7 @@ namespace HenryMod.SkillStates.Henry
         {
             base.FixedUpdate();
 
-            if (base.fixedAge >= 0.6f * this.duration)
+            if (base.fixedAge >= 0.75f * this.duration)
             {
                 this.StartReload();
             }
