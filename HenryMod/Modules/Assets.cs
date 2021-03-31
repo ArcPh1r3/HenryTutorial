@@ -61,7 +61,14 @@ namespace HenryMod.Modules
         public static Shader hotpoo = Resources.Load<Shader>("Shaders/Deferred/HGStandard");
         public static Material commandoMat;
 
-        internal static void PopulateAssets()
+        internal static void Initialize()
+        {
+            LoadAssetBundle();
+            LoadSoundbank();
+            PopulateAssets();
+        }
+
+        internal static void LoadAssetBundle()
         {
             if (mainAssetBundle == null)
             {
@@ -70,14 +77,20 @@ namespace HenryMod.Modules
                     mainAssetBundle = AssetBundle.LoadFromStream(assetStream);
                 }
             }
+        }
 
+        internal static void LoadSoundbank()
+        {
             using (Stream manifestResourceStream2 = Assembly.GetExecutingAssembly().GetManifestResourceStream("HenryMod.HenryBank.bnk"))
             {
                 byte[] array = new byte[manifestResourceStream2.Length];
                 manifestResourceStream2.Read(array, 0, array.Length);
                 SoundAPI.SoundBanks.Add(array);
             }
+        }
 
+        internal static void PopulateAssets()
+        {
             swordHitSoundEvent = CreateNetworkSoundEventDef("HenrySwordHit");
             punchHitSoundEvent = CreateNetworkSoundEventDef("HenryPunchHit");
             nemSwordHitSoundEvent = CreateNetworkSoundEventDef("NemrySwordHit");
@@ -125,13 +138,10 @@ namespace HenryMod.Modules
             swordHitImpactEffect = Assets.LoadEffect("ImpactHenrySlash");
 
             punchSwingEffect = Assets.LoadEffect("HenryFistSwingEffect", true);
-            //punchImpactEffect = Assets.LoadEffect("ImpactHenryPunch");
-            // on second thought my effect sucks so imma just clone loader's
             punchImpactEffect = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Effects/OmniEffect/OmniImpactVFXLoader"), "ImpactHenryPunch");
             punchImpactEffect.AddComponent<NetworkIdentity>();
 
             AddNewEffectDef(punchImpactEffect);
-            //EffectAPI.AddEffect(punchImpactEffect);
 
             fistBarrageEffect = Assets.LoadEffect("FistBarrageEffect", true);
             fistBarrageEffect.GetComponent<ParticleSystemRenderer>().material.shader = hotpoo;
@@ -180,7 +190,6 @@ namespace HenryMod.Modules
             }
 
             AddNewEffectDef(shotgunTracer);
-            //EffectAPI.AddEffect(shotgunTracer);
 
             spearSwingEffect = Assets.LoadEffect("NemrySpearSwingEffect");
 
