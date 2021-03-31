@@ -62,8 +62,9 @@ namespace HenryMod.Modules
         internal static List<EffectDef> effectDefs = new List<EffectDef>();
 
         // cache these and use to create our own materials
-        public static Shader hotpoo = Resources.Load<Shader>("Shaders/Deferred/HGStandard");
-        public static Material commandoMat;
+        internal static Shader hotpoo = Resources.Load<Shader>("Shaders/Deferred/HGStandard");
+        internal static Material commandoMat;
+        private static string[] assetNames = new string[0];
 
         internal static void Initialize()
         {
@@ -81,6 +82,8 @@ namespace HenryMod.Modules
                     mainAssetBundle = AssetBundle.LoadFromStream(assetStream);
                 }
             }
+
+            assetNames = mainAssetBundle.GetAllAssetNames();
         }
 
         internal static void LoadSoundbank()
@@ -95,6 +98,12 @@ namespace HenryMod.Modules
 
         internal static void PopulateAssets()
         {
+            if (!mainAssetBundle)
+            {
+                Debug.LogError("There is no AssetBundle to load assets from.");
+                return;
+            }
+
             swordHitSoundEvent = CreateNetworkSoundEventDef("HenrySwordHit");
             punchHitSoundEvent = CreateNetworkSoundEventDef("HenryPunchHit");
             nemSwordHitSoundEvent = CreateNetworkSoundEventDef("NemrySwordHit");
@@ -109,34 +118,41 @@ namespace HenryMod.Modules
 
             swordChargeFinishEffect = LoadEffect("SwordChargeFinishEffect");
             swordChargeEffect = mainAssetBundle.LoadAsset<GameObject>("SwordChargeEffect");
-            swordChargeEffect.AddComponent<ScaleParticleSystemDuration>().particleSystems = swordChargeEffect.GetComponentsInChildren<ParticleSystem>();
-            swordChargeEffect.GetComponent<ScaleParticleSystemDuration>().initialDuration = 1.5f;
 
-            ShakeEmitter shakeEmitter = bombExplosionEffect.AddComponent<ShakeEmitter>();
-            shakeEmitter.amplitudeTimeDecay = true;
-            shakeEmitter.duration = 0.5f;
-            shakeEmitter.radius = 200f;
-            shakeEmitter.scaleShakeRadiusWithLocalScale = false;
-
-            shakeEmitter.wave = new Wave
+            if (swordChargeEffect)
             {
-                amplitude = 1f,
-                frequency = 40f,
-                cycleOffset = 0f
-            };
+                swordChargeEffect.AddComponent<ScaleParticleSystemDuration>().particleSystems = swordChargeEffect.GetComponentsInChildren<ParticleSystem>();
+                swordChargeEffect.GetComponent<ScaleParticleSystemDuration>().initialDuration = 1.5f;
+            }
 
-            shakeEmitter = bazookaExplosionEffect.AddComponent<ShakeEmitter>();
-            shakeEmitter.amplitudeTimeDecay = true;
-            shakeEmitter.duration = 0.4f;
-            shakeEmitter.radius = 100f;
-            shakeEmitter.scaleShakeRadiusWithLocalScale = false;
-
-            shakeEmitter.wave = new Wave
+            if (bombExplosionEffect)
             {
-                amplitude = 1f,
-                frequency = 30f,
-                cycleOffset = 0f
-            };
+                ShakeEmitter shakeEmitter = bombExplosionEffect.AddComponent<ShakeEmitter>();
+                shakeEmitter.amplitudeTimeDecay = true;
+                shakeEmitter.duration = 0.5f;
+                shakeEmitter.radius = 200f;
+                shakeEmitter.scaleShakeRadiusWithLocalScale = false;
+
+                shakeEmitter.wave = new Wave
+                {
+                    amplitude = 1f,
+                    frequency = 40f,
+                    cycleOffset = 0f
+                };
+
+                shakeEmitter = bazookaExplosionEffect.AddComponent<ShakeEmitter>();
+                shakeEmitter.amplitudeTimeDecay = true;
+                shakeEmitter.duration = 0.4f;
+                shakeEmitter.radius = 100f;
+                shakeEmitter.scaleShakeRadiusWithLocalScale = false;
+
+                shakeEmitter.wave = new Wave
+                {
+                    amplitude = 1f,
+                    frequency = 30f,
+                    cycleOffset = 0f
+                };
+            }
 
             swordSwingEffect = Assets.LoadEffect("HenrySwordSwingEffect", true);
             swordHitImpactEffect = Assets.LoadEffect("ImpactHenrySlash");
@@ -145,7 +161,7 @@ namespace HenryMod.Modules
             punchImpactEffect = Assets.LoadEffect("ImpactHenryPunch");
 
             fistBarrageEffect = Assets.LoadEffect("FistBarrageEffect", true);
-            fistBarrageEffect.GetComponent<ParticleSystemRenderer>().material.shader = hotpoo;
+            if (fistBarrageEffect) fistBarrageEffect.GetComponent<ParticleSystemRenderer>().material.shader = hotpoo;
 
             bazookaCrosshair = PrefabAPI.InstantiateClone(LoadCrosshair("ToolbotGrenadeLauncher"), "HenryBazookaCrosshair", false);
             CrosshairController crosshair = bazookaCrosshair.GetComponent<CrosshairController>();
@@ -198,6 +214,9 @@ namespace HenryMod.Modules
             nemSwordStabSwingEffect = Assets.LoadEffect("NemrySwordStabSwingEffect", true);
             nemSwordHeavySwingEffect = Assets.LoadEffect("NemryHeavySwordSwingEffect", true);
             nemSwordHitImpactEffect = Assets.LoadEffect("ImpactNemrySlash");
+
+            energyBurstEffect = LoadEffect("EnergyBurstEffect");
+            smallEnergyBurstEffect = LoadEffect("EnergySmallBurstEffect");
 
             energyTracer = CreateTracer("TracerHuntressSnipe", "NemryEnergyTracer");
 
@@ -317,9 +336,23 @@ namespace HenryMod.Modules
 
         private static GameObject LoadEffect(string resourceName, string soundName, bool parentToTransform)
         {
-            GameObject newEffect = mainAssetBundle.LoadAsset<GameObject>(resourceName);
+            bool assetExists = false;
+            for (int i = 0; i < assetNames.Length; i++)
+            {
+                if (assetNames[i] == resourceName)
+                {
+                    assetExists = true;
+                    i = assetNames.Length;
+                }
+            }
 
-            if (newEffect == null) return null;
+            if (!assetExists)
+            {
+                Debug.LogError("Failed to load effect: " + resourceName + " because it does not exist in the AssetBundle");
+                return null;
+            }
+
+            GameObject newEffect = mainAssetBundle.LoadAsset<GameObject>(resourceName);
 
             newEffect.AddComponent<DestroyOnTimer>().duration = 12;
             newEffect.AddComponent<NetworkIdentity>();

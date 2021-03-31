@@ -27,12 +27,6 @@ namespace HenryMod.Modules
             Modules.Prefabs.projectilePrefabs.Add(bombPrefab);
             Modules.Prefabs.projectilePrefabs.Add(bazookaRocketPrefab);
             Modules.Prefabs.projectilePrefabs.Add(voidBlastPrefab);
-            /*ProjectileCatalog.getAdditionalEntries += list =>
-            {
-                list.Add(bombPrefab);
-                list.Add(bazookaRocketPrefab);
-                list.Add(voidBlastPrefab);
-            };*/
         }
 
         private static void CreateVoidBlast()

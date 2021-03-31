@@ -27,11 +27,13 @@ namespace HenryMod.Modules
 
         internal static void RegisterStates()
         {
+            // fixing a vanilla bug- ignore this
             Type type = typeof(SerializableEntityStateType);
             HookConfig cfg = default;
             cfg.Priority = Int32.MinValue;
             set_stateTypeHook = new Hook(type.GetMethod("set_stateType", allFlags), new set_stateTypeDelegate(SetStateTypeHook), cfg);
             set_typeNameHook = new Hook(type.GetMethod("set_typeName", allFlags), new set_typeNameDelegate(SetTypeName), cfg);
+            //
 
             entityStates.Add(typeof(BaseHenrySkillState));
 
@@ -107,6 +109,7 @@ namespace HenryMod.Modules
             entityStates.Add(typeof(SkillStates.Nemry.Burst));
         }
 
+        // ignore this
         private static void SetStateTypeHook(ref this SerializableEntityStateType self, Type value)
         {
             self._typeName = value.AssemblyQualifiedName;

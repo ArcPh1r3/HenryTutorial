@@ -48,7 +48,7 @@ namespace HenryMod
             if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.DestroyedClone.AncientScepter")) scepterInstalled = true;
 
             // load assets and read config
-            Modules.Assets.PopulateAssets();
+            Modules.Assets.Initialize();
             Modules.Config.ReadConfig();
             Modules.States.RegisterStates(); // register states for networking
             Modules.Buffs.RegisterBuffs(); // add and register custom buffs/debuffs
