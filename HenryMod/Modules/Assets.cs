@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using RoR2;
 using System.IO;
-using RoR2.Audio;
 using System.Collections.Generic;
 using RoR2.UI;
 
@@ -54,8 +53,8 @@ namespace HenryMod.Modules
         internal static NetworkSoundEventDef punchHitSoundEvent;
         internal static NetworkSoundEventDef nemSwordHitSoundEvent;
 
+        // lists of assets to add to contentpack
         internal static List<NetworkSoundEventDef> networkSoundEventDefs = new List<NetworkSoundEventDef>();
-
         internal static List<EffectDef> effectDefs = new List<EffectDef>();
 
         // cache these and use to create our own materials
@@ -202,6 +201,8 @@ namespace HenryMod.Modules
 
         private static GameObject CreateTracer(string originalTracerName, string newTracerName)
         {
+            if (Resources.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName) == null) return null;
+
             GameObject newTracer = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName), newTracerName, true);
 
             if (!newTracer.GetComponent<EffectComponent>()) newTracer.AddComponent<EffectComponent>();
@@ -233,6 +234,8 @@ namespace HenryMod.Modules
 
         internal static void ConvertAllRenderersToHopooShader(GameObject objectToConvert)
         {
+            if (!objectToConvert) return;
+
             foreach (MeshRenderer i in objectToConvert.GetComponentsInChildren<MeshRenderer>())
             {
                 if (i)
@@ -282,6 +285,7 @@ namespace HenryMod.Modules
 
         internal static GameObject LoadCrosshair(string crosshairName)
         {
+            if (Resources.Load<GameObject>("Prefabs/Crosshair/" + crosshairName + "Crosshair") == null) return Resources.Load<GameObject>("Prefabs/Crosshair/StandardCrosshair");
             return Resources.Load<GameObject>("Prefabs/Crosshair/" + crosshairName + "Crosshair");
         }
 
@@ -304,6 +308,8 @@ namespace HenryMod.Modules
         {
             GameObject newEffect = mainAssetBundle.LoadAsset<GameObject>(resourceName);
 
+            if (newEffect == null) return null;
+
             newEffect.AddComponent<DestroyOnTimer>().duration = 12;
             newEffect.AddComponent<NetworkIdentity>();
             newEffect.AddComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
@@ -315,7 +321,6 @@ namespace HenryMod.Modules
             effect.soundName = soundName;
 
             AddNewEffectDef(newEffect, soundName);
-            //EffectAPI.AddEffect(newEffect);
 
             return newEffect;
         }
