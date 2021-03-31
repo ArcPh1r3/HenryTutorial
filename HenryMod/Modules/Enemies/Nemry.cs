@@ -95,15 +95,7 @@ namespace HenryMod.Modules.Enemies
                 //On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
                 On.RoR2.MapZone.TryZoneStart += MapZone_TryZoneStart;
                 On.RoR2.HealthComponent.Suicide += HealthComponent_Suicide;
-
-                /*if (HenryPlugin.scrollableLobbyInstalled)
-                {
-                    On.RoR2.CharacterSelectBarController.Start += CharacterSelectBarController_Start;
-                }
-                else
-                {
-                    On.RoR2.UI.SurvivorIconController.Rebuild += SurvivorIconController_Rebuild;
-                }*/
+                On.RoR2.CharacterSelectBarController.Start += CharacterSelectBarController_Start;
 
                 if (HenryPlugin.starstormInstalled)
                 {
@@ -208,28 +200,6 @@ namespace HenryMod.Modules.Enemies
                 itemDrop = ItemIndex.Incubator
             });
         }*/
-
-        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-        private void UpdateBlackList()
-        {
-            // why the FUCK is this not working..
-            string bodyName = characterPrefab.GetComponent<CharacterBody>().baseNameToken;
-            bool unlocked = SurvivorCatalog.SurvivorIsUnlockedOnThisClient(SurvivorCatalog.FindSurvivorIndex(bodyName));
-            if (unlocked)
-            {
-                if (ScrollableLobbyUI.CharacterSelectBarControllerReplacement.SurvivorBlacklist.Contains(SurvivorCatalog.FindSurvivorIndex(bodyName)))
-                {
-                    ScrollableLobbyUI.CharacterSelectBarControllerReplacement.SurvivorBlacklist.Remove(SurvivorCatalog.FindSurvivorIndex(bodyName));
-                }
-            }
-            else
-            {
-                if (!ScrollableLobbyUI.CharacterSelectBarControllerReplacement.SurvivorBlacklist.Contains(SurvivorCatalog.FindSurvivorIndex(bodyName)))
-                {
-                    ScrollableLobbyUI.CharacterSelectBarControllerReplacement.SurvivorBlacklist.Add(SurvivorCatalog.FindSurvivorIndex(bodyName));
-                }
-            }
-        }
 
         private static GameObject CreateMaster(GameObject bodyPrefab, string masterName)
         {
@@ -3453,19 +3423,15 @@ localScale = new Vector3(0.1233F, 0.1233F, 0.1233F),
 
         private void CharacterSelectBarController_Start(On.RoR2.CharacterSelectBarController.orig_Start orig, CharacterSelectBarController self)
         {
-            UpdateBlackList();
-
-            orig(self);
-        }
-
-        private void SurvivorIconController_Rebuild(On.RoR2.UI.SurvivorIconController.orig_Rebuild orig, SurvivorIconController self)
-        {
-            if (SurvivorCatalog.GetSurvivorDef(self.survivorIndex).bodyPrefab == characterPrefab)
+            string bodyName = characterPrefab.GetComponent<CharacterBody>().baseNameToken;
+            bool unlocked = SurvivorCatalog.SurvivorIsUnlockedOnThisClient(SurvivorCatalog.FindSurvivorIndex(bodyName));
+            if (unlocked)
             {
-                if (!SurvivorCatalog.SurvivorIsUnlockedOnThisClient(self.survivorIndex))
-                {
-                    HenryPlugin.Destroy(self.gameObject);
-                }
+                SurvivorCatalog.FindSurvivorDefFromBody(characterPrefab).hidden = true;
+            }
+            else
+            {
+                SurvivorCatalog.FindSurvivorDefFromBody(characterPrefab).hidden = false;
             }
 
             orig(self);

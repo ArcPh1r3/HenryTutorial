@@ -11,7 +11,6 @@ namespace HenryMod
 {
     [BepInDependency("com.TeamMoonstorm.Starstorm2", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency("com.KingEnderBrine.ScrollableLobbyUI", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
@@ -37,7 +36,6 @@ namespace HenryMod
         // soft dependency stuff
         public static bool starstormInstalled = false;
         public static bool scepterInstalled = false;
-        public static bool scrollableLobbyInstalled = false;
 
         public static HenryPlugin instance;
 

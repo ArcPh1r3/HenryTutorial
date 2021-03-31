@@ -69,7 +69,7 @@ namespace HenryMod.Modules.Survivors
             }
         }
 
-        private virtual void InitializeUnlockables()
+        internal virtual void InitializeUnlockables()
         {
         }
 

@@ -73,7 +73,7 @@ namespace HenryMod.SkillStates.Nemry.Beam
                 base.skillLocator.utility.ExecuteIfReady();
             }
 
-            if (base.isAuthority && (base.fixedAge >= 1.25f * this.chargeDuration || !base.inputBank.skill2.down && base.fixedAge >= 0.1f))
+            if (base.isAuthority && (base.fixedAge >= 1.25f * this.chargeDuration || !base.inputBank.skill2.down && base.fixedAge >= this.chargeDuration))
             {
                 //ChargeRelease nextState = new ChargeRelease();
                 //nextState.charge = charge;
