@@ -60,7 +60,7 @@ namespace HenryMod
             Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
 
             new Modules.Survivors.Henry().Initialize();
-            new Modules.Survivors.SimpleCharacter().Initialize();
+            //new Modules.Survivors.SimpleCharacter().Initialize();
             //new Modules.Enemies.MrGreen().CreateCharacter();
 
             // nemry leak? if you're reading this keep quiet about it please.
