@@ -6,9 +6,9 @@ namespace HenryMod.SkillStates
 {
     public class ShootAlt : BaseSkillState
     {
-        public static float damageCoefficient = 0.9f;
+        public static float damageCoefficient = Modules.StaticValues.pistolDamageCoefficient;
         public static float procCoefficient = 1f;
-        public static float baseDuration = 0.4f;
+        public static float baseDuration = 0.3f;
         public static float force = 200f;
         public static float recoil = 1f;
         public static float range = 256f;

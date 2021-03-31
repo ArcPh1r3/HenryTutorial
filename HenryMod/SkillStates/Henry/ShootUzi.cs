@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using HenryMod.SkillStates.Henry;
 using RoR2;
 using UnityEngine;
 
@@ -6,8 +7,8 @@ namespace HenryMod.SkillStates
 {
     public class ShootUzi : BaseSkillState
     {
-        public static float damageCoefficient = 0.6f;
-        public static float procCoefficient = 0.5f;
+        public static float damageCoefficient = Modules.StaticValues.uziDamageCoefficient;
+        public static float procCoefficient = Modules.StaticValues.uziProcCoefficient;
         public static float baseDuration = 0.1f;
         public static float force = 100f;
         public static float recoil = 1.5f;
@@ -84,7 +85,7 @@ namespace HenryMod.SkillStates
 
             if (base.fixedAge >= this.duration && base.isAuthority)
             {
-                this.outer.SetNextStateToMain();
+                this.outer.SetNextState(new UziIdle());
                 return;
             }
         }

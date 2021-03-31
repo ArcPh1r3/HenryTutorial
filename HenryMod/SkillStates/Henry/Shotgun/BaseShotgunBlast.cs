@@ -8,9 +8,9 @@ namespace HenryMod.SkillStates.Henry.Shotgun
     public class BaseShotgunBlast : BaseHenrySkillState
     {
         public static float baseDuration = 0.5f;
-        public static uint bulletCount = 14;
-        public static float damageCoefficient = 1.4f;
-        public static float procCoefficient = 0.5f;
+        public static uint bulletCount = Modules.StaticValues.shotgunBulletCount;
+        public static float damageCoefficient = Modules.StaticValues.shotgunDamageCoefficient;
+        public static float procCoefficient = Modules.StaticValues.shotgunProcCoefficient;
         public static float bulletForce = 150f;
         public static float bulletRange = 128f;
         public static float basePushForce = 36f;

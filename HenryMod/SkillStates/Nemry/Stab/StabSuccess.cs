@@ -14,6 +14,8 @@ namespace HenryMod.SkillStates.Nemry.Stab
         {
             base.OnEnter();
             base.PlayAnimation("FullBody, Override", "StabSuccess", "StabSuccess.playbackRate", 2f * StabSuccess.duration);
+
+            this.SpendEnergy(100f);
         }
 
         public override void FixedUpdate()

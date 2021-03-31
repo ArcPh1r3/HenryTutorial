@@ -6,7 +6,7 @@ namespace HenryMod.SkillStates
 {
     public class Shoot : BaseSkillState
     {
-        public static float damageCoefficient = 4.2f;
+        public static float damageCoefficient = Modules.StaticValues.gunDamageCoefficient;
         public static float procCoefficient = 1f;
         public static float baseDuration = 0.6f;
         public static float force = 800f;

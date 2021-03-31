@@ -16,6 +16,7 @@ namespace HenryMod.SkillStates.Nemry.ChargeSlash
         private Transform modelBaseTransform;
         private uint chargePlayID;
         private GameObject chargeEffectInstance;
+        private GameObject chargeEffect;
         private bool zoomin;
 
         public override void OnEnter()
@@ -48,6 +49,9 @@ namespace HenryMod.SkillStates.Nemry.ChargeSlash
             this.chargeEffectInstance = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.swordChargeEffect, muzzleTransform.position, muzzleTransform.rotation);
             this.chargeEffectInstance.transform.parent = muzzleTransform;
             this.chargeEffectInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = this.chargeDuration;
+
+            this.chargeEffect = this.childLocator.FindChild("WeaponSpinEffect").gameObject;
+            this.chargeEffect.SetActive(true);
 
             //if (base.cameraTargetParams) base.cameraTargetParams.aimMode = CameraTargetParams.AimType.OverTheShoulder;
         }
@@ -102,6 +106,9 @@ namespace HenryMod.SkillStates.Nemry.ChargeSlash
             AkSoundEngine.StopPlayingID(this.chargePlayID);
 
             if (this.chargeEffectInstance) EntityState.Destroy(this.chargeEffectInstance);
+            this.chargeEffect.SetActive(false);
+
+            EffectManager.SimpleMuzzleFlash(Modules.Assets.smallEnergyBurstEffect, base.gameObject, "Muzzle", false);
 
             if (base.cameraTargetParams) base.cameraTargetParams.aimMode = CameraTargetParams.AimType.Aura;
         }

@@ -39,6 +39,16 @@ namespace HenryMod.Modules.Components
         private void Start()
         {
             this.characterMaster = this.characterBody.master;
+            this.ReplaceSkillDefs();
+        }
+
+        private void ReplaceSkillDefs()
+        {
+            SkillLocator skillLocator = this.gameObject.GetComponent<SkillLocator>();
+            skillLocator.primary.SetBaseSkill(Modules.Enemies.Nemry.swordPrimaryDef);
+            skillLocator.secondary.SetBaseSkill(Modules.Enemies.Nemry.swordSecondaryDef);
+            skillLocator.utility.SetBaseSkill(Modules.Enemies.Nemry.swordUtilityDef);
+            skillLocator.special.SetBaseSkill(Modules.Enemies.Nemry.swordSpecialDef);
         }
 
         public bool AddEnergy(float amount)

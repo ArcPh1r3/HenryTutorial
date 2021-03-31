@@ -27,7 +27,7 @@ namespace HenryMod.Modules.Achievements
 
         public override BodyIndex LookUpRequiredBodyIndex()
         {
-            return BodyCatalog.FindBodyIndex(Modules.Survivors.Henry.bodyName);
+            return BodyCatalog.FindBodyIndex(Modules.Survivors.Henry.instance.bodyName);
         }
 
         public void ClearCheck(Run run, RunReport runReport)

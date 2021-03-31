@@ -33,10 +33,14 @@ namespace HenryMod.Modules
         internal static GameObject swordChargeFinishEffect;
         internal static GameObject minibossEffect;
 
+        internal static GameObject energyBurstEffect;
+        internal static GameObject smallEnergyBurstEffect;
+
         internal static GameObject spearSwingEffect;
 
         internal static GameObject nemSwordSwingEffect;
         internal static GameObject nemSwordHeavySwingEffect;
+        internal static GameObject nemSwordStabSwingEffect;
         internal static GameObject nemSwordHitImpactEffect;
 
         internal static GameObject shotgunTracer;
@@ -138,10 +142,7 @@ namespace HenryMod.Modules
             swordHitImpactEffect = Assets.LoadEffect("ImpactHenrySlash");
 
             punchSwingEffect = Assets.LoadEffect("HenryFistSwingEffect", true);
-            punchImpactEffect = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Effects/OmniEffect/OmniImpactVFXLoader"), "ImpactHenryPunch");
-            punchImpactEffect.AddComponent<NetworkIdentity>();
-
-            AddNewEffectDef(punchImpactEffect);
+            punchImpactEffect = Assets.LoadEffect("ImpactHenryPunch");
 
             fistBarrageEffect = Assets.LoadEffect("FistBarrageEffect", true);
             fistBarrageEffect.GetComponent<ParticleSystemRenderer>().material.shader = hotpoo;
@@ -194,6 +195,7 @@ namespace HenryMod.Modules
             spearSwingEffect = Assets.LoadEffect("NemrySpearSwingEffect");
 
             nemSwordSwingEffect = Assets.LoadEffect("NemrySwordSwingEffect", true);
+            nemSwordStabSwingEffect = Assets.LoadEffect("NemrySwordStabSwingEffect", true);
             nemSwordHeavySwingEffect = Assets.LoadEffect("NemryHeavySwordSwingEffect", true);
             nemSwordHitImpactEffect = Assets.LoadEffect("ImpactNemrySlash");
 

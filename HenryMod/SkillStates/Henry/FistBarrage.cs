@@ -11,7 +11,7 @@ namespace HenryMod.SkillStates
             this.hitboxName = "Punch";
 
             this.damageType = DamageType.BypassArmor;
-            this.damageCoefficient = 2.4f;
+            this.damageCoefficient = Modules.StaticValues.boxingGlovesDamageCoefficient;
             this.procCoefficient = 1f;
             this.pushForce = 100f;
             this.bonusForce = Vector3.zero;

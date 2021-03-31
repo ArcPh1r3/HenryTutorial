@@ -228,6 +228,8 @@ ModelImporter:
     7400228: Armature|ShotgunBlastUp
     7400230: Armature|CastResurrect
     7400232: Armature|Respawn
+    7400234: Armature|ReloadPistol
+    7400236: Armature|ReloadUzi
     9500000: //RootNode
     13700000: meshHenry
     13700002: MeshHenryGun

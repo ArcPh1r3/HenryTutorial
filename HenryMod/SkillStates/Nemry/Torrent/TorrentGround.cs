@@ -22,6 +22,7 @@ namespace HenryMod.SkillStates.Nemry.Torrent
         private float fireStopwatch;
         private string muzzleString;
         private int startingJumpCount;
+        private GameObject spinningWeaponEffect;
 
         public override void OnEnter()
         {
@@ -31,6 +32,9 @@ namespace HenryMod.SkillStates.Nemry.Torrent
             this.startDuration = TorrentGround.baseStartDuration / this.attackSpeedStat;
             this.muzzleString = "Muzzle";
             this.startingJumpCount = base.characterMotor.jumpCount;
+            this.spinningWeaponEffect = base.FindModelChild("SpinningWeaponEffect").gameObject;
+
+            this.spinningWeaponEffect.SetActive(true);
 
             base.PlayAnimation("FullBody, Override", "GroundTorrent", "Torrent.playbackRate", this.startDuration);
             Util.PlaySound("HenryBazookaEquip", base.gameObject);
@@ -107,6 +111,8 @@ namespace HenryMod.SkillStates.Nemry.Torrent
 
             if (this.fireStopwatch <= 0f && base.fixedAge >= this.startDuration)
             {
+                this.spinningWeaponEffect.SetActive(false);
+
                 if (this.SpendEnergy(1))
                 {
                     this.fireStopwatch = this.fireInterval;

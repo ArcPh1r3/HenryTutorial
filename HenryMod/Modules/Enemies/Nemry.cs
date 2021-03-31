@@ -42,6 +42,10 @@ namespace HenryMod.Modules.Enemies
         internal static ItemDisplayRuleSet itemDisplayRuleSet;
         internal static List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules;
 
+        internal static SkillDef swordPrimaryDef;
+        internal static SkillDef swordSecondaryDef;
+        internal static SkillDef swordUtilityDef;
+        internal static SkillDef swordSpecialDef;
         internal static SkillDef gunPrimaryDef;
         internal static SkillDef gunSecondaryDef;
         internal static SkillDef gunUtilityDef;
@@ -362,10 +366,6 @@ namespace HenryMod.Modules.Enemies
             #endregion
 
             Modules.Prefabs.masterPrefabs.Add(newMaster);
-            /*MasterCatalog.getAdditionalEntries += delegate (List<GameObject> list)
-            {
-                list.Add(newMaster);
-            };*/
 
             return newMaster;
         }
@@ -391,7 +391,7 @@ namespace HenryMod.Modules.Enemies
 
             #region Primary
             Modules.Skills.AddPrimarySkill(prefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Nemry.SlashCombo)), "Weapon", prefix + "_NEMRY_BODY_PRIMARY_SWORDCSS_NAME", prefix + "_NEMRY_BODY_PRIMARY_SWORDCSS_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texNemSwordIconPreview"), true));
-            //Modules.Skills.AddPrimarySkill(prefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Nemry.SlashCombo)), "Weapon", prefix + "_NEMRY_BODY_PRIMARY_SWORD_NAME", prefix + "_NEMRY_BODY_PRIMARY_SWORD_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texNemSwordIcon"), true));
+            swordPrimaryDef = Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Nemry.SlashCombo)), "Weapon", prefix + "_NEMRY_BODY_PRIMARY_SWORD_NAME", prefix + "_NEMRY_BODY_PRIMARY_SWORD_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texNemSwordIcon"), true);
             gunPrimaryDef = Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.Nemry.ShootGun)), "Weapon", prefix + "_NEMRY_BODY_PRIMARY_GUN_NAME", prefix + "_NEMRY_BODY_PRIMARY_GUN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texNemGunIcon"), true);
             #endregion
 
@@ -420,7 +420,7 @@ namespace HenryMod.Modules.Enemies
                 stockToConsume = 1
             });
 
-            SkillDef chargeSkillDef = Modules.Skills.CreateEnergySkillDef(new SkillDefInfo
+            swordSecondaryDef = Modules.Skills.CreateEnergySkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_NEMRY_BODY_SECONDARY_CHARGE_NAME",
                 skillNameToken = prefix + "_NEMRY_BODY_SECONDARY_CHARGE_NAME",
@@ -520,7 +520,7 @@ namespace HenryMod.Modules.Enemies
                 stockToConsume = 1
             });
 
-            SkillDef blinkSkillDef = Modules.Skills.CreateTrackingEnergySkillDef(new SkillDefInfo
+            swordUtilityDef = Modules.Skills.CreateTrackingEnergySkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_NEMRY_BODY_UTILITY_BLINK_NAME",
                 skillNameToken = prefix + "_NEMRY_BODY_UTILITY_BLINK_NAME",
@@ -568,7 +568,6 @@ namespace HenryMod.Modules.Enemies
                 stockToConsume = 1
             });
 
-
             gunUtilityDef = Modules.Skills.CreateEnergySkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_NEMRY_BODY_UTILITY_BURST_NAME",
@@ -597,7 +596,7 @@ namespace HenryMod.Modules.Enemies
             #endregion
 
             #region Special
-            SkillDef stabSkillDef = Modules.Skills.CreateEnergySkillDef(new SkillDefInfo
+            swordSpecialDef = Modules.Skills.CreateEnergySkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_NEMRY_BODY_SPECIAL_STAB_NAME",
                 skillNameToken = prefix + "_NEMRY_BODY_SPECIAL_STAB_NAME",
@@ -687,12 +686,23 @@ namespace HenryMod.Modules.Enemies
 
             List<SkinDef> skins = new List<SkinDef>();
 
+            GameObject eyeTrail = childLocator.FindChild("EyeTrail").gameObject;
+
             #region DefaultSkin
             SkinDef defaultSkin = Modules.Skins.CreateSkinDef(HenryPlugin.developerPrefix + "_NEMRY_BODY_DEFAULT_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMainSkinNemry"),
                 defaultRenderers,
                 mainRenderer,
                 model);
+
+            defaultSkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            {
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = eyeTrail,
+                    shouldActivate = false
+                }
+            };
 
             skins.Add(defaultSkin);
             #endregion
@@ -716,6 +726,15 @@ namespace HenryMod.Modules.Enemies
                 {
                     mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshNemryMastery"),
                     renderer = defaultRenderers[bodyRendererIndex].renderer
+                }
+            };
+
+            masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            {
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = eyeTrail,
+                    shouldActivate = true
                 }
             };
 

@@ -15,8 +15,8 @@ namespace HenryMod.SkillStates.Bazooka.Scepter
         public static float baseDuration = 0.7f;
         public static float minSpeed = 20f;
         public static float maxSpeed = 160f;
-        public static float minDamageCoefficient = 6f;
-        public static float maxDamageCoefficient = 14f;
+        public static float minDamageCoefficient = Modules.StaticValues.bazookaMinDamageCoefficient;
+        public static float maxDamageCoefficient = Modules.StaticValues.bazookaMaxDamageCoefficient;
         public static float minRecoil = 0.5f;
         public static float maxRecoil = 5f;
 

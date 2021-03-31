@@ -7,15 +7,15 @@ namespace HenryMod.SkillStates.Nemry.Beam
 {
     public class ChargeBeam : BaseNemrySkillState
     {
-        public static float baseChargeDuration = 2f;
+        public static float baseChargeDuration = 3.4f;
 
         private float chargeDuration;
         private bool finishedCharge;
         private ChildLocator childLocator;
         private Animator animator;
         private Transform modelBaseTransform;
-        //private uint chargePlayID;
-        //private ParticleSystem swordVFX;
+        private uint chargePlayID;
+        private GameObject chargeEffectInstance;
         private bool zoomin;
 
         public override void OnEnter()
@@ -39,11 +39,20 @@ namespace HenryMod.SkillStates.Nemry.Beam
                 }
             }
 
-            this.SpendEnergy(100f, SkillSlot.Special);
-
             //base.PlayAnimation("FullBody, Override", "Charge", "Charge.playbackRate", this.chargeDuration);
+            this.chargePlayID = Util.PlaySound("NemryChargeBeam", base.gameObject);
 
-            if (base.cameraTargetParams) base.cameraTargetParams.aimMode = CameraTargetParams.AimType.OverTheShoulder;
+            Transform muzzleTransform = base.FindModelChild("Muzzle");
+            if (muzzleTransform)
+            {
+                this.chargeEffectInstance = UnityEngine.Object.Instantiate<GameObject>(EntityStates.LemurianBruiserMonster.ChargeMegaFireball.chargeEffectPrefab, muzzleTransform.position, muzzleTransform.rotation);
+                this.chargeEffectInstance.transform.parent = muzzleTransform;
+                this.chargeEffectInstance.transform.localScale *= 0.5f;
+                this.chargeEffectInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = this.chargeDuration;
+
+                this.chargeEffectInstance.transform.Find("FlameBillboards, Local").gameObject.SetActive(false);
+                this.chargeEffectInstance.transform.Find("SmokeBillboard").gameObject.SetActive(false);
+            }
         }
 
         public override void FixedUpdate()
@@ -64,20 +73,11 @@ namespace HenryMod.SkillStates.Nemry.Beam
 
                 //AkSoundEngine.StopPlayingID(this.chargePlayID);
                 //Util.PlaySound("NemmandoDecisiveStrikeReady", base.gameObject);
-
-                if (base.cameraTargetParams) base.cameraTargetParams.aimMode = CameraTargetParams.AimType.Aura;
-            }
-
-            if (base.isAuthority && base.inputBank.skill3.down && base.skillLocator.utility.CanExecute())
-            {
-                base.skillLocator.utility.ExecuteIfReady();
             }
 
             if (base.isAuthority && (base.fixedAge >= 1.25f * this.chargeDuration || !base.inputBank.skill2.down && base.fixedAge >= this.chargeDuration))
             {
-                //ChargeRelease nextState = new ChargeRelease();
-                //nextState.charge = charge;
-                //this.outer.SetNextState(nextState);
+                this.outer.SetNextState(new FireBeam());
             }
         }
 
@@ -90,8 +90,8 @@ namespace HenryMod.SkillStates.Nemry.Beam
         {
             base.OnExit();
 
-            base.PlayAnimation("FullBody, Override", "BufferEmpty");
-            //AkSoundEngine.StopPlayingID(this.chargePlayID);
+            AkSoundEngine.StopPlayingID(this.chargePlayID);
+            if (this.chargeEffectInstance) EntityState.Destroy(this.chargeEffectInstance);
 
             if (base.cameraTargetParams) base.cameraTargetParams.aimMode = CameraTargetParams.AimType.Aura;
         }

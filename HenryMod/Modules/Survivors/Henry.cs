@@ -113,6 +113,7 @@ namespace HenryMod.Modules.Survivors
         {
             base.InitializeCharacter();
 
+            this.bodyPrefab.GetComponent<SfxLocator>().deathSound = "HenryDeath";
             this.bodyPrefab.AddComponent<Components.HenryController>();
             this.bodyPrefab.AddComponent<Components.HenryTracker>();
         }

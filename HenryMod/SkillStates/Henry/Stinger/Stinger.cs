@@ -11,7 +11,7 @@ namespace HenryMod.SkillStates.Stinger
         public static float dashSpeed = 80f;
         public static float hopForce = 10f;
 
-        public static float damageCoefficient = 4.5f;
+        public static float damageCoefficient = Modules.StaticValues.stingerDamageCoefficient;
         public static float procCoefficient = 1f;
         public static float pushForce = 1000f;
 

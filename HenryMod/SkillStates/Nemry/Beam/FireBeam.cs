@@ -8,7 +8,7 @@ namespace HenryMod.SkillStates.Nemry.Beam
 {
     public class FireBeam : BaseNemrySkillState
     {
-        public static float damageCoefficient = 0.8f;
+        public static float damageCoefficient = 0.4f;
         public static float force = 1000f;
         public static float minSpread = 0f;
         public static float maxSpread = 0f;
@@ -16,7 +16,7 @@ namespace HenryMod.SkillStates.Nemry.Beam
         public static uint bulletCount = 1;
         public static float fireFrequency = 0.4f;
         public static float maxDistance = 256f;
-        public static float procCoefficientPerTick = 0.2f;
+        public static float procCoefficientPerTick = 0.25f;
 
         private float fireStopwatch;
         private float stopwatch;
@@ -47,13 +47,14 @@ namespace HenryMod.SkillStates.Nemry.Beam
                     this.laserEffectEnd = this.laserChildLocator.FindChild("LaserEnd");*/
                 }
             }
+
+            Util.PlaySound("NemryFireBeam", base.gameObject);
         }
 
         public override void OnExit()
         {
             if (this.beamEffectInstance) EntityState.Destroy(this.beamEffectInstance);
             base.characterBody.SetAimTimer(0.2f);
-            Util.PlaySound(EntityStates.TitanMonster.FireMegaLaser.stopLoopSoundString, base.gameObject);
 
             base.OnExit();
         }
@@ -68,8 +69,7 @@ namespace HenryMod.SkillStates.Nemry.Beam
             bool fired = false;
             if (this.fireStopwatch > this.attackSpeedStat / FireBeam.fireFrequency)
             {
-                string targetMuzzle = "MuzzleLaser";
-                this.FireBullet(this.modelTransform, this.aimRay, targetMuzzle, FireBeam.maxDistance);
+                this.FireBullet(this.modelTransform, this.aimRay, "Muzzle", FireBeam.maxDistance);
                 this.fireStopwatch -= 1f / FireBeam.fireFrequency;
                 fired = this.SpendEnergy(5f, SkillSlot.Special);
             }

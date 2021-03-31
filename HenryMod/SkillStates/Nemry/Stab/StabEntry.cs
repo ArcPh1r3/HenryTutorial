@@ -28,8 +28,8 @@ namespace HenryMod.SkillStates.Nemry.Stab
 
             this.swingSoundString = "NemrySwordSwing";
             this.hitSoundString = "";
-            this.muzzleString = "SwingDown";
-            this.swingEffectPrefab = Modules.Assets.nemSwordSwingEffect;
+            this.muzzleString = "SwingCenter";
+            this.swingEffectPrefab = Modules.Assets.nemSwordStabSwingEffect;
             this.hitEffectPrefab = Modules.Assets.nemSwordHitImpactEffect;
 
             this.impactSound = Modules.Assets.nemSwordHitSoundEvent.index;

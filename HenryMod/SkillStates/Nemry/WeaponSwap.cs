@@ -70,7 +70,7 @@ namespace HenryMod.SkillStates.Nemry
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.Frozen;
+            return InterruptPriority.Skill;
         }
     }
 }

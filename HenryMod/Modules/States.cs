@@ -11,6 +11,7 @@ using MonoMod.RuntimeDetour;
 using EntityStates;
 using RoR2;
 using System.Reflection;
+using HenryMod.SkillStates.Henry;
 
 namespace HenryMod.Modules
 {
@@ -47,6 +48,7 @@ namespace HenryMod.Modules
             entityStates.Add(typeof(Shoot));
             entityStates.Add(typeof(ShootAlt));
             entityStates.Add(typeof(ShootUzi));
+            entityStates.Add(typeof(UziIdle));
 
             entityStates.Add(typeof(Roll));
 

@@ -51,6 +51,11 @@ namespace HenryMod.SkillStates
                     return;
                 }
             }
+
+            if (base.isAuthority && Input.GetKeyDown("z"))
+            {
+                base.characterBody.master.inventory.GiveItem(RoR2Content.Items.Syringe, 5);
+            }
         }
 
         public override void FixedUpdate()

@@ -28,7 +28,7 @@
       <HintPath>..\libs\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\AegisBuff\libs\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\libs\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
       <HintPath>..\libs\BepInEx.dll</HintPath>
@@ -74,9 +74,6 @@
     </Reference>
     <Reference Include="Rewired_Core">
       <HintPath>..\..\Moonstorm\Starstorm 2\bin\Debug\Rewired_Core.dll</HintPath>
-    </Reference>
-    <Reference Include="ScrollableLobbyUI">
-      <HintPath>..\..\..\..\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\test\BepInEx\plugins\KingEnderBrine-ScrollableLobbyUI\ScrollableLobbyUI\ScrollableLobbyUI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
       <HintPath>..\libs\Unity.Postprocessing.Runtime.dll</HintPath>

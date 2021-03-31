@@ -63,7 +63,7 @@ namespace HenryMod.SkillStates.Nemry
                 effectData.origin = aimRay.origin + 2 * aimRay.direction;
                 effectData.scale = 4;
 
-                EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/ImpactEffects/FusionCellExplosion"), effectData, true);
+                EffectManager.SpawnEffect(Modules.Assets.energyBurstEffect, effectData, true);
             }
         }
 
