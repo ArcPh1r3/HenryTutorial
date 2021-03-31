@@ -8,7 +8,7 @@ namespace HenryMod.SkillStates.Nemry
 {
     public class FlashStep : BaseNemrySkillState
     {
-        public static float duration = 0.15f;
+        public static float duration = 0.1f;
 
         private Transform modelTransform;
         private float stopwatch;
@@ -21,7 +21,7 @@ namespace HenryMod.SkillStates.Nemry
         public override void OnEnter()
         {
             base.OnEnter();
-            Util.PlaySound(EntityStates.ImpMonster.BlinkState.beginSoundString, base.gameObject);
+            Util.PlaySound("NemryBlink", base.gameObject);
             this.modelTransform = base.GetModelTransform();
 
             if (this.modelTransform)

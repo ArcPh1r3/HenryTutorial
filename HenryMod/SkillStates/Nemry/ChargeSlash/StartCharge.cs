@@ -50,7 +50,7 @@ namespace HenryMod.SkillStates.Nemry.ChargeSlash
             this.chargeEffectInstance.transform.parent = muzzleTransform;
             this.chargeEffectInstance.GetComponent<ScaleParticleSystemDuration>().newDuration = this.chargeDuration;
 
-            this.chargeEffect = this.childLocator.FindChild("WeaponSpinEffect").gameObject;
+            this.chargeEffect = this.childLocator.FindChild("ChargeEffect").gameObject;
             this.chargeEffect.SetActive(true);
 
             //if (base.cameraTargetParams) base.cameraTargetParams.aimMode = CameraTargetParams.AimType.OverTheShoulder;
@@ -108,7 +108,7 @@ namespace HenryMod.SkillStates.Nemry.ChargeSlash
             if (this.chargeEffectInstance) EntityState.Destroy(this.chargeEffectInstance);
             this.chargeEffect.SetActive(false);
 
-            EffectManager.SimpleMuzzleFlash(Modules.Assets.smallEnergyBurstEffect, base.gameObject, "Muzzle", false);
+            if (this.CalcCharge() > 0.75f) EffectManager.SimpleMuzzleFlash(Modules.Assets.smallEnergyBurstEffect, base.gameObject, "Muzzle", false);
 
             if (base.cameraTargetParams) base.cameraTargetParams.aimMode = CameraTargetParams.AimType.Aura;
         }

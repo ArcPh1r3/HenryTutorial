@@ -16,7 +16,7 @@ namespace HenryMod.SkillStates.Nemry.Torrent
         public static float hopHeight = 22f;
         public static float procCoefficient = 0.9f;
         public static float bulletForce = 150f;
-        public static float baseStartDuration = 0.3f;
+        public static float baseStartDuration = 0.5f;
 
         private float startDuration;
         private float fireInterval;

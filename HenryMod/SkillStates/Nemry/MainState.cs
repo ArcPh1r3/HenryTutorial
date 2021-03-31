@@ -24,7 +24,7 @@ namespace HenryMod.SkillStates.Nemry
             {
                 if (this.customInputBank.weaponSwapSkill.down)
                 {
-                    this.weaponStateMachine.SetInterruptState(new WeaponSwap(), InterruptPriority.Skill);
+                    this.weaponStateMachine.SetInterruptState(new WeaponSwap(), InterruptPriority.Any);
                     return;
                 }
             }

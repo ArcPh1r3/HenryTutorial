@@ -54,7 +54,7 @@ namespace HenryMod.Modules.Survivors
                     material = henryMat
                 }};
 
-        internal override Type characterMainState { get; set; } = typeof(SkillStates.HenryMain);
+        internal override Type characterMainState { get; set; } = typeof(EntityStates.GenericCharacterMain);
 
         internal override ItemDisplayRuleSet itemDisplayRuleSet { get; set; }
         internal override List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules { get; set; }

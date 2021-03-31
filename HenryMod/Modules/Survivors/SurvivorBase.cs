@@ -44,22 +44,14 @@ namespace HenryMod.Modules.Survivors
             {
                 InitializeUnlockables();
 
-                #region Body
-                bodyPrefab = Modules.Prefabs.CreatePrefab(bodyName, "mdl" + bodyName, bodyInfo);
-
+                bodyPrefab = Modules.Prefabs.CreatePrefab(bodyName + "Body", "mdl" + bodyName, bodyInfo);
                 bodyPrefab.GetComponent<EntityStateMachine>().mainStateType = new EntityStates.SerializableEntityStateType(characterMainState);
-                #endregion
-
-                #region Model
-                Material henryMat = Modules.Assets.CreateMaterial("matHenry"); // cache these as there's no reason to create more when they're all the same
-                Material boxingGloveMat = Modules.Assets.CreateMaterial("matBoxingGlove");
 
                 Modules.Prefabs.SetupCharacterModel(bodyPrefab, customRendererInfos, mainRendererIndex);
-                #endregion
 
-                displayPrefab = Modules.Prefabs.CreateDisplayPrefab("HenryDisplay", bodyPrefab);
+                displayPrefab = Modules.Prefabs.CreateDisplayPrefab(bodyName + "Display", bodyPrefab);
 
-                Modules.Prefabs.RegisterNewSurvivor(bodyPrefab, displayPrefab, Color.grey, "HENRY", characterUnlockableDef);
+                Modules.Prefabs.RegisterNewSurvivor(bodyPrefab, displayPrefab, Color.grey, bodyName.ToUpper(), characterUnlockableDef);
 
                 InitializeHitboxes();
                 InitializeSkills();

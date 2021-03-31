@@ -339,7 +339,7 @@ namespace HenryMod.Modules
             bool assetExists = false;
             for (int i = 0; i < assetNames.Length; i++)
             {
-                if (assetNames[i] == resourceName)
+                if (assetNames[i].Contains(resourceName.ToLower()))
                 {
                     assetExists = true;
                     i = assetNames.Length;

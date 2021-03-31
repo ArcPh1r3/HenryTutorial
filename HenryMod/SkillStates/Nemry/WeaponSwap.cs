@@ -23,6 +23,7 @@ namespace HenryMod.SkillStates.Nemry
         {
             base.OnEnter();
             this.duration = WeaponSwap.baseDuration / this.attackSpeedStat;
+            if (this.duration <= 0.1f) this.duration = 0.1f;
             this.animator = base.GetModelAnimator();
 
             if (this.energyComponent.weaponMode == NemryEnergyComponent.WeaponMode.Sword)

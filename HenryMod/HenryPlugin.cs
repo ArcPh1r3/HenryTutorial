@@ -28,7 +28,7 @@ namespace HenryMod
         //   this shouldn't even have to be said
         public const string MODUID = "com.rob.HenryMod";
         public const string MODNAME = "HenryMod";
-        public const string MODVERSION = "1.2.3";
+        public const string MODVERSION = "1.2.4";
 
         // a prefix for name tokens to prevent conflicts
         public const string developerPrefix = "ROB";
@@ -62,7 +62,7 @@ namespace HenryMod
 
             // nemry leak? if you're reading this keep quiet about it please.
             // use it as an example for your own nemesis if you want i suppose
-            new Modules.Enemies.Nemry().CreateCharacter();
+            //new Modules.Enemies.Nemry().CreateCharacter();
 
             new Modules.ContentPacks().CreateContentPack();
 

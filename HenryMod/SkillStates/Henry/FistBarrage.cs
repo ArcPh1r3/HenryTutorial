@@ -38,14 +38,14 @@ namespace HenryMod.SkillStates
         {
             if (this.animator.GetBool("isGrounded"))
             {
-                if (!this.animator.GetBool("isMoving")) base.PlayCrossfade("FullBody, Override", "FastPunch" + (1 + swingIndex), "Punch.playbackRate", this.duration, 0.05f);
+                if (!this.animator.GetBool("isMoving")) base.PlayAnimation("FullBody, Override", "FastPunch" + (1 + swingIndex), "Punch.playbackRate", this.duration);
             }
             else
             {
-                base.PlayCrossfade("FullBody, Override", "FastPunch" + (1 + swingIndex), "FastPunch.playbackRate", this.duration, 0.05f);
+                base.PlayAnimation("FullBody, Override", "FastPunch" + (1 + swingIndex), "FastPunch.playbackRate", this.duration);
             }
 
-            base.PlayCrossfade("Gesture, Override", "FastPunch" + (1 + swingIndex), "FastPunch.playbackRate", this.duration, 0.05f);
+            base.PlayAnimation("Gesture, Override", "FastPunch" + (1 + swingIndex), "FastPunch.playbackRate", this.duration);
         }
 
         protected override void PlaySwingEffect()

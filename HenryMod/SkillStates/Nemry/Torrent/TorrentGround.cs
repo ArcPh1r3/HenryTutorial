@@ -32,7 +32,7 @@ namespace HenryMod.SkillStates.Nemry.Torrent
             this.startDuration = TorrentGround.baseStartDuration / this.attackSpeedStat;
             this.muzzleString = "Muzzle";
             this.startingJumpCount = base.characterMotor.jumpCount;
-            this.spinningWeaponEffect = base.FindModelChild("SpinningWeaponEffect").gameObject;
+            this.spinningWeaponEffect = base.FindModelChild("WeaponSpinEffect").gameObject;
 
             this.spinningWeaponEffect.SetActive(true);
 

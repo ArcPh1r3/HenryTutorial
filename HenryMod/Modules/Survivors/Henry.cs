@@ -20,7 +20,7 @@ namespace HenryMod.Modules.Survivors
         {
             armor = 20f,
             armorGrowth = 0f,
-            bodyName = instance.bodyName + "Body",
+            bodyName = "HenryBody",
             bodyNameToken = HenryPlugin.developerPrefix + "_HENRY_BODY_NAME",
             bodyColor = Color.grey,
             characterPortrait = Modules.Assets.LoadCharacterIcon("Henry"),
@@ -153,7 +153,7 @@ namespace HenryMod.Modules.Survivors
             #region Primary
             Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_SLASH_NAME", prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"), true));
             Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.PunchCombo)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_PUNCH_NAME", prefix + "_HENRY_BODY_PRIMARY_PUNCH_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texBoxingGlovesIcon"), true));
-            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.ShootAlt)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_GUN_NAME", prefix + "_HENRY_BODY_PRIMARY_GUN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"), true));
+            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.ShootAlt)), "Weapon", prefix + "_HENRY_BODY_PRIMARY_GUN_NAME", prefix + "_HENRY_BODY_PRIMARY_GUN_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPistolIcon"), true));
             #endregion
 
             #region Secondary

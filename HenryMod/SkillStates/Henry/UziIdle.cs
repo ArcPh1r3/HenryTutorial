@@ -37,7 +37,7 @@ namespace HenryMod.SkillStates.Henry
         {
             if (this.hasReloaded) return;
             this.hasReloaded = true;
-            base.PlayAnimation("Gesture, Override", "ReloadUzi");
+            base.PlayCrossfade("Gesture, Override", "ReloadUzi", 0.05f);
             Util.PlaySound("HenryUziReload", base.gameObject); 
         }
 
