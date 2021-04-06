@@ -70,9 +70,9 @@ namespace HenryMod.Modules.Survivors
             masterySkinUnlockableDef = Modules.Unlockables.AddUnlockable<Achievements.MasteryAchievement>(true);
         }
 
-        private static void CreateDoppelganger()
+        internal override void InitializeDoppelganger()
         {
-            Modules.Prefabs.CreateGenericDoppelganger(instance.bodyPrefab, "HenryMonsterMaster", "Merc");
+            Modules.Prefabs.CreateGenericDoppelganger(instance.bodyPrefab, bodyName + "MonsterMaster", "Merc");
         }
 
         internal override void InitializeHitboxes()
