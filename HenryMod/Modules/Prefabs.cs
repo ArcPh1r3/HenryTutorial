@@ -47,7 +47,13 @@ namespace HenryMod.Modules
 
         internal static GameObject CreateDisplayPrefab(string modelName, GameObject prefab, BodyInfo bodyInfo)
         {
-            GameObject newPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), modelName + "Prefab");
+            if (!Resources.Load<GameObject>("Prefabs/CharacterBodies/" + bodyInfo.bodyNameToClone + "Body"))
+            {
+                Debug.LogError(bodyInfo.bodyNameToClone + "Body is not a valid body, character creation failed");
+                return null;
+            }
+
+            GameObject newPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/" + bodyInfo.bodyNameToClone + "Body"), modelName + "Prefab");
 
             GameObject model = CreateModel(newPrefab, modelName);
             Transform modelBaseTransform = SetupModel(newPrefab, model.transform, bodyInfo);
@@ -61,9 +67,16 @@ namespace HenryMod.Modules
 
         internal static GameObject CreatePrefab(string bodyName, string modelName, BodyInfo bodyInfo)
         {
-            GameObject newPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), bodyName);
+            if (!Resources.Load<GameObject>("Prefabs/CharacterBodies/" + bodyInfo.bodyNameToClone + "Body"))
+            {
+                Debug.LogError(bodyInfo.bodyNameToClone + "Body is not a valid body, character creation failed");
+                return null;
+            }
+
+            GameObject newPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/" + bodyInfo.bodyNameToClone + "Body"), bodyName);
 
             GameObject model = CreateModel(newPrefab, modelName);
+            if (model == null) model = newPrefab.GetComponentInChildren<CharacterModel>().gameObject;
             Transform modelBaseTransform = SetupModel(newPrefab, model.transform, bodyInfo);
 
             #region CharacterBody
@@ -399,6 +412,8 @@ internal class BodyInfo
     internal string bodyName = "";
     internal string bodyNameToken = "";
     internal string subtitleNameToken = "";
+
+    internal string bodyNameToClone = "Commando";// body prefab you're cloning for your character- commando is the safest
 
     internal Texture characterPortrait = null;
 
