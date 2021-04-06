@@ -19,12 +19,15 @@ namespace HenryMod.Modules.Survivors
 
         internal abstract UnlockableDef characterUnlockableDef { get; set; }
 
+        internal abstract float survivorSortPosition { get; set; }
+
         internal abstract BodyInfo bodyInfo { get; set; }
 
         internal abstract int mainRendererIndex { get; set; }
         internal abstract CustomRendererInfo[] customRendererInfos { get; set; }
 
         internal abstract Type characterMainState { get; set; }
+        internal abstract Type characterSpawnState { get; set; }
 
         internal abstract ItemDisplayRuleSet itemDisplayRuleSet { get; set; }
         internal abstract List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules { get; set; }
@@ -49,9 +52,9 @@ namespace HenryMod.Modules.Survivors
 
                 Modules.Prefabs.SetupCharacterModel(bodyPrefab, customRendererInfos, mainRendererIndex);
 
-                displayPrefab = Modules.Prefabs.CreateDisplayPrefab(bodyName + "Display", bodyPrefab);
+                displayPrefab = Modules.Prefabs.CreateDisplayPrefab(bodyName + "Display", bodyPrefab, bodyInfo);
 
-                Modules.Prefabs.RegisterNewSurvivor(bodyPrefab, displayPrefab, Color.grey, bodyName.ToUpper(), characterUnlockableDef);
+                Modules.Prefabs.RegisterNewSurvivor(bodyPrefab, displayPrefab, Color.grey, bodyName.ToUpper(), characterUnlockableDef, survivorSortPosition);
 
                 InitializeHitboxes();
                 InitializeSkills();

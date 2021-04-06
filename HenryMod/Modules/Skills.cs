@@ -1,6 +1,4 @@
 ﻿using EntityStates;
-using HenryMod.Modules.Misc;
-using R2API;
 using RoR2;
 using RoR2.Skills;
 using System;
@@ -170,105 +168,6 @@ namespace HenryMod.Modules
         internal static SkillDef CreateSkillDef(SkillDefInfo skillDefInfo)
         {
             SkillDef skillDef = ScriptableObject.CreateInstance<SkillDef>();
-
-            skillDef.skillName = skillDefInfo.skillName;
-            skillDef.skillNameToken = skillDefInfo.skillNameToken;
-            skillDef.skillDescriptionToken = skillDefInfo.skillDescriptionToken;
-            skillDef.icon = skillDefInfo.skillIcon;
-
-            skillDef.activationState = skillDefInfo.activationState;
-            skillDef.activationStateMachineName = skillDefInfo.activationStateMachineName;
-            skillDef.baseMaxStock = skillDefInfo.baseMaxStock;
-            skillDef.baseRechargeInterval = skillDefInfo.baseRechargeInterval;
-            skillDef.beginSkillCooldownOnSkillEnd = skillDefInfo.beginSkillCooldownOnSkillEnd;
-            skillDef.canceledFromSprinting = skillDefInfo.canceledFromSprinting;
-            skillDef.forceSprintDuringState = skillDefInfo.forceSprintDuringState;
-            skillDef.fullRestockOnAssign = skillDefInfo.fullRestockOnAssign;
-            skillDef.interruptPriority = skillDefInfo.interruptPriority;
-            skillDef.resetCooldownTimerOnUse = skillDefInfo.resetCooldownTimerOnUse;
-            skillDef.isCombatSkill = skillDefInfo.isCombatSkill;
-            skillDef.mustKeyPress = skillDefInfo.mustKeyPress;
-            skillDef.cancelSprintingOnActivation = skillDefInfo.cancelSprintingOnActivation;
-            skillDef.rechargeStock = skillDefInfo.rechargeStock;
-            skillDef.requiredStock = skillDefInfo.requiredStock;
-            skillDef.stockToConsume = skillDefInfo.stockToConsume;
-
-            skillDef.keywordTokens = skillDefInfo.keywordTokens;
-
-            skillDefs.Add(skillDef);
-
-            return skillDef;
-        }
-
-        internal static SkillDef CreateTrackingSkillDef(SkillDefInfo skillDefInfo)
-        {
-            HenryTrackingSkillDef skillDef = ScriptableObject.CreateInstance<HenryTrackingSkillDef>();
-
-            skillDef.skillName = skillDefInfo.skillName;
-            skillDef.skillNameToken = skillDefInfo.skillNameToken;
-            skillDef.skillDescriptionToken = skillDefInfo.skillDescriptionToken;
-            skillDef.icon = skillDefInfo.skillIcon;
-
-            skillDef.activationState = skillDefInfo.activationState;
-            skillDef.activationStateMachineName = skillDefInfo.activationStateMachineName;
-            skillDef.baseMaxStock = skillDefInfo.baseMaxStock;
-            skillDef.baseRechargeInterval = skillDefInfo.baseRechargeInterval;
-            skillDef.beginSkillCooldownOnSkillEnd = skillDefInfo.beginSkillCooldownOnSkillEnd;
-            skillDef.canceledFromSprinting = skillDefInfo.canceledFromSprinting;
-            skillDef.forceSprintDuringState = skillDefInfo.forceSprintDuringState;
-            skillDef.fullRestockOnAssign = skillDefInfo.fullRestockOnAssign;
-            skillDef.interruptPriority = skillDefInfo.interruptPriority;
-            skillDef.resetCooldownTimerOnUse = skillDefInfo.resetCooldownTimerOnUse;
-            skillDef.isCombatSkill = skillDefInfo.isCombatSkill;
-            skillDef.mustKeyPress = skillDefInfo.mustKeyPress;
-            skillDef.cancelSprintingOnActivation = skillDefInfo.cancelSprintingOnActivation;
-            skillDef.rechargeStock = skillDefInfo.rechargeStock;
-            skillDef.requiredStock = skillDefInfo.requiredStock;
-            skillDef.stockToConsume = skillDefInfo.stockToConsume;
-
-            skillDef.keywordTokens = skillDefInfo.keywordTokens;
-
-            skillDefs.Add(skillDef);
-
-            return skillDef;
-        }
-
-        internal static SkillDef CreateEnergySkillDef(SkillDefInfo skillDefInfo)
-        {
-            NemryEnergySkillDef skillDef = ScriptableObject.CreateInstance<NemryEnergySkillDef>();
-
-            skillDef.skillName = skillDefInfo.skillName;
-            skillDef.skillNameToken = skillDefInfo.skillNameToken;
-            skillDef.skillDescriptionToken = skillDefInfo.skillDescriptionToken;
-            skillDef.icon = skillDefInfo.skillIcon;
-
-            skillDef.activationState = skillDefInfo.activationState;
-            skillDef.activationStateMachineName = skillDefInfo.activationStateMachineName;
-            skillDef.baseMaxStock = skillDefInfo.baseMaxStock;
-            skillDef.baseRechargeInterval = skillDefInfo.baseRechargeInterval;
-            skillDef.beginSkillCooldownOnSkillEnd = skillDefInfo.beginSkillCooldownOnSkillEnd;
-            skillDef.canceledFromSprinting = skillDefInfo.canceledFromSprinting;
-            skillDef.forceSprintDuringState = skillDefInfo.forceSprintDuringState;
-            skillDef.fullRestockOnAssign = skillDefInfo.fullRestockOnAssign;
-            skillDef.interruptPriority = skillDefInfo.interruptPriority;
-            skillDef.resetCooldownTimerOnUse = skillDefInfo.resetCooldownTimerOnUse;
-            skillDef.isCombatSkill = skillDefInfo.isCombatSkill;
-            skillDef.mustKeyPress = skillDefInfo.mustKeyPress;
-            skillDef.cancelSprintingOnActivation = skillDefInfo.cancelSprintingOnActivation;
-            skillDef.rechargeStock = skillDefInfo.rechargeStock;
-            skillDef.requiredStock = skillDefInfo.requiredStock;
-            skillDef.stockToConsume = skillDefInfo.stockToConsume;
-
-            skillDef.keywordTokens = skillDefInfo.keywordTokens;
-
-            skillDefs.Add(skillDef);
-
-            return skillDef;
-        }
-
-        internal static SkillDef CreateTrackingEnergySkillDef(SkillDefInfo skillDefInfo)
-        {
-            TrackingEnergySkillDef skillDef = ScriptableObject.CreateInstance<TrackingEnergySkillDef>();
 
             skillDef.skillName = skillDefInfo.skillName;
             skillDef.skillNameToken = skillDefInfo.skillNameToken;

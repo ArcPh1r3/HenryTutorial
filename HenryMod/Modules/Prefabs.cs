@@ -18,7 +18,7 @@ namespace HenryMod.Modules
         internal static List<GameObject> masterPrefabs = new List<GameObject>();
         internal static List<GameObject> projectilePrefabs = new List<GameObject>();
 
-        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix, UnlockableDef unlockableDef)
+        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix, UnlockableDef unlockableDef, float sortPosition)
         {
             string fullNameString = HenryPlugin.developerPrefix + "_" + namePrefix + "_BODY_NAME";
             string fullDescString = HenryPlugin.developerPrefix + "_" + namePrefix + "_BODY_DESCRIPTION";
@@ -33,20 +33,24 @@ namespace HenryMod.Modules
             survivorDef.descriptionToken = fullDescString;
             survivorDef.outroFlavorToken = fullOutroString;
             survivorDef.mainEndingEscapeFailureFlavorToken = fullFailureString;
-            survivorDef.desiredSortPosition = 100f;
+            survivorDef.desiredSortPosition = sortPosition;
             survivorDef.unlockableDef = unlockableDef;
 
             survivorDefinitions.Add(survivorDef);
         }
 
-        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, namePrefix, null); }
+        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, namePrefix, null, 100f); }
 
-        internal static GameObject CreateDisplayPrefab(string modelName, GameObject prefab)
+        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix, float sortPosition) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, namePrefix, null, sortPosition); }
+
+        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix, UnlockableDef unlockableDef) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, namePrefix, unlockableDef, 100f); }
+
+        internal static GameObject CreateDisplayPrefab(string modelName, GameObject prefab, BodyInfo bodyInfo)
         {
             GameObject newPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), modelName + "Prefab");
 
             GameObject model = CreateModel(newPrefab, modelName);
-            Transform modelBaseTransform = SetupModel(newPrefab, model.transform);
+            Transform modelBaseTransform = SetupModel(newPrefab, model.transform, bodyInfo);
 
             model.AddComponent<CharacterModel>().baseRendererInfos = prefab.GetComponentInChildren<CharacterModel>().baseRendererInfos;
 
@@ -60,7 +64,7 @@ namespace HenryMod.Modules
             GameObject newPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), bodyName);
 
             GameObject model = CreateModel(newPrefab, modelName);
-            Transform modelBaseTransform = SetupModel(newPrefab, model.transform);
+            Transform modelBaseTransform = SetupModel(newPrefab, model.transform, bodyInfo);
 
             #region CharacterBody
             CharacterBody bodyComponent = newPrefab.GetComponent<CharacterBody>();
@@ -142,23 +146,23 @@ namespace HenryMod.Modules
         }
 
         #region ModelSetup
-        private static Transform SetupModel(GameObject prefab, Transform modelTransform)
+        private static Transform SetupModel(GameObject prefab, Transform modelTransform, BodyInfo bodyInfo)
         {
             GameObject modelBase = new GameObject("ModelBase");
             modelBase.transform.parent = prefab.transform;
-            modelBase.transform.localPosition = new Vector3(0f, -0.92f, 0f);
+            modelBase.transform.localPosition = bodyInfo.modelBasePosition;
             modelBase.transform.localRotation = Quaternion.identity;
             modelBase.transform.localScale = new Vector3(1f, 1f, 1f);
 
             GameObject cameraPivot = new GameObject("CameraPivot");
             cameraPivot.transform.parent = modelBase.transform;
-            cameraPivot.transform.localPosition = new Vector3(0f, 1.6f, 0f);
+            cameraPivot.transform.localPosition = bodyInfo.cameraPivotPosition;
             cameraPivot.transform.localRotation = Quaternion.identity;
             cameraPivot.transform.localScale = Vector3.one;
 
             GameObject aimOrigin = new GameObject("AimOrigin");
             aimOrigin.transform.parent = modelBase.transform;
-            aimOrigin.transform.localPosition = new Vector3(0f, 1.8f, 0f);
+            aimOrigin.transform.localPosition = bodyInfo.aimOriginPosition;
             aimOrigin.transform.localRotation = Quaternion.identity;
             aimOrigin.transform.localScale = Vector3.one;
             prefab.GetComponent<CharacterBody>().aimOriginTransform = aimOrigin.transform;
@@ -191,17 +195,38 @@ namespace HenryMod.Modules
             ChildLocator childLocator = characterModel.GetComponent<ChildLocator>();
             characterModel.body = prefab.GetComponent<CharacterBody>();
 
+            if (!childLocator)
+            {
+                Debug.LogError("Failed CharacterModel setup: ChildLocator component does not exist on the model");
+                return;
+            }
+
             List<CharacterModel.RendererInfo> rendererInfos = new List<CharacterModel.RendererInfo>();
 
             for (int i = 0; i < rendererInfo.Length; i++)
             {
-                rendererInfos.Add(new CharacterModel.RendererInfo
+                if (!childLocator.FindChild(rendererInfo[i].childName))
                 {
-                    renderer = childLocator.FindChild(rendererInfo[i].childName).GetComponent<Renderer>(),
-                    defaultMaterial = rendererInfo[i].material,
-                    ignoreOverlays = rendererInfo[i].ignoreOverlays,
-                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On
-                });
+                    Debug.LogError("Trying to add a RendererInfo for a renderer that does not exist: " + rendererInfo[i].childName);
+                }
+                else
+                {
+                    Renderer j = childLocator.FindChild(rendererInfo[i].childName).GetComponent<Renderer>();
+                    if (!j)
+                    {
+
+                    }
+                    else
+                    {
+                        rendererInfos.Add(new CharacterModel.RendererInfo
+                        {
+                            renderer = childLocator.FindChild(rendererInfo[i].childName).GetComponent<Renderer>(),
+                            defaultMaterial = rendererInfo[i].material,
+                            ignoreOverlays = rendererInfo[i].ignoreOverlays,
+                            defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On
+                        });
+                    }
+                }
             }
 
             characterModel.baseRendererInfos = rendererInfos.ToArray();
@@ -261,7 +286,6 @@ namespace HenryMod.Modules
 
         private static void SetupMainHurtbox(GameObject prefab, GameObject model)
         {
-            HurtBoxGroup hurtBoxGroup = model.AddComponent<HurtBoxGroup>();
             ChildLocator childLocator = model.GetComponent<ChildLocator>();
 
             if (!childLocator.FindChild("MainHurtbox"))
@@ -270,6 +294,7 @@ namespace HenryMod.Modules
                 return;
             }
 
+            HurtBoxGroup hurtBoxGroup = model.AddComponent<HurtBoxGroup>();
             HurtBox mainHurtbox = childLocator.FindChild("MainHurtbox").gameObject.AddComponent<HurtBox>();
             mainHurtbox.gameObject.layer = LayerIndex.entityPrecise.intVal;
             mainHurtbox.healthComponent = prefab.GetComponent<HealthComponent>();
@@ -410,6 +435,10 @@ internal class BodyInfo
     internal int jumpCount = 1;
 
     internal Color bodyColor = Color.grey;
+
+    internal Vector3 aimOriginPosition = new Vector3(0f, 1.8f, 0f);
+    internal Vector3 modelBasePosition = new Vector3(0f, -0.92f, 0f);
+    internal Vector3 cameraPivotPosition = new Vector3(0f, 1.6f, 0f);
 }
 
 // for simplifying rendererinfo creation

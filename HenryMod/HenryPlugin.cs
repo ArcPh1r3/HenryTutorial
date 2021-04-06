@@ -9,8 +9,6 @@ using System.Security.Permissions;
 
 namespace HenryMod
 {
-    [BepInDependency("com.TeamMoonstorm.Starstorm2", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
@@ -26,26 +24,18 @@ namespace HenryMod
         // if you don't change these you're giving permission to deprecate the mod-
         //  please change the names to your own stuff, thanks
         //   this shouldn't even have to be said
-        public const string MODUID = "com.rob.HenryMod";
-        public const string MODNAME = "HenryMod";
-        public const string MODVERSION = "1.2.4";
+        public const string MODUID = "com.DeveloperName.MyCharacterMod";
+        public const string MODNAME = "MyCharacterMod";
+        public const string MODVERSION = "1.0.0";
 
-        // a prefix for name tokens to prevent conflicts
+        // a prefix for name tokens to prevent conflicts- please capitalize all name tokens for convention
         public const string developerPrefix = "ROB";
-
-        // soft dependency stuff
-        public static bool starstormInstalled = false;
-        public static bool scepterInstalled = false;
 
         public static HenryPlugin instance;
 
         private void Awake()
         {
             instance = this;
-
-            // check for soft dependencies
-            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.TeamMoonstorm.Starstorm2")) starstormInstalled = true;
-            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.DestroyedClone.AncientScepter")) scepterInstalled = true;
 
             // load assets and read config
             Modules.Assets.Initialize();
@@ -56,14 +46,10 @@ namespace HenryMod
             Modules.Tokens.AddTokens(); // register name tokens
             Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
 
-            new Modules.Survivors.Henry().Initialize();
-            //new Modules.Survivors.SimpleCharacter().Initialize();
-            //new Modules.Enemies.MrGreen().CreateCharacter();
+            // create your survivor here
+            new Modules.Survivors.MyCharacter().Initialize();
 
-            // nemry leak? if you're reading this keep quiet about it please.
-            // use it as an example for your own nemesis if you want i suppose
-            //new Modules.Enemies.Nemry().CreateCharacter();
-
+            // now make a content pack and add it- this part will change with the next update
             new Modules.ContentPacks().CreateContentPack();
 
             Hook();
@@ -71,7 +57,8 @@ namespace HenryMod
 
         private void Start()
         {
-            Modules.Survivors.Henry.instance.SetItemDisplays();
+            // have to set item displays in start now because they require direct object references..
+            Modules.Survivors.MyCharacter.instance.SetItemDisplays();
         }
 
         private void Hook()

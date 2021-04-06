@@ -27,7 +27,7 @@ namespace HenryMod.SkillStates
             base.characterBody.SetAimTimer(2f);
             this.muzzleString = "Muzzle";
 
-            base.PlayAnimation("LeftArm, Override", "ShootGun", "ShootGun.playbackRate", 1.8f);// 3f * this.duration);
+            base.PlayAnimation("LeftArm, Override", "ShootGun", "ShootGun.playbackRate", 1.8f);
         }
 
         public override void OnExit()

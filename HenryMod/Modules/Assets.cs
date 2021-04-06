@@ -18,44 +18,10 @@ namespace HenryMod.Modules
         internal static GameObject swordSwingEffect;
         internal static GameObject swordHitImpactEffect;
 
-        internal static GameObject punchSwingEffect;
-        internal static GameObject punchImpactEffect;
-
-        internal static GameObject fistBarrageEffect;
-
         internal static GameObject bombExplosionEffect;
-        internal static GameObject bazookaExplosionEffect;
-        internal static GameObject bazookaMuzzleFlash;
-        internal static GameObject dustEffect;
-
-        internal static GameObject muzzleFlashEnergy;
-        internal static GameObject swordChargeEffect;
-        internal static GameObject swordChargeFinishEffect;
-        internal static GameObject minibossEffect;
-
-        internal static GameObject energyBurstEffect;
-        internal static GameObject smallEnergyBurstEffect;
-
-        internal static GameObject spearSwingEffect;
-
-        internal static GameObject nemSwordSwingEffect;
-        internal static GameObject nemSwordHeavySwingEffect;
-        internal static GameObject nemSwordStabSwingEffect;
-        internal static GameObject nemSwordHitImpactEffect;
-
-        internal static GameObject shotgunTracer;
-        internal static GameObject energyTracer;
-
-        // custom crosshair
-        internal static GameObject bazookaCrosshair;
-
-        // tracker
-        internal static GameObject trackerPrefab;
 
         // networked hit sounds
         internal static NetworkSoundEventDef swordHitSoundEvent;
-        internal static NetworkSoundEventDef punchHitSoundEvent;
-        internal static NetworkSoundEventDef nemSwordHitSoundEvent;
 
         // lists of assets to add to contentpack
         internal static List<NetworkSoundEventDef> networkSoundEventDefs = new List<NetworkSoundEventDef>();
@@ -66,8 +32,16 @@ namespace HenryMod.Modules
         internal static Material commandoMat;
         private static string[] assetNames = new string[0];
 
+        // CHANGE THIS
+        private const string assetbundleName = "myassetbundle";
+
         internal static void Initialize()
         {
+            if (assetbundleName == "myassetbundle")
+            {
+                Debug.LogError("AssetBundle name hasn't been changed- not loading any assets to avoid conflicts");
+            }
+
             LoadAssetBundle();
             LoadSoundbank();
             PopulateAssets();
@@ -77,7 +51,7 @@ namespace HenryMod.Modules
         {
             if (mainAssetBundle == null)
             {
-                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("HenryMod.pleasechangethisnameinyourprojectorelseyouwillcauseconflicts"))
+                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("HenryMod." + assetbundleName))
                 {
                     mainAssetBundle = AssetBundle.LoadFromStream(assetStream);
                 }
@@ -104,26 +78,12 @@ namespace HenryMod.Modules
                 return;
             }
 
+            // feel free to delete everything in here and load in your own assets instead
+            // it should work fine even if left as is- even if the assets aren't in the bundle
+
             swordHitSoundEvent = CreateNetworkSoundEventDef("HenrySwordHit");
-            punchHitSoundEvent = CreateNetworkSoundEventDef("HenryPunchHit");
-            nemSwordHitSoundEvent = CreateNetworkSoundEventDef("NemrySwordHit");
 
-            dustEffect = LoadEffect("HenryDustEffect");
             bombExplosionEffect = LoadEffect("BombExplosionEffect", "HenryBombExplosion");
-            bazookaExplosionEffect = LoadEffect("HenryBazookaExplosionEffect", "HenryBazookaExplosion");
-            bazookaMuzzleFlash = LoadEffect("HenryBazookaMuzzleFlash");
-
-            muzzleFlashEnergy = LoadEffect("NemryMuzzleFlashEnergy", true);
-            minibossEffect = mainAssetBundle.LoadAsset<GameObject>("NemryMinibossIndicator");
-
-            swordChargeFinishEffect = LoadEffect("SwordChargeFinishEffect");
-            swordChargeEffect = mainAssetBundle.LoadAsset<GameObject>("SwordChargeEffect");
-
-            if (swordChargeEffect)
-            {
-                swordChargeEffect.AddComponent<ScaleParticleSystemDuration>().particleSystems = swordChargeEffect.GetComponentsInChildren<ParticleSystem>();
-                swordChargeEffect.GetComponent<ScaleParticleSystemDuration>().initialDuration = 1.5f;
-            }
 
             if (bombExplosionEffect)
             {
@@ -139,94 +99,10 @@ namespace HenryMod.Modules
                     frequency = 40f,
                     cycleOffset = 0f
                 };
-
-                shakeEmitter = bazookaExplosionEffect.AddComponent<ShakeEmitter>();
-                shakeEmitter.amplitudeTimeDecay = true;
-                shakeEmitter.duration = 0.4f;
-                shakeEmitter.radius = 100f;
-                shakeEmitter.scaleShakeRadiusWithLocalScale = false;
-
-                shakeEmitter.wave = new Wave
-                {
-                    amplitude = 1f,
-                    frequency = 30f,
-                    cycleOffset = 0f
-                };
             }
 
             swordSwingEffect = Assets.LoadEffect("HenrySwordSwingEffect", true);
             swordHitImpactEffect = Assets.LoadEffect("ImpactHenrySlash");
-
-            punchSwingEffect = Assets.LoadEffect("HenryFistSwingEffect", true);
-            punchImpactEffect = Assets.LoadEffect("ImpactHenryPunch");
-
-            fistBarrageEffect = Assets.LoadEffect("FistBarrageEffect", true);
-            if (fistBarrageEffect) fistBarrageEffect.GetComponent<ParticleSystemRenderer>().material.shader = hotpoo;
-
-            bazookaCrosshair = PrefabAPI.InstantiateClone(LoadCrosshair("ToolbotGrenadeLauncher"), "HenryBazookaCrosshair", false);
-            CrosshairController crosshair = bazookaCrosshair.GetComponent<CrosshairController>();
-            crosshair.skillStockSpriteDisplays = new CrosshairController.SkillStockSpriteDisplay[0];
-            bazookaCrosshair.transform.Find("StockCountHolder").gameObject.SetActive(false);
-            bazookaCrosshair.transform.Find("Image, Arrow (1)").gameObject.SetActive(true);
-            crosshair.spriteSpreadPositions[0].zeroPosition = new Vector3(32f, 34f, 0f);
-            crosshair.spriteSpreadPositions[2].zeroPosition = new Vector3(-32f, 34f, 0f);
-            bazookaCrosshair.transform.GetChild(1).gameObject.SetActive(false);
-
-            trackerPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/HuntressTrackingIndicator"), "HenryTrackerPrefab", false);
-            trackerPrefab.transform.Find("Core Pip").gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-            trackerPrefab.transform.Find("Core Pip").localScale = new Vector3(0.15f, 0.15f, 0.15f);
-
-            trackerPrefab.transform.Find("Core, Dark").gameObject.GetComponent<SpriteRenderer>().color = Color.black;
-            trackerPrefab.transform.Find("Core, Dark").localScale = new Vector3(0.1f, 0.1f, 0.1f);
-
-            foreach(SpriteRenderer i in trackerPrefab.transform.Find("Holder").gameObject.GetComponentsInChildren<SpriteRenderer>())
-            {
-                if (i)
-                {
-                    i.gameObject.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
-                    i.color = Color.white;
-                }
-            }
-
-            shotgunTracer = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerCommandoShotgun").InstantiateClone("HenryBulletTracer", true);
-
-            if (!shotgunTracer.GetComponent<EffectComponent>()) shotgunTracer.AddComponent<EffectComponent>();
-            if (!shotgunTracer.GetComponent<VFXAttributes>()) shotgunTracer.AddComponent<VFXAttributes>();
-            if (!shotgunTracer.GetComponent<NetworkIdentity>()) shotgunTracer.AddComponent<NetworkIdentity>();
-
-            foreach (LineRenderer i in shotgunTracer.GetComponentsInChildren<LineRenderer>())
-            {
-                if (i)
-                {
-                    Material bulletMat = UnityEngine.Object.Instantiate<Material>(i.material);
-                    bulletMat.SetColor("_TintColor", new Color(0.68f, 0.58f, 0.05f));
-                    i.material = bulletMat;
-                    i.startColor = new Color(0.68f, 0.58f, 0.05f);
-                    i.endColor = new Color(0.68f, 0.58f, 0.05f);
-                }
-            }
-
-            AddNewEffectDef(shotgunTracer);
-
-            spearSwingEffect = Assets.LoadEffect("NemrySpearSwingEffect");
-
-            nemSwordSwingEffect = Assets.LoadEffect("NemrySwordSwingEffect", true);
-            nemSwordStabSwingEffect = Assets.LoadEffect("NemrySwordStabSwingEffect", true);
-            nemSwordHeavySwingEffect = Assets.LoadEffect("NemryHeavySwordSwingEffect", true);
-            nemSwordHitImpactEffect = Assets.LoadEffect("ImpactNemrySlash");
-
-            energyBurstEffect = LoadEffect("EnergyBurstEffect");
-            smallEnergyBurstEffect = LoadEffect("EnergySmallBurstEffect");
-
-            energyTracer = CreateTracer("TracerHuntressSnipe", "NemryEnergyTracer");
-
-            LineRenderer line = energyTracer.transform.Find("TracerHead").GetComponent<LineRenderer>();
-            Material tracerMat = UnityEngine.Object.Instantiate<Material>(line.material);
-            line.startWidth *= 0.25f;
-            line.endWidth *= 0.25f;
-            // this did not work.
-            //tracerMat.SetColor("_TintColor", new Color(78f / 255f, 80f / 255f, 111f / 255f));
-            line.material = tracerMat;
         }
 
         private static GameObject CreateTracer(string originalTracerName, string newTracerName)
@@ -253,10 +129,6 @@ namespace HenryMod.Modules
             networkSoundEventDef.akId = AkSoundEngine.GetIDFromString(eventName);
             networkSoundEventDef.eventName = eventName;
 
-            /*NetworkSoundEventCatalog.getSoundEventDefs += delegate (List<NetworkSoundEventDef> list)
-            {
-                list.Add(networkSoundEventDef);
-            };*/
             networkSoundEventDefs.Add(networkSoundEventDef);
 
             return networkSoundEventDef;
@@ -393,7 +265,11 @@ namespace HenryMod.Modules
             Material mat = UnityEngine.Object.Instantiate<Material>(commandoMat);
             Material tempMat = Assets.mainAssetBundle.LoadAsset<Material>(materialName);
 
-            if (!tempMat) return commandoMat;
+            if (!tempMat)
+            {
+                Debug.LogError("Failed to load material: " + materialName + " - Check to see that the name in your Unity project matches the one in this code");
+                return commandoMat;
+            }
 
             mat.name = materialName;
             mat.SetColor("_Color", tempMat.GetColor("_Color"));

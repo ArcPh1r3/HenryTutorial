@@ -38,7 +38,6 @@ namespace HenryMod.SkillStates
             if (!this.hasFired)
             {
                 this.hasFired = true;
-                //EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FirePistol2.muzzleEffectPrefab, base.gameObject, this.muzzleString, false);
                 Util.PlaySound("HenryBombThrow", base.gameObject);
 
                 if (base.isAuthority)
