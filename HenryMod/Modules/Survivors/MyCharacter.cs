@@ -72,7 +72,7 @@ namespace HenryMod.Modules.Survivors
 
         internal override void InitializeDoppelganger()
         {
-            Modules.Prefabs.CreateGenericDoppelganger(instance.bodyPrefab, bodyName + "MonsterMaster", "Merc");
+            Modules.Prefabs.CreateGenericDoppelganger(bodyPrefab, bodyName + "MonsterMaster", "Merc");
         }
 
         internal override void InitializeHitboxes()
