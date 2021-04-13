@@ -10,6 +10,13 @@ namespace HenryMod.Modules.Survivors
     internal class MyCharacter : SurvivorBase
     {
         internal override string bodyName { get; set; } = "Henry";
+        internal override string mdlName { get; set; } = "Henry";
+
+        internal override string subtitleText { get; set; } = "The Chosen One";
+        internal override string descriptionText { get; set; } = StaticValues.descriptionText;
+        internal override string outroText { get; set; } = "..and so he left, ";
+        internal override string outroFailureText { get; set; } = "..and so he vanished, ";
+        internal override string loreText { get; set; } = "sample lore";
 
         internal override GameObject bodyPrefab { get; set; }
         internal override GameObject displayPrefab { get; set; }

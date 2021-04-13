@@ -75,9 +75,14 @@ namespace HenryMod.Modules
 
             GameObject newPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/" + bodyInfo.bodyNameToClone + "Body"), bodyName);
 
-            GameObject model = CreateModel(newPrefab, modelName);
-            if (model == null) model = newPrefab.GetComponentInChildren<CharacterModel>().gameObject;
-            Transform modelBaseTransform = SetupModel(newPrefab, model.transform, bodyInfo);
+            Transform modelBaseTransform = null;
+            GameObject model = null;
+            if (modelName != "mdl")
+            {
+                model = CreateModel(newPrefab, modelName);
+                if (model == null) model = newPrefab.GetComponentInChildren<CharacterModel>().gameObject;
+                modelBaseTransform = SetupModel(newPrefab, model.transform, bodyInfo);
+            }
 
             #region CharacterBody
             CharacterBody bodyComponent = newPrefab.GetComponent<CharacterBody>();
@@ -135,9 +140,9 @@ namespace HenryMod.Modules
             bodyComponent.bodyColor = bodyInfo.bodyColor;
             #endregion
 
-            SetupCharacterDirection(newPrefab, modelBaseTransform, model.transform);
+            if (modelBaseTransform != null) SetupCharacterDirection(newPrefab, modelBaseTransform, model.transform);
             SetupCameraTargetParams(newPrefab);
-            SetupModelLocator(newPrefab, modelBaseTransform, model.transform);
+            if (modelBaseTransform != null) SetupModelLocator(newPrefab, modelBaseTransform, model.transform);
             SetupRigidbody(newPrefab);
             SetupCapsuleCollider(newPrefab);
             SetupMainHurtbox(newPrefab, model);

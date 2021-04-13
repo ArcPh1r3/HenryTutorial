@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using R2API;
 using RoR2;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,13 @@ namespace HenryMod.Modules.Survivors
         internal static SurvivorBase instance;
 
         internal abstract string bodyName { get; set;  }
+        internal abstract string mdlName { get; set; }
+
+        internal abstract string subtitleText { get; set; }
+        internal abstract string descriptionText { get; set; }
+        internal abstract string outroText { get; set; }
+        internal abstract string outroFailureText { get; set; }
+        internal abstract string loreText { get; set; }
 
         internal abstract GameObject bodyPrefab { get; set;  }
         internal abstract GameObject displayPrefab { get; set; }
@@ -47,7 +55,14 @@ namespace HenryMod.Modules.Survivors
             {
                 InitializeUnlockables();
 
-                bodyPrefab = Modules.Prefabs.CreatePrefab(bodyName + "Body", "mdl" + bodyName, bodyInfo);
+                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_NAME", bodyName);
+                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_SUBTITLE", subtitleText);
+                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_DESCRIPTION", descriptionText);
+                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_OUTRO_FLAVOR", outroText);
+                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_OUTRO_FAILURE", outroFailureText);
+                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_LORE", loreText);
+
+                bodyPrefab = Modules.Prefabs.CreatePrefab(bodyName + "Body", "mdl" + mdlName, bodyInfo);
 
                 EntityStateMachine entityStateMachine = bodyPrefab.GetComponent<EntityStateMachine>();
                 entityStateMachine.mainStateType = new EntityStates.SerializableEntityStateType(characterMainState);
@@ -56,7 +71,7 @@ namespace HenryMod.Modules.Survivors
                 Modules.Prefabs.SetupCharacterModel(bodyPrefab, customRendererInfos, mainRendererIndex);
 
                 displayPrefab = Modules.Prefabs.CreateDisplayPrefab(bodyName + "Display", bodyPrefab, bodyInfo);
-                if (!displayPrefab) displayPrefab = GameObject.Instantiate(bodyPrefab.GetComponent<ModelLocator>().modelBaseTransform.gameObject);
+                if (displayPrefab == null) displayPrefab = GameObject.Instantiate(bodyPrefab.GetComponent<ModelLocator>().modelBaseTransform.gameObject);
 
                 Modules.Prefabs.RegisterNewSurvivor(bodyPrefab, displayPrefab, Color.grey, bodyName.ToUpper(), characterUnlockableDef, survivorSortPosition);
 

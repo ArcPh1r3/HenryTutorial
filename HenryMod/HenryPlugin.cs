@@ -50,14 +50,16 @@ namespace HenryMod
             new Modules.Survivors.MyCharacter().Initialize();
 
             // now make a content pack and add it- this part will change with the next update
-            new Modules.ContentPacks().CreateContentPack();
+            new Modules.ContentPacks().Initialize();
+
+            RoR2.ContentManagement.ContentManager.onContentPacksAssigned += LateSetup;
 
             Hook();
         }
 
-        private void Start()
+        private void LateSetup(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> obj)
         {
-            // have to set item displays in start now because they require direct object references..
+            // have to set item displays later now because they require direct object references..
             Modules.Survivors.MyCharacter.instance.SetItemDisplays();
         }
 

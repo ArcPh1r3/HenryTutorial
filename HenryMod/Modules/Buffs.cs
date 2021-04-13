@@ -1,6 +1,4 @@
-﻿using Mono.Cecil.Cil;
-using MonoMod.Cil;
-using RoR2;
+﻿using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,23 +13,7 @@ namespace HenryMod.Modules
 
         internal static void RegisterBuffs()
         {
-            // fix the buff catalog to actually register our buffs
-            IL.RoR2.BuffCatalog.Init += FixBuffCatalog; // remove this hook after next ror2 update as it will have been fixed
-
             armorBuff = AddNewBuff("HenryArmorBuff", Resources.Load<Sprite>("Textures/BuffIcons/texBuffGenericShield"), Color.white, false, false);
-        }
-
-        internal static void FixBuffCatalog(ILContext il)
-        {
-            ILCursor c = new ILCursor(il);
-
-            if (!c.Next.MatchLdsfld(typeof(RoR2Content.Buffs), nameof(RoR2Content.Buffs.buffDefs)))
-            {
-                return;
-            }
-
-            c.Remove();
-            c.Emit(OpCodes.Ldsfld, typeof(ContentManager).GetField(nameof(ContentManager.buffDefs)));
         }
 
         // simple helper method
