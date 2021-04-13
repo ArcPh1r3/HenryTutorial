@@ -31,7 +31,7 @@ namespace HenryMod.Modules
                     if (followerPrefab)
                     {
                         string name = followerPrefab.name;
-                        string key = (name != null) ? name.ToLower() : null;
+                        string key = name?.ToLower();
                         if (!itemDisplayPrefabs.ContainsKey(key))
                         {
                             itemDisplayPrefabs[key] = followerPrefab;

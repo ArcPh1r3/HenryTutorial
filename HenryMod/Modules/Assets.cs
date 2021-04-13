@@ -37,7 +37,7 @@ namespace HenryMod.Modules
 
         internal static void Initialize()
         {
-            if (assetbundleName == "myassetbundle")
+            if (assetbundleName == "myassetbundlee")
             {
                 Debug.LogError("AssetBundle name hasn't been changed- not loading any assets to avoid conflicts");
                 return;

@@ -1,6 +1,11 @@
 ﻿using BepInEx;
+using HenryMod.Modules.Survivors;
 using R2API.Utils;
 using RoR2;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Security;
 using System.Security.Permissions;
 
@@ -31,6 +36,8 @@ namespace HenryMod
         // a prefix for name tokens to prevent conflicts- please capitalize all name tokens for convention
         public const string developerPrefix = "ROB";
 
+        internal List<SurvivorBase> Survivors = new List<SurvivorBase>();
+
         public static HenryPlugin instance;
 
         private void Awake()
@@ -46,8 +53,8 @@ namespace HenryMod
             Modules.Tokens.AddTokens(); // register name tokens
             Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
 
-            // create your survivor here
-            new Modules.Survivors.MyCharacter().Initialize();
+            // survivor initialization
+            new MyCharacter().Initialize();
 
             // now make a content pack and add it- this part will change with the next update
             new Modules.ContentPacks().Initialize();

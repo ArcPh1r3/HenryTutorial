@@ -1,5 +1,4 @@
 ﻿using BepInEx.Configuration;
-using R2API;
 using RoR2;
 using System;
 using System.Collections.Generic;
@@ -11,23 +10,16 @@ namespace HenryMod.Modules.Survivors
     {
         internal static SurvivorBase instance;
 
-        internal abstract string bodyName { get; set;  }
-        internal abstract string mdlName { get; set; }
+        internal abstract string bodyName { get; set; }
 
-        internal abstract string subtitleText { get; set; }
-        internal abstract string descriptionText { get; set; }
-        internal abstract string outroText { get; set; }
-        internal abstract string outroFailureText { get; set; }
-        internal abstract string loreText { get; set; }
-
-        internal abstract GameObject bodyPrefab { get; set;  }
+        internal abstract GameObject bodyPrefab { get; set; }
         internal abstract GameObject displayPrefab { get; set; }
+
+        internal string fullBodyName => bodyName + "Body";
 
         internal abstract ConfigEntry<bool> characterEnabled { get; set; }
 
         internal abstract UnlockableDef characterUnlockableDef { get; set; }
-
-        internal abstract float survivorSortPosition { get; set; }
 
         internal abstract BodyInfo bodyInfo { get; set; }
 
@@ -35,7 +27,6 @@ namespace HenryMod.Modules.Survivors
         internal abstract CustomRendererInfo[] customRendererInfos { get; set; }
 
         internal abstract Type characterMainState { get; set; }
-        internal abstract Type characterSpawnState { get; set; }
 
         internal abstract ItemDisplayRuleSet itemDisplayRuleSet { get; set; }
         internal abstract List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules { get; set; }
@@ -55,25 +46,14 @@ namespace HenryMod.Modules.Survivors
             {
                 InitializeUnlockables();
 
-                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_NAME", bodyName);
-                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_SUBTITLE", subtitleText);
-                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_DESCRIPTION", descriptionText);
-                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_OUTRO_FLAVOR", outroText);
-                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_OUTRO_FAILURE", outroFailureText);
-                LanguageAPI.Add(HenryPlugin.developerPrefix + "_" + bodyName.ToUpper() + "_BODY_LORE", loreText);
-
-                bodyPrefab = Modules.Prefabs.CreatePrefab(bodyName + "Body", "mdl" + mdlName, bodyInfo);
-
-                EntityStateMachine entityStateMachine = bodyPrefab.GetComponent<EntityStateMachine>();
-                entityStateMachine.mainStateType = new EntityStates.SerializableEntityStateType(characterMainState);
-                entityStateMachine.initialStateType = new EntityStates.SerializableEntityStateType(characterSpawnState);
+                bodyPrefab = Modules.Prefabs.CreatePrefab(bodyName + "Body", "mdl" + bodyName, bodyInfo);
+                bodyPrefab.GetComponent<EntityStateMachine>().mainStateType = new EntityStates.SerializableEntityStateType(characterMainState);
 
                 Modules.Prefabs.SetupCharacterModel(bodyPrefab, customRendererInfos, mainRendererIndex);
 
                 displayPrefab = Modules.Prefabs.CreateDisplayPrefab(bodyName + "Display", bodyPrefab, bodyInfo);
-                if (displayPrefab == null) displayPrefab = GameObject.Instantiate(bodyPrefab.GetComponent<ModelLocator>().modelBaseTransform.gameObject);
 
-                Modules.Prefabs.RegisterNewSurvivor(bodyPrefab, displayPrefab, Color.grey, bodyName.ToUpper(), characterUnlockableDef, survivorSortPosition);
+                Modules.Prefabs.RegisterNewSurvivor(bodyPrefab, displayPrefab, Color.grey, bodyName.ToUpper(), characterUnlockableDef, 101f);
 
                 InitializeHitboxes();
                 InitializeSkills();
