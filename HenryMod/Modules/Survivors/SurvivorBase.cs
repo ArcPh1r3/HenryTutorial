@@ -15,6 +15,8 @@ namespace HenryMod.Modules.Survivors
         internal abstract GameObject bodyPrefab { get; set; }
         internal abstract GameObject displayPrefab { get; set; }
 
+        internal abstract float sortPosition { get; set; }
+
         internal string fullBodyName => bodyName + "Body";
 
         internal abstract ConfigEntry<bool> characterEnabled { get; set; }
@@ -42,7 +44,7 @@ namespace HenryMod.Modules.Survivors
             // this creates a config option to enable the character- feel free to remove if the character is the only thing in your mod
             characterEnabled = Modules.Config.CharacterEnableConfig(bodyName);
 
-            if (characterEnabled.Value)
+            if (isCharacterEnabled)
             {
                 InitializeUnlockables();
 
@@ -60,6 +62,14 @@ namespace HenryMod.Modules.Survivors
                 InitializeSkins();
                 InitializeItemDisplays();
                 InitializeDoppelganger();
+            }
+        }
+
+        private virtual bool isCharacterEnabled
+        {
+            get
+            {
+                return characterEnabled.Value;
             }
         }
 
