@@ -14,6 +14,8 @@ namespace HenryMod.Modules.Survivors
         internal override GameObject bodyPrefab { get; set; }
         internal override GameObject displayPrefab { get; set; }
 
+        internal override float sortPosition { get; set; } = 100f;
+
         internal override ConfigEntry<bool> characterEnabled { get; set; }
 
         internal override BodyInfo bodyInfo { get; set; } = new BodyInfo

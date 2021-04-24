@@ -253,6 +253,12 @@ namespace HenryMod.Modules
             characterModel.invisibilityCount = 0;
             characterModel.temporaryOverlays = new List<TemporaryOverlay>();
 
+            if (mainRendererIndex > characterModel.baseRendererInfos.Length)
+            {
+                Debug.LogError("mainRendererIndex out of range: not setting mainSkinnedMeshRenderer for " + prefab.name);
+                return;
+            }
+
             characterModel.mainSkinnedMeshRenderer = characterModel.baseRendererInfos[mainRendererIndex].renderer.GetComponent<SkinnedMeshRenderer>();
         }
         #endregion

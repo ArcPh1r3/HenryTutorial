@@ -44,7 +44,7 @@ namespace HenryMod.Modules.Survivors
             // this creates a config option to enable the character- feel free to remove if the character is the only thing in your mod
             characterEnabled = Modules.Config.CharacterEnableConfig(bodyName);
 
-            if (isCharacterEnabled)
+            if (characterEnabled.Value)
             {
                 InitializeUnlockables();
 
@@ -55,7 +55,7 @@ namespace HenryMod.Modules.Survivors
 
                 displayPrefab = Modules.Prefabs.CreateDisplayPrefab(bodyName + "Display", bodyPrefab, bodyInfo);
 
-                Modules.Prefabs.RegisterNewSurvivor(bodyPrefab, displayPrefab, Color.grey, bodyName.ToUpper(), characterUnlockableDef, 101f);
+                Modules.Prefabs.RegisterNewSurvivor(bodyPrefab, displayPrefab, Color.grey, bodyName.ToUpper(), characterUnlockableDef, sortPosition);
 
                 InitializeHitboxes();
                 InitializeSkills();
@@ -65,13 +65,6 @@ namespace HenryMod.Modules.Survivors
             }
         }
 
-        private virtual bool isCharacterEnabled
-        {
-            get
-            {
-                return characterEnabled.Value;
-            }
-        }
 
         internal virtual void InitializeUnlockables()
         {
