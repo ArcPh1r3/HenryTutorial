@@ -166,14 +166,17 @@ namespace HenryMod.Modules.Characters
         public float moveSpeedGrowth = 0f;
         public float jumpPowerGrowth = 0f;// jump power per level exists for some reason
 
-
-        //camera stuff
+        public Vector3 aimOriginPosition = new Vector3(0f, 1.6f, 0f);
         public Vector3 modelBasePosition = new Vector3(0f, -0.92f, 0f);
-        public Vector3 cameraPivotPosition = new Vector3(0f, 1.6f, 0f);
-        public Vector3 aimOriginPosition = new Vector3(0f, 2f, 0f);
+       
+        //the point where your camera pivots
+        public Vector3 cameraPivotPosition = new Vector3(0f, 0.8f, 0f);
 
-        public float cameraParamsVerticalOffset = 1.5f;
-        public float cameraParamsDepth = -12;
+        //how far from the pivot is your camera's center 
+        public float cameraParamsVerticalOffset = 1.37f;
+
+        //large characters like loader are -12. for smaller characters like commando go for -10 maybe -9
+        public float cameraParamsDepth = -10;
 
         private CharacterCameraParams _cameraParams;
         /// <summary>

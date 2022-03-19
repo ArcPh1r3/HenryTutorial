@@ -36,6 +36,9 @@ namespace HenryMod.Modules.Survivors
             armor = 0f,
 
             jumpCount = 1,
+
+            //large characters like loader are -12. for smaller characters like commando go for -10 maybe -9
+            cameraParamsDepth = -10f,
         };
 
         public override CustomRendererInfo[] customRendererInfos { get; set; } = new CustomRendererInfo[] {
@@ -219,7 +222,7 @@ namespace HenryMod.Modules.Survivors
                 new SkinDef.MeshReplacement
                 {
                     mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenry"),
-                    renderer = defaultRenderers[3].renderer
+                    renderer = defaultRenderers[2].renderer
                 }
             };
 
