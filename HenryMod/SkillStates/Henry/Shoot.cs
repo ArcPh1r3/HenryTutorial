@@ -2,7 +2,7 @@
 using RoR2;
 using UnityEngine;
 
-namespace HenryMod.EntityStates
+namespace HenryMod.SkillStates
 {
     public class Shoot : BaseSkillState
     {

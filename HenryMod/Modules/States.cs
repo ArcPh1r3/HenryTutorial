@@ -1,5 +1,5 @@
-﻿using HenryMod.EntityStates;
-using HenryMod.EntityStates.BaseStates;
+﻿using HenryMod.SkillStates;
+using HenryMod.SkillStates.BaseStates;
 using System.Collections.Generic;
 using System;
 

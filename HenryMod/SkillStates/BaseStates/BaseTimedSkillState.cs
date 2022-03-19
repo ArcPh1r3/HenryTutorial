@@ -1,7 +1,7 @@
 ﻿using EntityStates;
 using System;
 
-namespace HenryMod.EntityStates.BaseStates
+namespace HenryMod.SkillStates.BaseStates
 {
     public class BaseTimedSkillState : BaseSkillState
     {
@@ -72,5 +72,12 @@ namespace HenryMod.EntityStates.BaseStates
                 OnCastUpdate();
             }
         }
+    }
+
+
+    public class ExampleTimedSkillState : BaseTimedSkillState
+    {
+
+
     }
 }
