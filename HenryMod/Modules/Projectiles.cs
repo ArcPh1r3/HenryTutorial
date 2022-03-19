@@ -12,7 +12,6 @@ namespace HenryMod.Modules
 
         internal static void RegisterProjectiles()
         {
-            // only separating into separate methods for my sanity
             CreateBomb();
 
             AddProjectile(bombPrefab);
@@ -20,7 +19,7 @@ namespace HenryMod.Modules
 
         internal static void AddProjectile(GameObject projectileToAdd)
         {
-            Modules.Prefabs.projectilePrefabs.Add(projectileToAdd);
+            Modules.Content.AddProjectilePrefab(projectileToAdd);
         }
 
         private static void CreateBomb()
@@ -54,13 +53,11 @@ namespace HenryMod.Modules
             projectileImpactExplosion.childrenProjectilePrefab = null;
             projectileImpactExplosion.destroyOnEnemy = false;
             projectileImpactExplosion.destroyOnWorld = false;
-            projectileImpactExplosion.explosionSoundString = "";
             projectileImpactExplosion.falloffModel = RoR2.BlastAttack.FalloffModel.None;
             projectileImpactExplosion.fireChildren = false;
             projectileImpactExplosion.impactEffect = null;
             projectileImpactExplosion.lifetime = 0f;
             projectileImpactExplosion.lifetimeAfterImpact = 0f;
-            projectileImpactExplosion.lifetimeExpiredSoundString = "";
             projectileImpactExplosion.lifetimeRandomOffset = 0f;
             projectileImpactExplosion.offsetForLifetimeExpiredSound = 0f;
             projectileImpactExplosion.timerAfterImpact = false;
@@ -81,7 +78,7 @@ namespace HenryMod.Modules
 
         private static GameObject CloneProjectilePrefab(string prefabName, string newPrefabName)
         {
-            GameObject newPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Projectiles/" + prefabName), newPrefabName);
+            GameObject newPrefab = PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/" + prefabName), newPrefabName);
             return newPrefab;
         }
     }

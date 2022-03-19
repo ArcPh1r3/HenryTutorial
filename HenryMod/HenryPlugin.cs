@@ -31,7 +31,7 @@ namespace HenryMod
         public const string MODVERSION = "1.0.0";
 
         // a prefix for name tokens to prevent conflicts- please capitalize all name tokens for convention
-        public const string developerPrefix = "ROB";
+        public const string DEV_PREFIX = "ROB";
 
         internal List<SurvivorBase> Survivors = new List<SurvivorBase>();
 
@@ -56,15 +56,7 @@ namespace HenryMod
             // now make a content pack and add it- this part will change with the next update
             new Modules.ContentPacks().Initialize();
 
-            RoR2.ContentManagement.ContentManager.onContentPacksAssigned += LateSetup;
-
             Hook();
-        }
-
-        private void LateSetup(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> obj)
-        {
-            // have to set item displays later now because they require direct object references..
-            Modules.Survivors.MyCharacter.instance.SetItemDisplays();
         }
 
         private void Hook()

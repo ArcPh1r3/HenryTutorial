@@ -6,6 +6,7 @@ using RoR2;
 using System.IO;
 using System.Collections.Generic;
 using RoR2.UI;
+using System;
 
 namespace HenryMod.Modules
 {
@@ -23,12 +24,8 @@ namespace HenryMod.Modules
         // networked hit sounds
         internal static NetworkSoundEventDef swordHitSoundEvent;
 
-        // lists of assets to add to contentpack
-        internal static List<NetworkSoundEventDef> networkSoundEventDefs = new List<NetworkSoundEventDef>();
-        internal static List<EffectDef> effectDefs = new List<EffectDef>();
-
         // cache these and use to create our own materials
-        internal static Shader hotpoo = Resources.Load<Shader>("Shaders/Deferred/HGStandard");
+        internal static Shader hotpoo = RoR2.LegacyResourcesAPI.Load<Shader>("Shaders/Deferred/HGStandard");
         internal static Material commandoMat;
         private static string[] assetNames = new string[0];
 
@@ -39,8 +36,8 @@ namespace HenryMod.Modules
         {
             if (assetbundleName == "myassetbundle")
             {
-                Debug.LogError("AssetBundle name hasn't been changed- not loading any assets to avoid conflicts");
-                return;
+                Debug.LogError("AssetBundle name hasn't been changed. not loading any assets to avoid conflicts");
+                //return;
             }
 
             LoadAssetBundle();
@@ -51,18 +48,24 @@ namespace HenryMod.Modules
         internal static void LoadAssetBundle()
         {
             if (mainAssetBundle == null)
-            {
+            {                                                                                     //makesure this "HenryMod." is the same name as your project if you rename it
                 using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("HenryMod." + assetbundleName))
                 {
                     mainAssetBundle = AssetBundle.LoadFromStream(assetStream);
                 }
             }
 
+            if(mainAssetBundle == null) {
+
+                Debug.LogError("Failed to load assetbundle. Make sure your assetbundle is setup correctly");
+                return;
+            }
+
             assetNames = mainAssetBundle.GetAllAssetNames();
         }
 
         internal static void LoadSoundbank()
-        {
+        {                                                                                                    //likewise
             using (Stream manifestResourceStream2 = Assembly.GetExecutingAssembly().GetManifestResourceStream("HenryMod.HenryBank.bnk"))
             {
                 byte[] array = new byte[manifestResourceStream2.Length];
@@ -108,9 +111,9 @@ namespace HenryMod.Modules
 
         private static GameObject CreateTracer(string originalTracerName, string newTracerName)
         {
-            if (Resources.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName) == null) return null;
+            if (RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName) == null) return null;
 
-            GameObject newTracer = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName), newTracerName, true);
+            GameObject newTracer = PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName), newTracerName, true);
 
             if (!newTracer.GetComponent<EffectComponent>()) newTracer.AddComponent<EffectComponent>();
             if (!newTracer.GetComponent<VFXAttributes>()) newTracer.AddComponent<VFXAttributes>();
@@ -130,7 +133,7 @@ namespace HenryMod.Modules
             networkSoundEventDef.akId = AkSoundEngine.GetIDFromString(eventName);
             networkSoundEventDef.eventName = eventName;
 
-            networkSoundEventDefs.Add(networkSoundEventDef);
+            Modules.Content.AddNetworkSoundEventDef(networkSoundEventDef);
 
             return networkSoundEventDef;
         }
@@ -139,24 +142,13 @@ namespace HenryMod.Modules
         {
             if (!objectToConvert) return;
 
-            foreach (MeshRenderer i in objectToConvert.GetComponentsInChildren<MeshRenderer>())
+            foreach (Renderer i in objectToConvert.GetComponentsInChildren<Renderer>())
             {
                 if (i)
                 {
                     if (i.material)
                     {
-                        i.material.shader = hotpoo;
-                    }
-                }
-            }
-
-            foreach (SkinnedMeshRenderer i in objectToConvert.GetComponentsInChildren<SkinnedMeshRenderer>())
-            {
-                if (i)
-                {
-                    if (i.material)
-                    {
-                        i.material.shader = hotpoo;
+                        i.material.SetHopooMaterial();
                     }
                 }
             }
@@ -181,6 +173,17 @@ namespace HenryMod.Modules
             return rendererInfos;
         }
 
+
+        public static GameObject LoadSurvivorModel(string modelName) {
+            GameObject model = mainAssetBundle.LoadAsset<GameObject>(modelName);
+            if (model == null) {
+                Debug.LogError("Trying to load a null model- check to see if the name in your code matches the name of the object in Unity");
+                return null;
+            }
+
+            return PrefabAPI.InstantiateClone(model, model.name, false);
+        }
+
         internal static Texture LoadCharacterIcon(string characterName)
         {
             return mainAssetBundle.LoadAsset<Texture>("tex" + characterName + "Icon");
@@ -188,8 +191,8 @@ namespace HenryMod.Modules
 
         internal static GameObject LoadCrosshair(string crosshairName)
         {
-            if (Resources.Load<GameObject>("Prefabs/Crosshair/" + crosshairName + "Crosshair") == null) return Resources.Load<GameObject>("Prefabs/Crosshair/StandardCrosshair");
-            return Resources.Load<GameObject>("Prefabs/Crosshair/" + crosshairName + "Crosshair");
+            if (RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Crosshair/" + crosshairName + "Crosshair") == null) return RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Crosshair/StandardCrosshair");
+            return RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Crosshair/" + crosshairName + "Crosshair");
         }
 
         private static GameObject LoadEffect(string resourceName)
@@ -256,46 +259,7 @@ namespace HenryMod.Modules
             newEffectDef.prefabVfxAttributes = effectPrefab.GetComponent<VFXAttributes>();
             newEffectDef.spawnSoundEventName = soundName;
 
-            effectDefs.Add(newEffectDef);
-        }
-
-        public static Material CreateMaterial(string materialName, float emission, Color emissionColor, float normalStrength)
-        {
-            if (!commandoMat) commandoMat = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
-
-            Material mat = UnityEngine.Object.Instantiate<Material>(commandoMat);
-            Material tempMat = Assets.mainAssetBundle.LoadAsset<Material>(materialName);
-
-            if (!tempMat)
-            {
-                Debug.LogError("Failed to load material: " + materialName + " - Check to see that the name in your Unity project matches the one in this code");
-                return commandoMat;
-            }
-
-            mat.name = materialName;
-            mat.SetColor("_Color", tempMat.GetColor("_Color"));
-            mat.SetTexture("_MainTex", tempMat.GetTexture("_MainTex"));
-            mat.SetColor("_EmColor", emissionColor);
-            mat.SetFloat("_EmPower", emission);
-            mat.SetTexture("_EmTex", tempMat.GetTexture("_EmissionMap"));
-            mat.SetFloat("_NormalStrength", normalStrength);
-
-            return mat;
-        }
-
-        public static Material CreateMaterial(string materialName)
-        {
-            return Assets.CreateMaterial(materialName, 0f);
-        }
-
-        public static Material CreateMaterial(string materialName, float emission)
-        {
-            return Assets.CreateMaterial(materialName, emission, Color.white);
-        }
-
-        public static Material CreateMaterial(string materialName, float emission, Color emissionColor)
-        {
-            return Assets.CreateMaterial(materialName, emission, emissionColor, 0f);
+            Modules.Content.AddEffectDef(newEffectDef);
         }
     }
 }

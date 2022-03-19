@@ -7,18 +7,16 @@ namespace HenryMod.Modules
 {
     public static class States
     {
-        internal static List<Type> entityStates = new List<Type>();
-
         internal static void RegisterStates()
         {
-            entityStates.Add(typeof(BaseMeleeAttack));
-            entityStates.Add(typeof(SlashCombo));
+            Modules.Content.AddEntityState(typeof(BaseMeleeAttack));
+            Modules.Content.AddEntityState(typeof(SlashCombo));
 
-            entityStates.Add(typeof(Shoot));
+            Modules.Content.AddEntityState(typeof(Shoot));
 
-            entityStates.Add(typeof(Roll));
+            Modules.Content.AddEntityState(typeof(Roll));
 
-            entityStates.Add(typeof(ThrowBomb));
+            Modules.Content.AddEntityState(typeof(ThrowBomb));
         }
     }
 }

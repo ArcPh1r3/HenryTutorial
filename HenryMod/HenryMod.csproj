@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <None Remove="HenryBank.bnk" />
-    <None Remove="Modules\Survivors\Henry.cs~RF6221a098.TMP" />
+    <None Remove="Modules\Characters\Henry.cs~RF6221a098.TMP" />
     <None Remove="myassetbundle" />
   </ItemGroup>
 
@@ -27,8 +27,8 @@
     <Reference Include="0Harmony">
       <HintPath>..\libs\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="AncientScepter">
-      <HintPath>..\libs\AncientScepter.dll</HintPath>
+    <Reference Include="0Harmony20">
+      <HintPath>..\libs\0Harmony20.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\libs\Assembly-CSharp.dll</HintPath>
@@ -39,14 +39,14 @@
     <Reference Include="BepInEx.Harmony">
       <HintPath>..\libs\BepInEx.Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="BepInEx.MonoMod.Loader">
-      <HintPath>..\libs\BepInEx.MonoMod.Loader.dll</HintPath>
-    </Reference>
     <Reference Include="BepInEx.Preloader">
       <HintPath>..\libs\BepInEx.Preloader.dll</HintPath>
     </Reference>
-    <Reference Include="Facepunch.Steamworks">
-      <HintPath>..\libs\Facepunch.Steamworks.dll</HintPath>
+    <Reference Include="com.unity.multiplayer-hlapi.Runtime">
+      <HintPath>..\libs\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="HarmonyXInterop">
+      <HintPath>..\libs\HarmonyXInterop.dll</HintPath>
     </Reference>
     <Reference Include="HGCSharpUtils">
       <HintPath>..\libs\HGCSharpUtils.dll</HintPath>
@@ -54,8 +54,14 @@
     <Reference Include="HGUnityUtils">
       <HintPath>..\libs\HGUnityUtils.dll</HintPath>
     </Reference>
-    <Reference Include="MMHOOK_Assembly-CSharp">
-      <HintPath>..\libs\MMHOOK_Assembly-CSharp.dll</HintPath>
+    <Reference Include="KinematicCharacterController">
+      <HintPath>..\libs\KinematicCharacterController.dll</HintPath>
+    </Reference>
+    <Reference Include="LegacyResourcesAPI">
+      <HintPath>..\libs\LegacyResourcesAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="MMHOOK_RoR2">
+      <HintPath>..\libs\MMHOOK_RoR2.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>..\libs\Mono.Cecil.dll</HintPath>
@@ -69,9 +75,6 @@
     <Reference Include="Mono.Cecil.Rocks">
       <HintPath>..\libs\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
-    <Reference Include="MonoMod">
-      <HintPath>..\libs\MonoMod.exe</HintPath>
-    </Reference>
     <Reference Include="MonoMod.RuntimeDetour">
       <HintPath>..\libs\MonoMod.RuntimeDetour.dll</HintPath>
     </Reference>
@@ -81,8 +84,20 @@
     <Reference Include="R2API">
       <HintPath>..\libs\R2API.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Postprocessing.Runtime">
-      <HintPath>..\libs\Unity.Postprocessing.Runtime.dll</HintPath>
+    <Reference Include="Rewired_Core">
+      <HintPath>..\libs\Rewired_Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Rewired_CSharp">
+      <HintPath>..\libs\Rewired_CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="RoR2">
+      <HintPath>..\libs\RoR2.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>..\libs\Unity.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>..\libs\Unity.ResourceManager.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>..\libs\Unity.TextMeshPro.dll</HintPath>
@@ -99,11 +114,11 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>..\libs\UnityEngine.Networking.dll</HintPath>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\libs\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.ParticleSystemModule">
-      <HintPath>..\libs\UnityEngine.ParticleSystemModule.dll</HintPath>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>..\libs\UnityEngine.InputModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>..\libs\UnityEngine.PhysicsModule.dll</HintPath>
@@ -111,18 +126,13 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>..\libs\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\libs\UnityEngine.UIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UNETModule">
-      <HintPath>..\libs\UnityEngine.UNETModule.dll</HintPath>
-    </Reference>
     <Reference Include="Wwise">
       <HintPath>..\libs\Wwise.dll</HintPath>
     </Reference>
-    <Reference Include="Zio">
-      <HintPath>..\libs\Zio.dll</HintPath>
-    </Reference>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if &quot;$(Username)&quot; == &quot;Erikbir&quot; copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2\r2modman\BepInEx\plugins\TheTimesweeper-SillyItems&quot;" />
+  </Target>
 
 </Project>

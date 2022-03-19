@@ -9,11 +9,9 @@ namespace HenryMod.Modules
         // armor buff gained during roll
         internal static BuffDef armorBuff;
 
-        internal static List<BuffDef> buffDefs = new List<BuffDef>();
-
         internal static void RegisterBuffs()
         {
-            armorBuff = AddNewBuff("HenryArmorBuff", Resources.Load<Sprite>("Textures/BuffIcons/texBuffGenericShield"), Color.white, false, false);
+            armorBuff = AddNewBuff("HenryArmorBuff", RoR2.LegacyResourcesAPI.Load<Sprite>("Textures/BuffIcons/texBuffGenericShield"), Color.white, false, false);
         }
 
         // simple helper method
@@ -27,7 +25,7 @@ namespace HenryMod.Modules
             buffDef.eliteDef = null;
             buffDef.iconSprite = buffIcon;
 
-            buffDefs.Add(buffDef);
+            Modules.Content.AddBuffDef(buffDef);
 
             return buffDef;
         }

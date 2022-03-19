@@ -12,14 +12,14 @@ namespace HenryMod.Modules
     internal static class Unlockables
     {
         private static readonly HashSet<string> usedRewardIds = new HashSet<string>();
-        internal static List<AchievementDef> achievementDefs = new List<AchievementDef>();
-        internal static List<UnlockableDef> unlockableDefs = new List<UnlockableDef>();
-        private static readonly List<(AchievementDef achDef, UnlockableDef unlockableDef, String unlockableName)> moddedUnlocks = new List<(AchievementDef achDef, UnlockableDef unlockableDef, string unlockableName)>();
+        public static List<AchievementDef> achievementDefs = new List<AchievementDef>();
+        public static List<UnlockableDef> unlockableDefs = new List<UnlockableDef>();
+        private static readonly List<(AchievementDef achDef, UnlockableDef unlockableDef, string unlockableName)> moddedUnlocks = new List<(AchievementDef achDef, UnlockableDef unlockableDef, string unlockableName)>();
 
         private static bool addingUnlockables;
         public static bool ableToAdd { get; private set; } = false;
 
-        internal static UnlockableDef CreateNewUnlockable(UnlockableInfo unlockableInfo)
+        public static UnlockableDef CreateNewUnlockable(UnlockableInfo unlockableInfo)
         {
             UnlockableDef newUnlockableDef = ScriptableObject.CreateInstance<UnlockableDef>();
 
@@ -32,7 +32,12 @@ namespace HenryMod.Modules
             return newUnlockableDef;
         }
 
+        [Obsolete("The bool parameter serverTracked is redundant. Instead, pass in a BaseServerAchievement type if it is server tracked, or nothing if it's not")]
         public static UnlockableDef AddUnlockable<TUnlockable>(bool serverTracked) where TUnlockable : BaseAchievement, IModdedUnlockableDataProvider, new()
+        {
+            return AddUnlockable<TUnlockable>(null);
+        }
+        public static UnlockableDef AddUnlockable<TUnlockable>(Type serverTrackerType = null) where TUnlockable : BaseAchievement, IModdedUnlockableDataProvider, new()
         {
             TUnlockable instance = new TUnlockable();
 
@@ -49,7 +54,7 @@ namespace HenryMod.Modules
                 descriptionToken = instance.AchievementDescToken,
                 achievedIcon = instance.Sprite,
                 type = instance.GetType(),
-                serverTrackerType = (serverTracked ? instance.GetType() : null),
+                serverTrackerType = serverTrackerType,
             };
 
             UnlockableDef unlockableDef = CreateNewUnlockable(new UnlockableInfo
@@ -75,10 +80,10 @@ namespace HenryMod.Modules
             return unlockableDef;
         }
 
-        public static ILCursor CallDel_<TDelegate>(this ILCursor cursor, TDelegate target, out Int32 index)
+        public static ILCursor CallDel_<TDelegate>(this ILCursor cursor, TDelegate target, out int index)
 where TDelegate : Delegate
         {
-            index = cursor.EmitDelegate<TDelegate>(target);
+            index = cursor.EmitDelegate(target);
             return cursor;
         }
         public static ILCursor CallDel_<TDelegate>(this ILCursor cursor, TDelegate target)
@@ -98,10 +103,10 @@ where TDelegate : Delegate
                 x => x.MatchLdloc(1)
             );
 
-            void EmittedDelegate(List<AchievementDef> list, Dictionary<String, AchievementDef> map, List<String> identifiers)
+            void EmittedDelegate(List<AchievementDef> list, Dictionary<string, AchievementDef> map, List<string> identifiers)
             {
                 ableToAdd = false;
-                for (Int32 i = 0; i < moddedUnlocks.Count; ++i)
+                for (int i = 0; i < moddedUnlocks.Count; ++i)
                 {
                     var (ach, unl, unstr) = moddedUnlocks[i];
                     if (ach is null) continue;
@@ -113,20 +118,20 @@ where TDelegate : Delegate
 
             _ = cursor.Emit(OpCodes.Ldarg_0);
             _ = cursor.Emit(OpCodes.Ldsfld, f1);
-            _ = cursor.EmitDelegate<Action<List<AchievementDef>, Dictionary<String, AchievementDef>, List<String>>>(EmittedDelegate);
+            _ = cursor.EmitDelegate<Action<List<AchievementDef>, Dictionary<string, AchievementDef>, List<string>>>(EmittedDelegate);
             _ = cursor.Emit(OpCodes.Ldloc_1);
         }
 
-        internal struct UnlockableInfo
+        public struct UnlockableInfo
         {
-            internal string Name;
-            internal Func<string> HowToUnlockString;
-            internal Func<string> UnlockedString;
-            internal int SortScore;
+            public string Name;
+            public Func<string> HowToUnlockString;
+            public Func<string> UnlockedString;
+            public int SortScore;
         }
     }
 
-    internal interface IModdedUnlockableDataProvider
+    public interface IModdedUnlockableDataProvider
     {
         string AchievementIdentifier { get; }
         string UnlockableIdentifier { get; }
@@ -139,17 +144,18 @@ where TDelegate : Delegate
         Func<string> GetUnlocked { get; }
     }
 
-    internal abstract class ModdedUnlockable : BaseAchievement, IModdedUnlockableDataProvider
+    //fuck your internal i'm a slut
+    public abstract class ModdedUnlockable : BaseAchievement, IModdedUnlockableDataProvider
     {
         #region Implementation
         public void Revoke()
         {
-            if (base.userProfile.HasAchievement(this.AchievementIdentifier))
+            if (userProfile.HasAchievement(AchievementIdentifier))
             {
-                base.userProfile.RevokeAchievement(this.AchievementIdentifier);
+                userProfile.RevokeAchievement(AchievementIdentifier);
             }
 
-            base.userProfile.RevokeUnlockable(UnlockableCatalog.GetUnlockableDef(this.UnlockableIdentifier));
+            userProfile.RevokeUnlockable(UnlockableCatalog.GetUnlockableDef(UnlockableIdentifier));
         }
         #endregion
 
@@ -175,7 +181,7 @@ where TDelegate : Delegate
         {
             base.OnUninstall();
         }
-        public override Single ProgressForAchievement() => base.ProgressForAchievement();
+        public override float ProgressForAchievement() => base.ProgressForAchievement();
         public override BodyIndex LookUpRequiredBodyIndex()
         {
             return base.LookUpRequiredBodyIndex();
@@ -184,5 +190,19 @@ where TDelegate : Delegate
         public override void OnBodyRequirementMet() => base.OnBodyRequirementMet();
         public override bool wantsBodyCallbacks { get => base.wantsBodyCallbacks; }
         #endregion
+    }
+
+    public static class ArrayHelper
+    {
+        public static T[] Append<T>(ref T[] array, List<T> list)
+        {
+            var orig = array.Length;
+            var added = list.Count;
+            Array.Resize(ref array, orig + added);
+            list.CopyTo(array, orig);
+            return array;
+        }
+
+        public static Func<T[], T[]> AppendDel<T>(List<T> list) => (r) => Append(ref r, list);
     }
 }

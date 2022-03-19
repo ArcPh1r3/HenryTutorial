@@ -11,14 +11,12 @@ namespace HenryMod.Modules
         }
 
         // this helper automatically makes config entries for disabling survivors
-        internal static ConfigEntry<bool> CharacterEnableConfig(string characterName)
-        {
-            return HenryPlugin.instance.Config.Bind<bool>(new ConfigDefinition(characterName, "Enabled"), true, new ConfigDescription("Set to false to disable this character"));
-        }
+        public static ConfigEntry<bool> CharacterEnableConfig(string characterName, string description = "Set to false to disable this character", bool enabledDefault = true) {
 
-        internal static ConfigEntry<bool> EnemyEnableConfig(string characterName)
-        {
-            return HenryPlugin.instance.Config.Bind<bool>(new ConfigDefinition(characterName, "Enabled"), true, new ConfigDescription("Set to false to disable this enemy"));
+            return HenryPlugin.instance.Config.Bind<bool>("General",
+                                                          "Enable " + characterName,
+                                                          enabledDefault,
+                                                          description);
         }
     }
 }
