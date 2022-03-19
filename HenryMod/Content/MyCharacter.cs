@@ -55,7 +55,7 @@ namespace HenryMod.Modules.Survivors
                     childName = "Model",
                 }};
 
-        public override Type characterMainState => typeof(EntityStates.GenericCharacterMain);
+        public override Type characterMainState => typeof(global::EntityStates.GenericCharacterMain);
 
         public override UnlockableDef characterUnlockableDef => null;
 
@@ -88,11 +88,11 @@ namespace HenryMod.Modules.Survivors
             string prefix = HenryPlugin.DEV_PREFIX;
 
             #region Primary
-                                                                   //Creates a skilldef for a typical primary 
+            //Creates a skilldef for a typical primary 
             SkillDef primarySkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo(prefix + "_HENRY_BODY_PRIMARY_SLASH_NAME",
                                                                                       prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION",
                                                                                       Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
-                                                                                      new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)),
+                                                                                      new global::EntityStates.SerializableEntityStateType(typeof(EntityStates.SlashCombo)),
                                                                                       "Weapon",
                                                                                       true));
 
@@ -107,7 +107,7 @@ namespace HenryMod.Modules.Survivors
                 skillNameToken = prefix + "_HENRY_BODY_SECONDARY_GUN_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_GUN_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
+                activationState = new global::EntityStates.SerializableEntityStateType(typeof(EntityStates.Shoot)),
                 activationStateMachineName = "Slide",
                 baseMaxStock = 1,
                 baseRechargeInterval = 1f,
@@ -115,7 +115,7 @@ namespace HenryMod.Modules.Survivors
                 canceledFromSprinting = false,
                 forceSprintDuringState = false,
                 fullRestockOnAssign = true,
-                interruptPriority = EntityStates.InterruptPriority.Skill,
+                interruptPriority = global::EntityStates.InterruptPriority.Skill,
                 resetCooldownTimerOnUse = false,
                 isCombatSkill = true,
                 mustKeyPress = false,
@@ -136,7 +136,7 @@ namespace HenryMod.Modules.Survivors
                 skillNameToken = prefix + "_HENRY_BODY_UTILITY_ROLL_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_UTILITY_ROLL_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Roll)),
+                activationState = new global::EntityStates.SerializableEntityStateType(typeof(EntityStates.Roll)),
                 activationStateMachineName = "Body",
                 baseMaxStock = 1,
                 baseRechargeInterval = 4f,
@@ -144,7 +144,7 @@ namespace HenryMod.Modules.Survivors
                 canceledFromSprinting = false,
                 forceSprintDuringState = true,
                 fullRestockOnAssign = true,
-                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
+                interruptPriority = global::EntityStates.InterruptPriority.PrioritySkill,
                 resetCooldownTimerOnUse = false,
                 isCombatSkill = false,
                 mustKeyPress = false,
@@ -164,7 +164,7 @@ namespace HenryMod.Modules.Survivors
                 skillNameToken = prefix + "_HENRY_BODY_SPECIAL_BOMB_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_SPECIAL_BOMB_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
+                activationState = new global::EntityStates.SerializableEntityStateType(typeof(EntityStates.ThrowBomb)),
                 activationStateMachineName = "Slide",
                 baseMaxStock = 1,
                 baseRechargeInterval = 10f,
@@ -172,7 +172,7 @@ namespace HenryMod.Modules.Survivors
                 canceledFromSprinting = false,
                 forceSprintDuringState = false,
                 fullRestockOnAssign = true,
-                interruptPriority = EntityStates.InterruptPriority.Skill,
+                interruptPriority = global::EntityStates.InterruptPriority.Skill,
                 resetCooldownTimerOnUse = false,
                 isCombatSkill = true,
                 mustKeyPress = false,
