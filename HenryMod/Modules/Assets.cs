@@ -144,13 +144,7 @@ namespace HenryMod.Modules
 
             foreach (Renderer i in objectToConvert.GetComponentsInChildren<Renderer>())
             {
-                if (i)
-                {
-                    if (i.material)
-                    {
-                        i.material.SetHopooMaterial();
-                    }
-                }
+                i?.material?.SetHopooMaterial();
             }
         }
 
@@ -184,7 +178,7 @@ namespace HenryMod.Modules
             return PrefabAPI.InstantiateClone(model, model.name, false);
         }
 
-        internal static Texture LoadCharacterIcon(string characterName)
+        internal static Texture LoadCharacterIconGeneric(string characterName)
         {
             return mainAssetBundle.LoadAsset<Texture>("tex" + characterName + "Icon");
         }

@@ -1,17 +1,19 @@
-﻿using HenryMod.Modules.Characters;
-using RoR2;
+﻿using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HenryMod.Modules.Survivors {
-    internal class HenryItemDisplays : ItemDisplaysBase {
-
-        protected override void SetItemDisplayRules(List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules) {
-
+namespace HenryMod.Modules.Characters
+{
+    internal class HenryItemDisplays : ItemDisplaysBase
+    {
+        protected override void SetItemDisplayRules(List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules)
+        {
             #region Item Displays
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.Jetpack,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -28,9 +30,11 @@ namespace HenryMod.Modules.Survivors {
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.GoldGat,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -47,9 +51,11 @@ localScale = new Vector3(0.15F, 0.15F, 0.15F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.BFG,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -66,9 +72,11 @@ localScale = new Vector3(0.3F, 0.3F, 0.3F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.CritGlasses,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -85,9 +93,11 @@ localScale = new Vector3(0.3215F, 0.3034F, 0.3034F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Syringe,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -104,9 +114,11 @@ localScale = new Vector3(0.1F, 0.1F, 0.1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Behemoth,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -123,9 +135,11 @@ localScale = new Vector3(0.1F, 0.1F, 0.1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Missile,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -142,9 +156,11 @@ localScale = new Vector3(0.1F, 0.1F, 0.1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Dagger,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -161,9 +177,11 @@ localScale = new Vector3(1.2428F, 1.2428F, 1.2299F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Hoof,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -180,9 +198,11 @@ localScale = new Vector3(0.0846F, 0.0846F, 0.0758F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.ChainLightning,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -199,9 +219,11 @@ localScale = new Vector3(0.4749F, 0.4749F, 0.4749F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.GhostOnKill,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -218,9 +240,11 @@ localScale = new Vector3(0.6313F, 0.6313F, 0.6313F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Mushroom,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -237,9 +261,11 @@ localScale = new Vector3(0.0501F, 0.0501F, 0.0501F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.AttackSpeedOnCrit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -256,9 +282,11 @@ localScale = new Vector3(0.5666F, 0.5666F, 0.5666F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.BleedOnHit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -275,9 +303,11 @@ localScale = new Vector3(0.2615F, 0.2615F, 0.2615F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.WardOnLevel,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -294,9 +324,11 @@ localScale = new Vector3(0.3162F, 0.3162F, 0.3162F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.HealOnCrit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -313,9 +345,11 @@ localScale = new Vector3(0.1884F, 0.1884F, 0.1884F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.HealWhileSafe,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -332,9 +366,11 @@ localScale = new Vector3(0.0289F, 0.0289F, 0.0289F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Clover,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -351,9 +387,11 @@ localScale = new Vector3(0.2749F, 0.2749F, 0.2749F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.BarrierOnOverHeal,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -370,9 +408,11 @@ localScale = new Vector3(0.2849F, 0.2849F, 0.2849F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.GoldOnHit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -389,9 +429,11 @@ localScale = new Vector3(1.1754F, 1.1754F, 1.1754F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.WarCryOnMultiKill,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -408,9 +450,11 @@ localScale = new Vector3(0.7094F, 0.7094F, 0.7094F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.SprintArmor,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -427,9 +471,11 @@ localScale = new Vector3(0.3351F, 0.3351F, 0.3351F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.IceRing,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -446,9 +492,11 @@ localScale = new Vector3(0.3627F, 0.3627F, 0.3627F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.FireRing,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -465,9 +513,11 @@ localScale = new Vector3(0.3627F, 0.3627F, 0.3627F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.UtilitySkillMagazine,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -494,9 +544,11 @@ localScale = new Vector3(0.3627F, 0.3627F, 0.3627F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.JumpBoost,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -513,9 +565,11 @@ localScale = new Vector3(0.5253F, 0.5253F, 0.5253F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.ArmorReductionOnHit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -532,9 +586,11 @@ localScale = new Vector3(0.1722F, 0.1722F, 0.1722F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.NearbyDamageBonus,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -551,9 +607,11 @@ localScale = new Vector3(0.1236F, 0.1236F, 0.1236F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.ArmorPlate,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -570,9 +628,11 @@ localScale = new Vector3(0.1971F, 0.1971F, 0.1971F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.CommandMissile,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -589,9 +649,11 @@ localScale = new Vector3(0.3362F, 0.3362F, 0.3362F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Feather,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -608,9 +670,11 @@ localScale = new Vector3(0.0285F, 0.0285F, 0.0285F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Crowbar,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -627,9 +691,11 @@ localScale = new Vector3(0.1936F, 0.1936F, 0.1936F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.FallBoots,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -656,9 +722,11 @@ localScale = new Vector3(0.1485F, 0.1485F, 0.1485F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.ExecuteLowHealthElite,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -675,9 +743,11 @@ localScale = new Vector3(0.1843F, 0.1843F, 0.1843F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.EquipmentMagazine,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -694,9 +764,11 @@ localScale = new Vector3(0.0773F, 0.0773F, 0.0773F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.NovaOnHeal,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -723,9 +795,11 @@ localScale = new Vector3(-0.5349F, 0.5349F, 0.5349F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Infusion,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -742,9 +816,11 @@ localScale = new Vector3(0.5253F, 0.5253F, 0.5253F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Medkit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -761,9 +837,11 @@ localScale = new Vector3(0.4907F, 0.4907F, 0.4907F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Bandolier,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -780,9 +858,11 @@ localScale = new Vector3(0.1684F, 0.242F, 0.242F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.BounceNearby,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -799,9 +879,11 @@ localScale = new Vector3(0.214F, 0.214F, 0.214F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.IgniteOnKill,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -818,9 +900,11 @@ localScale = new Vector3(0.3165F, 0.3165F, 0.3165F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.StunChanceOnHit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -837,9 +921,11 @@ localScale = new Vector3(0.5672F, 0.5672F, 0.5672F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Firework,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -856,9 +942,11 @@ localScale = new Vector3(0.1194F, 0.1194F, 0.1194F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.LunarDagger,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -875,9 +963,11 @@ localScale = new Vector3(0.3385F, 0.3385F, 0.3385F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Knurl,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -894,9 +984,11 @@ localScale = new Vector3(0.0848F, 0.0848F, 0.0848F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.BeetleGland,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -913,9 +1005,11 @@ localScale = new Vector3(0.0553F, 0.0553F, 0.0553F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.SprintBonus,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -932,9 +1026,11 @@ localScale = new Vector3(0.1655F, 0.1655F, 0.1655F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.SecondarySkillMagazine,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -951,9 +1047,11 @@ localScale = new Vector3(0.0441F, 0.0441F, 0.0441F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.StickyBomb,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -970,9 +1068,11 @@ localScale = new Vector3(0.0736F, 0.0736F, 0.0736F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.TreasureCache,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -989,9 +1089,11 @@ localScale = new Vector3(0.4092F, 0.4092F, 0.4092F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.BossDamageBonus,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1008,9 +1110,11 @@ localScale = new Vector3(0.2279F, 0.2279F, 0.2279F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.SlowOnHit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1027,9 +1131,11 @@ localScale = new Vector3(0.0687F, 0.0687F, 0.0687F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.ExtraLife,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1046,9 +1152,11 @@ localScale = new Vector3(0.2645F, 0.2645F, 0.2645F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.KillEliteFrenzy,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1065,9 +1173,11 @@ localScale = new Vector3(0.2638F, 0.2638F, 0.2638F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.RepeatHeal,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1084,9 +1194,11 @@ localScale = new Vector3(0.1511F, 0.1511F, 0.1511F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.AutoCastEquipment,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1103,9 +1215,11 @@ localScale = new Vector3(0.4208F, 0.4208F, 0.4208F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.IncreaseHealing,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1132,9 +1246,11 @@ localScale = new Vector3(0.3395F, 0.3395F, -0.3395F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.TitanGoldDuringTP,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1151,9 +1267,11 @@ localScale = new Vector3(0.1191F, 0.1191F, 0.1191F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.SprintWisp,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1170,9 +1288,11 @@ localScale = new Vector3(0.1385F, 0.1385F, 0.1385F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.BarrierOnKill,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1189,9 +1309,11 @@ localScale = new Vector3(0.1841F, 0.1841F, 0.1841F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.TPHealingNova,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1208,9 +1330,11 @@ localScale = new Vector3(0.2731F, 0.2731F, 0.0273F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.LunarUtilityReplacement,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1227,9 +1351,11 @@ localScale = new Vector3(0.2833F, 0.2833F, 0.2833F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Thorns,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1246,9 +1372,11 @@ localScale = new Vector3(0.4814F, 0.4814F, 0.4814F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.LunarPrimaryReplacement,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1265,9 +1393,11 @@ localScale = new Vector3(0.2866F, 0.2866F, 0.2866F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.NovaOnLowHealth,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1284,9 +1414,11 @@ localScale = new Vector3(0.1035F, 0.1035F, 0.1035F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.LunarTrinket,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1303,9 +1435,11 @@ localScale = new Vector3(1F, 1F, 1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Plant,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1322,9 +1456,11 @@ localScale = new Vector3(0.0429F, 0.0429F, 0.0429F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Bear,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1341,9 +1477,11 @@ localScale = new Vector3(0.2034F, 0.2034F, 0.2034F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.DeathMark,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1360,9 +1498,11 @@ localScale = new Vector3(-0.0375F, -0.0341F, -0.0464F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.ExplodeOnDeath,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1379,9 +1519,11 @@ localScale = new Vector3(0.0283F, 0.0283F, 0.0283F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Seed,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1398,9 +1540,11 @@ localScale = new Vector3(0.0275F, 0.0275F, 0.0275F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.SprintOutOfCombat,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1417,9 +1561,11 @@ localScale = new Vector3(0.2845F, 0.2845F, 0.2845F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = JunkContent.Items.CooldownOnCrit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1436,9 +1582,11 @@ localScale = new Vector3(0.2789F, 0.2789F, 0.2789F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Phasing,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1455,9 +1603,11 @@ localScale = new Vector3(0.1454F, 0.2399F, 0.16F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.PersonalShield,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1474,9 +1624,11 @@ localScale = new Vector3(0.1057F, 0.1057F, 0.1057F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.ShockNearby,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1493,9 +1645,11 @@ localScale = new Vector3(0.3229F, 0.3229F, 0.3229F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.ShieldOnly,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1522,9 +1676,11 @@ localScale = new Vector3(0.3521F, 0.3521F, -0.3521F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.AlienHead,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1541,9 +1697,11 @@ localScale = new Vector3(0.6701F, 0.6701F, 0.6701F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.HeadHunter,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1560,9 +1718,11 @@ localScale = new Vector3(0.4851F, 0.1617F, 0.1617F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.EnergizedOnEquipmentUse,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1579,9 +1739,11 @@ localScale = new Vector3(0.2732F, 0.2732F, 0.2732F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.FlatHealth,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1598,9 +1760,11 @@ localScale = new Vector3(0.1245F, 0.1155F, 0.1155F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Tooth,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1617,9 +1781,11 @@ localScale = new Vector3(7.5452F, 7.5452F, 7.5452F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Pearl,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1636,9 +1802,11 @@ localScale = new Vector3(0.1F, 0.1F, 0.1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.ShinyPearl,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1655,9 +1823,11 @@ localScale = new Vector3(0.1F, 0.1F, 0.1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.BonusGoldPackOnKill,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1674,9 +1844,11 @@ localScale = new Vector3(0.0475F, 0.0475F, 0.0475F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Squid,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1693,9 +1865,11 @@ localScale = new Vector3(0.2235F, 0.3016F, 0.3528F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Icicle,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1712,9 +1886,11 @@ localScale = new Vector3(1F, 1F, 1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.Talisman,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1731,9 +1907,11 @@ localScale = new Vector3(1F, 1F, 1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.LaserTurbine,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1750,9 +1928,11 @@ localScale = new Vector3(0.2159F, 0.2159F, 0.2159F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.FocusConvergence,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1769,9 +1949,11 @@ localScale = new Vector3(0.1F, 0.1F, 0.1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = JunkContent.Items.Incubator,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1788,9 +1970,11 @@ localScale = new Vector3(0.0528F, 0.0528F, 0.0528F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.FireballsOnHit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1807,9 +1991,11 @@ localScale = new Vector3(0.0761F, 0.0761F, 0.0761F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.SiphonOnLowHealth,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1826,9 +2012,11 @@ localScale = new Vector3(0.0385F, 0.0385F, 0.0385F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.BleedOnHitAndExplode,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1845,9 +2033,11 @@ localScale = new Vector3(0.0486F, 0.0486F, 0.0486F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.MonstersOnShrineUse,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1864,9 +2054,11 @@ localScale = new Vector3(0.0246F, 0.0246F, 0.0246F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Items.RandomDamageZone,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1883,9 +2075,11 @@ localScale = new Vector3(0.0465F, 0.0465F, 0.0465F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.Fruit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1902,9 +2096,11 @@ localScale = new Vector3(0.2118F, 0.2118F, 0.2118F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.AffixRed,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1931,9 +2127,11 @@ localScale = new Vector3(-0.1036F, 0.1036F, 0.1036F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.AffixBlue,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1960,9 +2158,11 @@ localScale = new Vector3(0.1F, 0.1F, 0.1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.AffixWhite,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1979,9 +2179,11 @@ localScale = new Vector3(0.0265F, 0.0265F, 0.0265F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.AffixPoison,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -1998,9 +2200,11 @@ localScale = new Vector3(0.0496F, 0.0496F, 0.0496F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.AffixHaunted,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2017,9 +2221,11 @@ localScale = new Vector3(0.065F, 0.065F, 0.065F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.CritOnUse,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2036,9 +2242,11 @@ localScale = new Vector3(0.2326F, 0.2326F, 0.2326F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.DroneBackup,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2055,9 +2263,11 @@ localScale = new Vector3(0.2641F, 0.2641F, 0.2641F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.Lightning,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2074,9 +2284,11 @@ localScale = new Vector3(0.3413F, 0.3413F, 0.3413F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.BurnNearby,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2093,9 +2305,11 @@ localScale = new Vector3(0.0307F, 0.0307F, 0.0307F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.CrippleWard,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2112,9 +2326,11 @@ localScale = new Vector3(0.2812F, 0.2812F, 0.2812F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.QuestVolatileBattery,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2131,9 +2347,11 @@ localScale = new Vector3(0.2188F, 0.2188F, 0.2188F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.GainArmor,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2150,9 +2368,11 @@ localScale = new Vector3(0.6279F, 0.6279F, 0.6279F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.Recycle,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2169,9 +2389,11 @@ localScale = new Vector3(0.0802F, 0.0802F, 0.0802F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.FireBallDash,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2188,9 +2410,11 @@ localScale = new Vector3(0.1891F, 0.1891F, 0.1891F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.Cleanse,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2207,9 +2431,11 @@ localScale = new Vector3(0.0821F, 0.0821F, 0.0821F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.Tonic,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2226,9 +2452,11 @@ localScale = new Vector3(0.1252F, 0.1252F, 0.1252F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.Gateway,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2245,9 +2473,11 @@ localScale = new Vector3(0.0982F, 0.0982F, 0.0982F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.Meteor,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2264,9 +2494,11 @@ localScale = new Vector3(1F, 1F, 1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.Saw,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2283,9 +2515,11 @@ localScale = new Vector3(0.1F, 0.1F, 0.1F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.Blackhole,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2302,9 +2536,11 @@ localScale = new Vector3(0.5F, 0.5F, 0.5F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.Scanner,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2321,9 +2557,11 @@ localScale = new Vector3(0.0861F, 0.0861F, 0.0861F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.DeathProjectile,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2340,9 +2578,11 @@ localScale = new Vector3(0.0596F, 0.0596F, 0.0596F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.LifestealOnHit,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule
@@ -2359,9 +2599,11 @@ localScale = new Vector3(0.1246F, 0.1246F, 0.1246F),
                 }
             });
 
-            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup {
+            itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
+            {
                 keyAsset = RoR2Content.Equipment.TeamWarCry,
-                displayRuleGroup = new DisplayRuleGroup {
+                displayRuleGroup = new DisplayRuleGroup
+                {
                     rules = new ItemDisplayRule[]
                     {
                         new ItemDisplayRule

@@ -28,22 +28,22 @@ The recommended method for this is exporting as FBX with these import/export set
 
 ## Setting up your character prefab in Unity
 
-You're gonna want Unity version 2018.4.16f, the one Risk of Rain 2 currently uses. Download [here](https://download.unity3d.com/download_unity/e6e9ca02b32a/Windows64EditorInstaller/UnitySetup64-2018.4.16f1.exe)
+You're gonna want Unity version 2019.4.26f1, the one Risk of Rain 2 currently uses. Download [here](https://unity3d.com/get-unity/download/archive)
 
 Once you have this, if you haven't already, grab Henry's Unity project from the repo. This is recommended over creating a new one so that you can use Henry as a reference as well as add several scripts I've included to make things easier.
 
 Once that's done, follow these steps:
 
-  1. Import your model. Drag it into the scene, right click it in the hierarchy and click `Unpack Prefab`. Then (optionally) rename the `GameObject` to "mdl" + whatever your character's name is. It doesn't have to follow the naming convention but it's good practice to do so.
+  1. Import your model. Drag it into the scene, right click it in the hierarchy and click `Unpack Prefab`. Then rename the `GameObject` to "mdlMyCharacterName", replacing MyCharacterName with your character's name of course. Remember the name you set here.
   2. Add an `Animator`. I highly recommend copying Henry's animator and pasting your own animations in.
   3. Add a `ChildLocator` component to your object.
   4. Add a empty `GameObject` as a child of your object. Call this "MainHurtbox" and add a `Capsule Collider`. Scale it to fit your character and make sure the pivot of the object is set around the center of your character. This determines the `corePosition`, where enemies will aim at and where effects like `Berzerker's Pauldron` will show up.
   5. In your `ChildLocator`, create a new entry called "MainHurtbox" and drag your hurtbox object into it. Once you've done this the code will handle the rest.
   6. Create more entries in your `ChildLocator` for every mesh you have in your model and drag those in where necessary. The names don't matter because you'll fill in that part in the code.
-  8. Drag your `GameObject` into the `Project` window to create a new prefab
-  9. Once again, drag it into the `Project` window to create another prefab, and when prompted make a `Prefab Variant`. Then change the name of this to "MyCharacterNameDisplay" and change the `Animator` component if you want. This will be your display prefab used in the lobby.
-  10. Once this is all done, open the AssetBundle Browser and create a new AssetBundle. Drag whatever assets you're using into there and build it. I like to have everything I need in a single folder and just drag that to keep things simple.
-  11. Put the AssetBundle you've just created into your C# project and change the name in the Assets module to whatever you named it. There's plenty of tutorials on this so I won't be going over it.
+  7. Drag your `GameObject` into the `Project` window to create a new prefab
+  8. Once again, drag it into the `Project` window to create another prefab, and when prompted, make a `Prefab Variant`. Then change the name of this to "MyCharacterNameDisplay", using the same name MyCharacterName from before. This will be your display prefab used in the lobby. Here we usually the `Animator` to a new one that just plays the lobby animation. 
+  9. Once this is all done, open the AssetBundle Browser and create a new AssetBundle (If you don't have the AssetBundle Browser window, go to Windows > Packages and there you can install it). Drag whatever assets you're using into there and build it. I like to have everything I need in a single folder and just drag that to keep things simple.
+  10. Put the AssetBundle you've just created into your C# project, and change the name in the Assets module to whatever you named it. There's plenty of tutorials on using assetbundles if you'd like to refer to those instead.
 
 If this was done right, you should be able to navigate to where you built the AssetBundle and see a game ready bundle. Next step is hooking it all up in your code.
 
@@ -82,46 +82,47 @@ There's plenty more to go over but these are the main ones you need to know. Rea
 
 ## Step 1 - Initial Setup
 
-The first thing you wanna do is go through and change the name of the character to your own.
+The first thing you wanna do is go through and change the name of the character to your own.  
 
-In the Solution Explorer, go through and rename every instance of `Henry` to something else. Then open up `HenryPlugin.cs`
+Open up `HenryPlugin.cs`
 
-![](https://cdn.discordapp.com/attachments/469291841859092488/814488315981725696/unknown.png) 
+![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step1-1_henryplugin.cs.png)
 
-Navigate to this section: 
+Rename the `HenryMod` namespace to a name of you're choosing. As well, rename the class `HenryPlugin`.  
+In the Solution Explorer, go through and rename every instance of `Henry` to something else.
 
-![](https://cdn.discordapp.com/attachments/469291841859092488/814488992040615936/unknown.png) 
+Back to your renamed `HenryPlugin.cs`, navigate to this section: 
+
+![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step1-2_thissection.png) 
 
 Standard naming convention is `com.AuthorName.YourModName` so go ahead and fill in the fields accordingly. For the version, it's good practice to follow [Semantic Versioning](https://semver.org/). This isn't enforced but you'll probably be made fun of if you don't follow it.
 
 Now after this, open up `Tokens.cs`
 
-![](https://cdn.discordapp.com/attachments/469291841859092488/814513794398945320/unknown.png) 
+![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step1-3_tokens.png) 
 
 Inside this class all our name tokens are stored for organization. Change any of these to your character and skill names and make sure to use the prefixes to avoid mod conflicts.
 
 ![](https://cdn.discordapp.com/attachments/469291841859092488/814513934970126436/unknown.png) 
 
+## Step 2 - CharacterBody Setup
+
 Next you're going to want to create a class for the survivor you're creating. `SurvivorBase` is an abstract class that you can inherit from that takes care of most of the work for you. Included is an example of this, `MyCharacter`.
 
-![](https://cdn.discordapp.com/attachments/469291841859092488/829080247047159828/unknown.png) 
+![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step2-1_Mycharacte.png) 
 
 Open up this (hopefully renamed) class and you'll see a bunch of fields and information about your character that you need to fill out.
 
-
-## Step 2 - CharacterBody Setup
-
-![](https://cdn.discordapp.com/attachments/469291841859092488/829080957264330782/unknown.png) 
+![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step2-2_bodyinfo.png) 
 
 This code right here is what sets up your entire `CharacterBody` prefab. You can check out the Prefabs module if you're curious to see how it all works, but this `CreatePrefab` method exists to make it pain free. Everything in it is fairly self-explanatory, base stats, crosshair prefab, survivor pod, name tokens...
 
 A few things to note:
 
-* `Assets.LoadCharacterIcon` assumes the name for your character icon follows the same naming convention of `texCharacterNameIcon`
 * The names of all the crosshair prefabs can be found [here](https://github.com/risk-of-thunder/R2Wiki/wiki/Resources-Paths)
-* Damage and regen scaling aren't listed here as there's a standard for those that should be followed, but there's nothing stopping you from changing it manually
-* `sortPosition` controls where your character is placed in the character select menu
 * Having duplicate body names tends to break the entire game so make sure the name you choose is something original. It's something the player never sees so it can be complete nonsense if you want.
+* Stat scaling fields aren't shown here as there's a standard for those that should be followed, but there's nothing stopping you from changing it manually
+* Check out the BodyInfo class for more fields to mess with. the most important ones are here so you're likely not to need to.
 
 If this is done properly, you'll now have a functioning character body! However there's still a few more steps.
 
@@ -131,7 +132,7 @@ This step is crucial if you want your character to look good and authentic ingam
 
 ![](https://cdn.discordapp.com/attachments/469291841859092488/829081977666666506/unknown.png) 
 
-Pretty simple, we use `Assets.CreateMaterial` to create materials with Hopoo's shader based on our own materials made in Unity. Make sure the name matches here or it'll just use Commando's material.
+Pretty simple, we use `Materials.CreateHopooMaterial` to create materials with Hopoo's shader based on our own materials made in Unity. Make sure the name matches here or it'll error and show up white.
 
 To add emission and normal/bump maps, all you have to do is `Assets.CreateMaterial(name, i, color, j)`.
 

@@ -60,11 +60,11 @@ namespace HenryMod.Modules.Characters
         protected virtual void InitializeCharacterMaster() { }
         protected virtual void InitializeEntityStateMachine()
         {
-            bodyPrefab.GetComponent<EntityStateMachine>().mainStateType = new global::EntityStates.SerializableEntityStateType(characterMainState);
+            bodyPrefab.GetComponent<EntityStateMachine>().mainStateType = new EntityStates.SerializableEntityStateType(characterMainState);
             Modules.Content.AddEntityState(characterMainState);
             if (characterSpawnState != null)
             {
-                bodyPrefab.GetComponent<EntityStateMachine>().initialStateType = new global::EntityStates.SerializableEntityStateType(characterSpawnState);
+                bodyPrefab.GetComponent<EntityStateMachine>().initialStateType = new EntityStates.SerializableEntityStateType(characterSpawnState);
                 Modules.Content.AddEntityState(characterSpawnState);
             }
         }
@@ -108,56 +108,54 @@ namespace HenryMod.Modules.Characters
     // for simplifying characterbody creation
     internal class BodyInfo
     {
+        #region Character
         public string bodyName = "";
         public string bodyNameToken = "";
         public string subtitleNameToken = "";
-        /// <summary>
-        /// body prefab you're cloning for your character- commando is the safest
-        /// </summary>
+
+        // body prefab you're cloning for your character- commando is the safest
         public string bodyNameToClone = "Commando";
 
-        /// <summary>
-        /// the color of your characters name and skills and such in the lobby
-        /// </summary>
+        // the color of your characters name and skills and such in the lobby
         public Color bodyColor = Color.white;
 
         public Texture characterPortrait = null;
 
-        public float sortPosition = 69f;
+        public float sortPosition = 100f;
 
         public GameObject crosshair = null;
         public GameObject podPrefab = null;
+        #endregion Character
 
-        //stats
+        #region Stats
+        //main stats
         public float maxHealth = 100f;
         public float healthRegen = 1f;
         public float armor = 0f;
-        /// <summary>
-        /// base shield is a thing apparently. neat
-        /// </summary>
-        public float shield = 0f;
+        public float shield = 0f; // base shield is a thing apparently. neat
 
+        public int jumpCount = 1;
+
+        //conventional base stats, consistent for all survivors
         public float damage = 12f;
         public float attackSpeed = 1f;
         public float crit = 1f;
 
-        public float moveSpeed = 7f;
-        public float jumpPower = 15f;
-
         //misc stats
+        public float moveSpeed = 7f;
         public float acceleration = 80f;
-        public int jumpCount = 1;
+        public float jumpPower = 15f;
 
         //stat growth
         /// <summary>
-        /// When this is true, you don't need to worry about setting any of the stat growth values. 
+        /// Leave this alone, and you don't need to worry about setting any of the stat growth values. They'll be set at the consistent ratio that all vanilla survivors have.
         /// </summary>
         public bool autoCalculateLevelStats = true;
 
         public float healthGrowth = 30f;
         public float regenGrowth = 0.2f;
-        public float shieldGrowth = 0f;
         public float armorGrowth = 0f;
+        public float shieldGrowth = 0f;
 
         public float damageGrowth = 2.4f;
         public float attackSpeedGrowth = 0f;
@@ -165,23 +163,22 @@ namespace HenryMod.Modules.Characters
 
         public float moveSpeedGrowth = 0f;
         public float jumpPowerGrowth = 0f;// jump power per level exists for some reason
+        #endregion Stats
 
+        #region Camera
         public Vector3 aimOriginPosition = new Vector3(0f, 1.6f, 0f);
         public Vector3 modelBasePosition = new Vector3(0f, -0.92f, 0f);
        
-        //the point where your camera pivots
+        //basically the "height" of your camera
         public Vector3 cameraPivotPosition = new Vector3(0f, 0.8f, 0f);
 
-        //how far from the pivot is your camera's center 
+        //how far relative to the pivot is your camera's center 
         public float cameraParamsVerticalOffset = 1.37f;
 
         //large characters like loader are -12. for smaller characters like commando go for -10 maybe -9
         public float cameraParamsDepth = -10;
 
         private CharacterCameraParams _cameraParams;
-        /// <summary>
-        /// taken care of by the fields, cameraParamsVerticalOffset, and cameraParamsDepth. You can override this to create a new CharacterCameraParams for this field, in which case those two fields will be ignored
-        /// </summary>
         public CharacterCameraParams cameraParams
         {
             get
@@ -199,6 +196,7 @@ namespace HenryMod.Modules.Characters
             }
             set => _cameraParams = value;
         }
+        #endregion camera
     }
 
     // for simplifying rendererinfo creation

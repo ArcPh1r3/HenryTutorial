@@ -12,20 +12,17 @@ namespace HenryMod.Modules.Survivors
     {
         public override string bodyName => "Henry";
 
-        public const string HENRY_PREFIX = HenryPlugin.DEV_PREFIX + "_HENRY_BODY_";
-
+        public const string HENRY_PREFIX = HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_";
         //used when registering your survivor's language tokens
         public override string survivorTokenPrefix => HENRY_PREFIX;
-        //if you have more than one character, easily create a config to enable/disable them like this
-        public override ConfigEntry<bool> characterEnabledConfig => null; //Modules.Config.CharacterEnableConfig(bodyName);
 
         public override BodyInfo bodyInfo { get; set; } = new BodyInfo
         {
             bodyName = "HenryBody",
-            bodyNameToken = HenryPlugin.DEV_PREFIX + "_HENRY_BODY_NAME",
-            subtitleNameToken = HenryPlugin.DEV_PREFIX + "_HENRY_BODY_SUBTITLE",
+            bodyNameToken = HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_NAME",
+            subtitleNameToken = HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_SUBTITLE",
 
-            characterPortrait = Modules.Assets.LoadCharacterIcon("Henry"),
+            characterPortrait = Assets.mainAssetBundle.LoadAsset<Texture>("texHenryIcon"),
             bodyColor = Color.white,
 
             crosshair = Modules.Assets.LoadCrosshair("Standard"),
@@ -36,9 +33,6 @@ namespace HenryMod.Modules.Survivors
             armor = 0f,
 
             jumpCount = 1,
-
-            //large characters like loader are -12. for smaller characters like commando go for -10 maybe -9
-            cameraParamsDepth = -10f,
         };
 
         public override CustomRendererInfo[] customRendererInfos { get; set; } = new CustomRendererInfo[] 
@@ -46,6 +40,7 @@ namespace HenryMod.Modules.Survivors
                 new CustomRendererInfo
                 {
                     childName = "SwordModel",
+                    material = Materials.CreateHopooMaterial("matHenry"),
                 },
                 new CustomRendererInfo
                 {
@@ -57,11 +52,14 @@ namespace HenryMod.Modules.Survivors
                 }
         };
 
-        public override Type characterMainState => typeof(EntityStates.GenericCharacterMain);
-
         public override UnlockableDef characterUnlockableDef => null;
 
+        public override Type characterMainState => typeof(EntityStates.GenericCharacterMain);
+
         public override ItemDisplaysBase itemDisplays => new HenryItemDisplays();
+
+                                                                          //if you have more than one character, easily create a config to enable/disable them like this
+        public override ConfigEntry<bool> characterEnabledConfig => null; //Modules.Config.CharacterEnableConfig(bodyName);
 
         private static UnlockableDef masterySkinUnlockableDef;
 
@@ -72,7 +70,7 @@ namespace HenryMod.Modules.Survivors
 
         public override void InitializeUnlockables()
         {
-            masterySkinUnlockableDef = Modules.Unlockables.AddUnlockable<Achievements.MasteryAchievement>();
+            masterySkinUnlockableDef = Modules.Unlockables.AddUnlockable<Modules.Achievements.MasteryAchievement>();
         }
 
         public override void InitializeHitboxes()
@@ -87,7 +85,7 @@ namespace HenryMod.Modules.Survivors
         public override void InitializeSkills()
         {
             Modules.Skills.CreateSkillFamilies(bodyPrefab);
-            string prefix = HenryPlugin.DEV_PREFIX;
+            string prefix = HenryPlugin.DEVELOPER_PREFIX;
 
             #region Primary
             //Creates a skilldef for a typical primary 
@@ -203,7 +201,7 @@ namespace HenryMod.Modules.Survivors
             List<SkinDef> skins = new List<SkinDef>();
 
             #region DefaultSkin
-            SkinDef defaultSkin = Modules.Skins.CreateSkinDef(HenryPlugin.DEV_PREFIX + "_HENRY_BODY_DEFAULT_SKIN_NAME",
+            SkinDef defaultSkin = Modules.Skins.CreateSkinDef(HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_DEFAULT_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMainSkin"),
                 defaultRenderers,
                 mainRenderer,
@@ -241,7 +239,7 @@ namespace HenryMod.Modules.Survivors
                 masteryMat
             });
 
-            SkinDef masterySkin = Modules.Skins.CreateSkinDef(HenryPlugin.DEV_PREFIX + "_HENRY_BODY_MASTERY_SKIN_NAME",
+            SkinDef masterySkin = Modules.Skins.CreateSkinDef(HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_MASTERY_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
                 masteryRendererInfos,
                 mainRenderer,
