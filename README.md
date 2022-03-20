@@ -262,3 +262,17 @@ Unlocks are optional I suppose. People like having them, but you don't need them
 --------------------
 
 That should cover just about everything. If there's anything I'm missing or anything that doesn't make sense feel free to let me know in the modding discord (TheTimesweeper#5727).
+
+--------------------
+
+## Step 9 - Extra
+
+### Post-Build Event
+It's wonderful to just hit ctrl+b and run the game and your mod is magically there.
+
+In Visual Studio, find your project in the solution explorer, right click > Properties  
+You'll see a screen something like this:  
+
+![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step9-1_extra.png)    
+An example has been set up for you here  
+You can also use a similar copy command in Pre-build events to copy your assetbundle to your project, so you don't have to drag and replace it every time you make a change in unity.

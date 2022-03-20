@@ -39,9 +39,8 @@ namespace HenryMod
         {
             instance = this;
 
-            // load assets and read config
             Log.Init(Logger);
-            Modules.Assets.Initialize();
+            Modules.Assets.Initialize(); // load assets and read config
             Modules.Config.ReadConfig();
             Modules.States.RegisterStates(); // register states for networking
             Modules.Buffs.RegisterBuffs(); // add and register custom buffs/debuffs
