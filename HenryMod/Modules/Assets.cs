@@ -57,7 +57,7 @@ namespace HenryMod.Modules
 
             if(mainAssetBundle == null) {
 
-                Debug.LogError("Failed to load assetbundle. Make sure your assetbundle is setup correctly");
+                Debug.LogError("Failed to load assetbundle. Make sure your assetbundle name is setup correctly");
                 return;
             }
 

@@ -89,7 +89,8 @@ Open up `HenryPlugin.cs`
 ![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step1-1_henryplugin.cs.png)
 
 Rename the `HenryMod` namespace to a name of you're choosing. As well, rename the class `HenryPlugin`.  
-In the Solution Explorer, go through and rename every instance of `Henry` to something else.
+In the Solution Explorer, go through and rename every instance of `Henry` to something else.  
+In `Assets.cs`, make sure you change the `assetbundleName` to 
 
 Back to your renamed `HenryPlugin.cs`, navigate to this section: 
 
