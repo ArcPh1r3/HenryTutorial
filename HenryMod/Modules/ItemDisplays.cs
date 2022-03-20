@@ -36,7 +36,7 @@ namespace HenryMod.Modules
                     if (followerPrefab)
                     {
                         string name = followerPrefab.name;
-                        string key = name?.ToLower();
+                        string key = name?.ToLowerInvariant();
                         if (!itemDisplayPrefabs.ContainsKey(key))
                         {
                             itemDisplayPrefabs[key] = followerPrefab;
@@ -51,15 +51,15 @@ namespace HenryMod.Modules
 
         public static GameObject LoadDisplay(string name) {
 
-            if (itemDisplayPrefabs.ContainsKey(name.ToLower())) {
+            if (itemDisplayPrefabs.ContainsKey(name.ToLowerInvariant())) {
 
-                if (itemDisplayPrefabs[name.ToLower()]) {
+                if (itemDisplayPrefabs[name.ToLowerInvariant()]) {
 
                     if (recording) {
-                        itemDisplayCheckCount[name.ToLower()]++;
+                        itemDisplayCheckCount[name.ToLowerInvariant()]++;
                     }
 
-                    GameObject display = itemDisplayPrefabs[name.ToLower()];
+                    GameObject display = itemDisplayPrefabs[name.ToLowerInvariant()];
 
                     #region IgnoreThisAndRunAway
                     //seriously you don't need this
@@ -81,7 +81,7 @@ namespace HenryMod.Modules
                     return display;
                 }
             }
-            Debug.LogError("item display " + name + " returned null");
+            Log.Error("item display " + name + " returned null");
             return null;
         }
 

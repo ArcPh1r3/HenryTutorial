@@ -21,7 +21,7 @@ namespace HenryMod.Modules
 
             if (!tempMat)
             {
-                Debug.LogError("Failed to load material: " + materialName + " - Check to see that the material in your Unity project matches this name");
+                Log.Error("Failed to load material: " + materialName + " - Check to see that the material in your Unity project matches this name");
                 return new Material(Assets.hotpoo);
             }
 

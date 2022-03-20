@@ -40,6 +40,7 @@ namespace HenryMod
             instance = this;
 
             // load assets and read config
+            Log.Init(Logger);
             Modules.Assets.Initialize();
             Modules.Config.ReadConfig();
             Modules.States.RegisterStates(); // register states for networking

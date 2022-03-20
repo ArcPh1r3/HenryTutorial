@@ -36,7 +36,7 @@ namespace HenryMod.Modules
         {
             if (assetbundleName == "myassetbundle")
             {
-                Debug.LogError("AssetBundle name hasn't been changed. not loading any assets to avoid conflicts");
+                Log.Error("AssetBundle name hasn't been changed. not loading any assets to avoid conflicts");
                 return;
             }
 
@@ -48,7 +48,7 @@ namespace HenryMod.Modules
         internal static void LoadAssetBundle()
         {
             if (mainAssetBundle == null)
-            {                                                                                     //makesure this "HenryMod." is the same name as your project if you rename it
+            {                                                                                     //makesure this "HenryMod." is the same name as your project when you rename it
                 using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("HenryMod." + assetbundleName))
                 {
                     mainAssetBundle = AssetBundle.LoadFromStream(assetStream);
@@ -57,7 +57,7 @@ namespace HenryMod.Modules
 
             if(mainAssetBundle == null) {
 
-                Debug.LogError("Failed to load assetbundle. Make sure your assetbundle name is setup correctly");
+                Log.Error("Failed to load assetbundle. Make sure your assetbundle name is setup correctly");
                 return;
             }
 
@@ -78,7 +78,7 @@ namespace HenryMod.Modules
         {
             if (!mainAssetBundle)
             {
-                Debug.LogError("There is no AssetBundle to load assets from.");
+                Log.Error("There is no AssetBundle to load assets from.");
                 return;
             }
 
@@ -171,7 +171,7 @@ namespace HenryMod.Modules
         public static GameObject LoadSurvivorModel(string modelName) {
             GameObject model = mainAssetBundle.LoadAsset<GameObject>(modelName);
             if (model == null) {
-                Debug.LogError("Trying to load a null model- check to see if the name in your code matches the name of the object in Unity");
+                Log.Error("Trying to load a null model- check to see if the name in your code matches the name of the object in Unity");
                 return null;
             }
 
@@ -209,7 +209,7 @@ namespace HenryMod.Modules
             bool assetExists = false;
             for (int i = 0; i < assetNames.Length; i++)
             {
-                if (assetNames[i].Contains(resourceName.ToLower()))
+                if (assetNames[i].Contains(resourceName.ToLowerInvariant()))
                 {
                     assetExists = true;
                     i = assetNames.Length;
@@ -218,7 +218,7 @@ namespace HenryMod.Modules
 
             if (!assetExists)
             {
-                Debug.LogError("Failed to load effect: " + resourceName + " because it does not exist in the AssetBundle");
+                Log.Error("Failed to load effect: " + resourceName + " because it does not exist in the AssetBundle");
                 return null;
             }
 

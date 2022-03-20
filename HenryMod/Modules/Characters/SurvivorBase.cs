@@ -11,7 +11,7 @@ namespace HenryMod.Modules.Survivors
     internal abstract class SurvivorBase : CharacterBase
     {
         public abstract string survivorTokenPrefix { get; }
-
+        
         public abstract UnlockableDef characterUnlockableDef { get; }
 
         public virtual ConfigEntry<bool> characterEnabledConfig { get; }
@@ -77,7 +77,7 @@ namespace HenryMod.Modules.Survivors
             CharacterSelectSurvivorPreviewDisplayController CSSPreviewDisplayConroller = displayPrefab.GetComponent<CharacterSelectSurvivorPreviewDisplayController>();
             if (!CSSPreviewDisplayConroller)
             {
-                Debug.LogError("trying to add skillChangeResponse to null CharacterSelectSurvivorPreviewDisplayController.\nMake sure you created one on your Display prefab in editor");
+                Log.Error("trying to add skillChangeResponse to null CharacterSelectSurvivorPreviewDisplayController.\nMake sure you created one on your Display prefab in editor");
                 return;
             }
 
@@ -90,7 +90,7 @@ namespace HenryMod.Modules.Survivors
             CharacterSelectSurvivorPreviewDisplayController CSSPreviewDisplayConroller = displayPrefab.GetComponent<CharacterSelectSurvivorPreviewDisplayController>();
             if (!CSSPreviewDisplayConroller)
             {
-                Debug.LogError("trying to add skinChangeResponse to null CharacterSelectSurvivorPreviewDisplayController.\nMake sure you created one on your Display prefab in editor");
+                Log.Error("trying to add skinChangeResponse to null CharacterSelectSurvivorPreviewDisplayController.\nMake sure you created one on your Display prefab in editor");
                 return;
             }
 

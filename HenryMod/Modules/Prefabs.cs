@@ -34,7 +34,7 @@ namespace HenryMod.Modules {
             GameObject clonedBody = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/" + bodyInfo.bodyNameToClone + "Body");
             if (!clonedBody)
             {
-                Debug.LogError(bodyInfo.bodyNameToClone + "Body is not a valid body, character creation failed");
+                Log.Error(bodyInfo.bodyNameToClone + "Body is not a valid body, character creation failed");
                 return null;
             }
 
@@ -197,7 +197,7 @@ namespace HenryMod.Modules {
 
             ChildLocator childLocator = characterModel.GetComponent<ChildLocator>();
             if (!childLocator) {
-                Debug.LogError("Failed CharacterModel setup: ChildLocator component does not exist on the model");
+                Log.Error("Failed CharacterModel setup: ChildLocator component does not exist on the model");
                 return;
             }
 
@@ -205,7 +205,7 @@ namespace HenryMod.Modules {
 
             for (int i = 0; i < customInfos.Length; i++) {
                 if (!childLocator.FindChild(customInfos[i].childName)) {
-                    Debug.LogError("Trying to add a RendererInfo for a renderer that does not exist: " + customInfos[i].childName);
+                    Log.Error("Trying to add a RendererInfo for a renderer that does not exist: " + customInfos[i].childName);
                 } else {
                     Renderer rend = childLocator.FindChild(customInfos[i].childName).GetComponent<Renderer>();
                     if (rend) {
