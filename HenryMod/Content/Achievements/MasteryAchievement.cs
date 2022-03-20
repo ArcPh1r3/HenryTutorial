@@ -11,6 +11,7 @@ namespace HenryMod.Modules.Achievements
         public override string PrerequisiteUnlockableIdentifier => HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_UNLOCKABLE_REWARD_ID";
 
         public override string RequiredCharacterBody => "HenryBody";
+                                                             //difficulty coeff 3 is monsoon. 3.5 is typhoon for grandmastery skins
         public override float RequiredDifficultyCoefficient => 3;
     }
 }

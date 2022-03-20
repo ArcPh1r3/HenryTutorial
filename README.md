@@ -128,44 +128,52 @@ If this is done properly, you'll now have a functioning character body! However 
 
 ## Step 3 - CharacterModel Setup
 
-This step is crucial if you want your character to look good and authentic ingame. All that `ChildLocator` stuff from before, linking all the meshes, comes into play here.
+This step is crucial if you want your character to look good and authentic ingame. All that `ChildLocator` stuff from before, linking all the meshes, comes into play here.  
 
-![](https://cdn.discordapp.com/attachments/469291841859092488/829081977666666506/unknown.png) 
+![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step3-1_model.png) 
 
-Pretty simple, we use `Materials.CreateHopooMaterial` to create materials with Hopoo's shader based on our own materials made in Unity. Make sure the name matches here or it'll error and show up white.
-
-To add emission and normal/bump maps, all you have to do is `Assets.CreateMaterial(name, i, color, j)`.
-
-	name = Whatever the material is called in your Unity project
-    i = Emission power, not sure what the limit here is but feel free to mess around with high numbers
-    color = The color of the emission, generally just go with Color.white
-	j = Normal strength
+Pretty simple, we use `Materials.CreateHopooMaterial` to create materials with Hopoo's shader based on our own materials made in Unity. Make sure the name matches here or it'll error and show up white.  
+To add emission and normal/bump maps, set up all that stuff in editor, and it should seamlessly transfer here.
     
-`mainRendererIndex` is used to keep track of which `RendererInfo` stores the info for your main body. Set this to 0 if your body is the only renderer, and try to keep the body last as that's what teleporter particles come from. Not hugely important but it's a small detail.
-
-After you have some materials created, what follows is the magic code that adds a `CharacterModel` component with proper `RendererInfos` to your character.
+After you have some materials created, what follows is the magic code that adds a `CharacterModel` component with proper `RendererInfos` to your character:
 
 `CustomRendererInfo` is a class defined in the `Prefabs` modules that's designed to store basic information that's used to create your `RendererInfos`. You're gonna need one for every renderer you linked in your `ChildLocator`.
 
 `childName` would be the name of the transform pair while `material` would be whatever material you created just before this.
 
-So, for example, if you had a character with a body mesh and a helmet mesh, you would do the following:
+So, if you had a character with a body mesh and a helmet mesh, you would do the following:
 
 ```
-Modules.Prefabs.SetupCharacterModel(characterPrefab, new CustomRendererInfo[] {
-                new CustomRendererInfo
-                {
-                    childName = "HelmetModel",
-                    material = helmetMat,
-                },
-                new CustomRendererInfo
-                {
-                    childName = "Model",
-                    material = characterMat,
-                }}, bodyRendererIndex);
+public override CustomRendererInfo[] customRendererInfos { get; set; } = new CustomRendererInfo[]
+{
+        new CustomRendererInfo
+        {
+            childName = "Model",
+            material = characterMat,
+        },
+        new CustomRendererInfo
+        {
+            childName = "HelmetModel",
+            material = helmetMat,
+        }
+};
 ```
+Note: note if you have all your materials on your model in unity, you may be able to avoid all this by simply specifying the childnames:
 
-The `mainRendererIndex` at the end is used to set the `mainSkinnedMeshRenderer` field, you can ignore that. As the character model is second here, the renderer index for it would be set to `1`.
+```
+public override CustomRendererInfo[] customRendererInfos { get; set; } = new CustomRendererInfo[]
+{
+        new CustomRendererInfo
+        {
+            childName = "Model",
+        },
+        new CustomRendererInfo
+        {
+            childName = "HelmetModel",
+        }
+};
+```
+ If no material is passed in, whatever material that's currently on your renderers in unity will be transferred to hopoo materials and applied to rendererinfos.
 
 With all that taken care of, you should now have a working character that can be selected and played with ingame! If you run into any issues at this point be sure to go back through and make sure you've followed every step properly.
 
@@ -207,13 +215,13 @@ So once you've created your `SkillDef`, `Skills.AddSecondarySkill()` will add it
 ## Step 5 - Skins
 
 
-Skin creation isn't streamlined as much as I'd like but it's not too bad to work with as of now. Inside the `CreateSkins` method, you'll see this code:
+Skin creation isn't streamlined as much as I'd like but it's not too bad to work with as of now. Inside the `InitializeSkins` method, you'll see this code:
 
 ![](https://cdn.discordapp.com/attachments/469291841859092488/814510796918489098/unknown.png) 
 
 Most of it can be ignored. It's just grabbing the necessary components and adding the `ModelSkinController` as well as creating a `List` of our `SkinDefs`. The line at the end is for `GameObjectActivations` field, which serves as an example of how to use it but should be removed for your character.
 
-Not too keen on explaining it all since it's so poorly written but the rest of this method should be fairly easy to understand. If not feel free to harass me with your questions.
+Not too keen on explaining it all since it's so poorly written but the rest of this method should be fairly easy to understand. If not feel free to harass timesweeper with your questions.
 
 ## Step 6 - Item Displays
 
@@ -223,28 +231,33 @@ Thankfully `KingEnderBrine` has made a tool that streamlines this process to an 
 
 [ItemDisplayPlacementHelper](https://thunderstore.io/package/KingEnderBrine/ItemDisplayPlacementHelper/)
 
-All the code for the item displays is already written in `CreateItemDisplays`, so all you need to do is install this tool, run the game, press `F2` on the main menu, select your character and start dragging items around.
+The code for setting it up can be found up near your bodyInfo and customRendererInfos:  
+![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step6-1_itemdisplays.png)  
+All of the initialization is handled for you. Go into the `HenryItemDisplays` class and all the items rules have been written, so all you need to do is install that tool, run the game, press `F2` on the main menu, select your character and start dragging items around.
 
 Seriously, this section would've been a lot longer without that tool.
 
 ## Step 7 - Vengeance Doppelganger
 
-![](https://cdn.discordapp.com/attachments/469291841859092488/829083472084860988/unknown.png) 
+![](https://cdn.discordapp.com/attachments/469291841859092488/829083472084860988/unknown.png)  
 
-Yeah. I haven't streamlined anything for AI creation beyond copying an existing AI.
+By default, a simple clone of Mercenary's AI is used. I haven't streamlined anything for AI creation beyond copying an existing AI.  
+This is automatically done in CharacterBase so you don't need to worry about it if you don't want to.
 
-If you're looking for actual AI creation then [`Regigigas`](https://github.com/ArcPh1r3/RegigigasMod/blob/master/RegigigasMod/Modules/Enemies/Regigigas.cs#L247) serves as a decent reference for now.
+If you're looking for actual AI creation then [`Enforcer`](https://github.com/GnomeModder/EnforcerMod/blob/master/EnforcerMod_VS/Modules/Characters/EnforcerSurvivor.cs#L452) or [`Regigigas`](https://github.com/ArcPh1r3/RegigigasMod/blob/master/RegigigasMod/Modules/Enemies/Regigigas.cs#L312) serve as a decent reference for now.
 
 ## Step 8 - Unlockables
 
 I'll elaborate on this more sometime but unlockables are basically just hooking a game event like `onClientGameOverGlobal` for example and checking if you've met the proper conditions for the unlock.
 
+There exists a `GenericModdedUnlockable` class and a `BaseMasteryUnlockable` class you can inherit from to slightly more easily create your unlocks. 
 
-There's plenty of examples of this in most of my repos, so I recommend checking those out. One thing to note is that on kill achievements don't network properly, only the host can unlock them. So when thinking of unlocks if possible try and avoid those for now.
+![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step8-1_unlocks.png)  
 
+There's plenty of examples of this in most of my repos, so I recommend checking those out, namely Enforcer and Miner. One thing to note is that certain things like on kill achievements must be server tracked, otherwise only the host can unlock them. Keep an eye out for some examples on that.
 
-Unlocks are optional I suppose, people like having them, but you don't need them.
+Unlocks are optional I suppose. People like having them, but you don't need them.
 
 --------------------
 
-That should cover just about everything. If there's anything I'm missing or anything that doesn't make sense feel free to let me know in the modding discord.
+That should cover just about everything. If there's anything I'm missing or anything that doesn't make sense feel free to let me know in the modding discord (TheTimesweeper#5727).
