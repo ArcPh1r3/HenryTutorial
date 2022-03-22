@@ -43,7 +43,8 @@ Once that's done, follow these steps:
   7. Drag your `GameObject` into the `Project` window to create a new prefab
   8. Once again, drag it into the `Project` window to create another prefab, and when prompted, make a `Prefab Variant`. Then change the name of this to "MyCharacterNameDisplay", using the same name MyCharacterName from before. This will be your display prefab used in the lobby. Here we usually the `Animator` to a new one that just plays the lobby animation. 
   9. Once this is all done, open the AssetBundle Browser and create a new AssetBundle (If you don't have the AssetBundle Browser window, go to Windows > Packages and there you can install it). Drag whatever assets you're using into there and build it. I like to have everything I need in a single folder and just drag that to keep things simple.
-  10. Put the AssetBundle you've just created into your C# project, and change the name in the Assets module to whatever you named it. There's plenty of tutorials on using assetbundles if you'd like to refer to those instead.
+  10. Put the AssetBundle you've just created into your C# project. In visual studio, find the file in the Solution Explorer, right click it and hit Properties. Set Build Action to Embedded Resource.  
+  *10-1. Note: Yes, there is a [better way](https://github.com/risk-of-thunder/R2Wiki/wiki/Loading-Resources-Into-the-Game-(The-actual-sane-way)) to load assetbundles with your project, and I recommend looking into that when you can, especially if your assetbundle starts to get big, but for now, the embedded way is simpler for tutorial purposes.*
 
 If this was done right, you should be able to navigate to where you built the AssetBundle and see a game ready bundle. Next step is hooking it all up in your code.
 
@@ -89,10 +90,11 @@ Open up `HenryPlugin.cs`
 ![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step1-1_henryplugin.cs.png)
 
 Rename the `HenryMod` namespace to a name of you're choosing. As well, rename the class `HenryPlugin`.  
-In the Solution Explorer, go through and rename every instance of `Henry` to something else.  
-In `Assets.cs`, make sure you change the `assetbundleName` to 
+In the Solution Explorer, go through and rename every instance of `Henry` to something else.
 
-Back to your renamed `HenryPlugin.cs`, navigate to this section: 
+If you haven't already, in `Assets.cs`, make sure you change the `assetbundleName` and `csProjName` as fits your assetbundle and csproj.  
+
+Back to your renamed `HenryPlugin.cs`, navigate to this section:
 
 ![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step1-2_thissection.png) 
 
@@ -176,7 +178,9 @@ public override CustomRendererInfo[] customRendererInfos { get; set; } = new Cus
 ```
  If no material is passed in, whatever material that's currently on your renderers in unity will be transferred to hopoo materials and applied to rendererinfos.
 
-With all that taken care of, you should now have a working character that can be selected and played with ingame! If you run into any issues at this point be sure to go back through and make sure you've followed every step properly.
+With all that taken care of, you should now have a working character that can be selected and played with ingame! If you run into any issues at this point be sure to go back through and make sure you've followed every step properly.  
+There may be a few placeholdery things that might get in your way, so work through them if they come up.
+
 
 ## Step 4 - Skill Setup
 

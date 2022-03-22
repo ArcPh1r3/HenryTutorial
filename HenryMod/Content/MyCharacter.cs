@@ -70,7 +70,8 @@ namespace HenryMod.Modules.Survivors
 
         public override void InitializeUnlockables()
         {
-            masterySkinUnlockableDef = Modules.Unlockables.AddUnlockable<Modules.Achievements.MasteryAchievement>();
+            //uncomment this when you have a mastery skin. when you do, make sure you have an icon too
+            //masterySkinUnlockableDef = Modules.Unlockables.AddUnlockable<Modules.Achievements.MasteryAchievement>();
         }
 
         public override void InitializeHitboxes()
@@ -78,8 +79,9 @@ namespace HenryMod.Modules.Survivors
             ChildLocator childLocator = bodyPrefab.GetComponentInChildren<ChildLocator>();
             GameObject model = childLocator.gameObject;
 
-            Transform hitboxTransform = childLocator.FindChild("SwordHitbox");
-            Modules.Prefabs.SetupHitbox(model, hitboxTransform, "Sword");
+            //example of how to create a hitbox
+            //Transform hitboxTransform = childLocator.FindChild("SwordHitbox");
+            //Modules.Prefabs.SetupHitbox(model, hitboxTransform, "Sword");
         }
 
         public override void InitializeSkills()
@@ -209,27 +211,31 @@ namespace HenryMod.Modules.Survivors
 
             defaultSkin.meshReplacements = new SkinDef.MeshReplacement[]
             {
-                new SkinDef.MeshReplacement
-                {
-                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenrySword"),
-                    renderer = defaultRenderers[0].renderer
-                },
-                new SkinDef.MeshReplacement
-                {
-                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenryGun"),
-                    renderer = defaultRenderers[1].renderer
-                },
-                new SkinDef.MeshReplacement
-                {
-                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenry"),
-                    renderer = defaultRenderers[2].renderer
-                }
+                //place your mesh replacements here
+                //unnecessary if you don't have multiple skins
+                //new SkinDef.MeshReplacement
+                //{
+                //    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenrySword"),
+                //    renderer = defaultRenderers[0].renderer
+                //},
+                //new SkinDef.MeshReplacement
+                //{
+                //    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenryGun"),
+                //    renderer = defaultRenderers[1].renderer
+                //},
+                //new SkinDef.MeshReplacement
+                //{
+                //    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshHenry"),
+                //    renderer = defaultRenderers[2].renderer
+                //}
             };
 
             skins.Add(defaultSkin);
             #endregion
 
+            //uncomment this when you have a mastery skin
             #region MasterySkin
+            /*
             Material masteryMat = Modules.Materials.CreateHopooMaterial("matHenryAlt");
             CharacterModel.RendererInfo[] masteryRendererInfos = SkinRendererInfos(defaultRenderers, new Material[]
             {
@@ -261,21 +267,10 @@ namespace HenryMod.Modules.Survivors
             };
 
             skins.Add(masterySkin);
+            */
             #endregion
 
             skinController.skins = skins.ToArray();
-        }
-
-        private static CharacterModel.RendererInfo[] SkinRendererInfos(CharacterModel.RendererInfo[] defaultRenderers, Material[] materials)
-        {
-            CharacterModel.RendererInfo[] newRendererInfos = new CharacterModel.RendererInfo[defaultRenderers.Length];
-            defaultRenderers.CopyTo(newRendererInfos, 0);
-
-            newRendererInfos[0].defaultMaterial = materials[0];
-            newRendererInfos[1].defaultMaterial = materials[1];
-            newRendererInfos[2].defaultMaterial = materials[2];
-
-            return newRendererInfos;
         }
     }
 }

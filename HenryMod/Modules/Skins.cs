@@ -68,5 +68,57 @@ namespace HenryMod.Modules
             internal SkinDef.MinionSkinReplacement[] MinionSkinReplacements;
             internal string Name;
         }
+
+        private static CharacterModel.RendererInfo[] getRendererMaterials(CharacterModel.RendererInfo[] defaultRenderers, params Material[] materials)
+        {
+            CharacterModel.RendererInfo[] newRendererInfos = new CharacterModel.RendererInfo[defaultRenderers.Length];
+            defaultRenderers.CopyTo(newRendererInfos, 0);
+
+            for (int i = 0; i < newRendererInfos.Length; i++)
+            {
+                try
+                {
+                    newRendererInfos[i].defaultMaterial = materials[i];
+                }
+                catch
+                {
+                    Log.Error("error adding skin rendererinfo material. make sure you're not passing in too many");
+                }
+            }
+
+            return newRendererInfos;
+        }
+        /// <summary>
+        /// pass in strings for mesh assets in your project. pass the same amount and order as you have renderers, filling with null as needed
+        /// <code>
+        /// myskindef.meshReplacements = Modules.Skins.getMeshReplacements(defaultRenderers,
+        ///    "meshHenrySword",
+        ///    null,
+        ///    "meshHenry");
+        /// </code>
+        /// </summary>
+        /// <param name="rendererinfos">your skindef's rendererinfos to access the renderers</param>
+        /// <param name="meshes">name of the mesh assets in your project</param>
+        /// <returns></returns>
+        internal static SkinDef.MeshReplacement[] getMeshReplacements(CharacterModel.RendererInfo[] rendererinfos, params string[] meshes)
+        {
+
+            List<SkinDef.MeshReplacement> meshReplacements = new List<SkinDef.MeshReplacement>();
+
+            for (int i = 0; i < rendererinfos.Length; i++)
+            {
+                if (string.IsNullOrEmpty(meshes[i]))
+                    continue;
+
+                meshReplacements.Add(
+                new SkinDef.MeshReplacement
+                {
+                    renderer = rendererinfos[i].renderer,
+                    mesh = Assets.mainAssetBundle.LoadAsset<Mesh>(meshes[i])
+                });
+            }
+
+            return meshReplacements.ToArray();
+        }
     }
 }
