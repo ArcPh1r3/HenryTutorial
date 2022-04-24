@@ -236,9 +236,10 @@ Thankfully `KingEnderBrine` has made a tool that streamlines this process to an 
 
 [ItemDisplayPlacementHelper](https://thunderstore.io/package/KingEnderBrine/ItemDisplayPlacementHelper/)
 
-The code for setting it up can be found up near your bodyInfo and customRendererInfos:  
+The code responsible for setting it up can be found up near your bodyInfo and customRendererInfos:  
 ![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step6-1_itemdisplays.png)  
-All of the initialization is handled for you. Go into the `HenryItemDisplays` class and all the items rules have been written, so all you need to do is install that tool, run the game, press `F2` on the main menu, select your character and start dragging items around.
+All of the initialization is handled for you. If you don't want displays yet,   
+Go into the `HenryItemDisplays` class and all the items rules have been written, so all you need to do is install that tool, run the game, press `F2` on the main menu, select your character and start dragging items around.
 
 Seriously, this section would've been a lot longer without that tool.
 
@@ -249,7 +250,7 @@ Seriously, this section would've been a lot longer without that tool.
 By default, a simple clone of Mercenary's AI is used. I haven't streamlined anything for AI creation beyond copying an existing AI.  
 This is automatically done in CharacterBase so you don't need to worry about it if you don't want to.
 
-If you're looking for actual AI creation then [`Enforcer`](https://github.com/GnomeModder/EnforcerMod/blob/master/EnforcerMod_VS/Modules/Characters/EnforcerSurvivor.cs#L452) or [`Regigigas`](https://github.com/ArcPh1r3/RegigigasMod/blob/master/RegigigasMod/Modules/Enemies/Regigigas.cs#L312) serve as a decent reference for now.
+If you're looking for actual AI creation then [`Enforcer`](https://github.com/GnomeModder/EnforcerMod/blob/master/EnforcerMod_VS/Content/Characters/EnforcerSurvivor.cs#L451) or [`Regigigas`](https://github.com/ArcPh1r3/RegigigasMod/blob/master/RegigigasMod/Modules/Enemies/Regigigas.cs#L312) serve as a decent reference for now.
 
 ## Step 8 - Unlockables
 
@@ -258,6 +259,7 @@ I'll elaborate on this more sometime but unlockables are basically just hooking 
 There exists a `GenericModdedUnlockable` class and a `BaseMasteryUnlockable` class you can inherit from to slightly more easily create your unlocks. 
 
 ![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step8-1_unlocks.png)  
+*making a mastery achievement literally couldn't be any easier!*
 
 There's plenty of examples of this in most of my repos, so I recommend checking those out, namely Enforcer and Miner. One thing to note is that certain things like on kill achievements must be server tracked, otherwise only the host can unlock them. Keep an eye out for some examples on that.
 

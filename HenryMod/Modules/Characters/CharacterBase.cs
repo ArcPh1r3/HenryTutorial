@@ -18,7 +18,7 @@ namespace HenryMod.Modules.Characters
         public abstract Type characterMainState { get; }
         public virtual Type characterSpawnState { get; }
 
-        public abstract ItemDisplaysBase itemDisplays { get; }
+        public virtual ItemDisplaysBase itemDisplays { get; } = null;
 
         public virtual GameObject bodyPrefab { get; set; }
         public virtual CharacterModel characterBodyModel { get; set; }
@@ -100,7 +100,7 @@ namespace HenryMod.Modules.Characters
 
         public void SetItemDisplays()
         {
-            itemDisplays.SetItemDIsplays(characterBodyModel.itemDisplayRuleSet);
+            itemDisplays.SetItemDisplays(characterBodyModel.itemDisplayRuleSet);
         }
 
     }

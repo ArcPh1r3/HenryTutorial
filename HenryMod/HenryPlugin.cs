@@ -19,6 +19,7 @@ namespace HenryMod
         "PrefabAPI",
         "LanguageAPI",
         "SoundAPI",
+        "UnlockableAPI"
     })]
 
     public class HenryPlugin : BaseUnityPlugin

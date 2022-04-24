@@ -32,8 +32,8 @@ namespace HenryMod.Modules
         // CHANGE THIS
         private const string assetbundleName = "myassetbundle";
         //change this to your project's name if/when you've renamed it
-        private const string csProjName = "HenryMod.";
-
+        private const string csProjName = "HenryMod";
+        
         internal static void Initialize()
         {
             if (assetbundleName == "myassetbundle")
@@ -49,17 +49,19 @@ namespace HenryMod.Modules
 
         internal static void LoadAssetBundle()
         {
-            if (mainAssetBundle == null)
-            {                                                                                     
-                using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{csProjName}.{assetbundleName}"))
+            try
+            {
+                if (mainAssetBundle == null)
                 {
-                    mainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+                    using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{csProjName}.{assetbundleName}"))
+                    {
+                        mainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+                    }
                 }
             }
-
-            if(mainAssetBundle == null) {
-
-                Log.Error("Failed to load assetbundle. Make sure your assetbundle name is setup correctly");
+            catch (Exception e)
+            {
+                Log.Error("Failed to load assetbundle. Make sure your assetbundle name is setup correctly\n" + e);
                 return;
             }
 
@@ -67,7 +69,8 @@ namespace HenryMod.Modules
         }
 
         internal static void LoadSoundbank()
-        {                                                                                                   
+        {                                                                
+            //soundbank currently broke, but this is how you should load yours
             using (Stream manifestResourceStream2 = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{csProjName}.HenryBank.bnk"))
             {
                 byte[] array = new byte[manifestResourceStream2.Length];
