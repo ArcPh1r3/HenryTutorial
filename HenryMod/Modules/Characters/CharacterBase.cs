@@ -94,11 +94,11 @@ namespace HenryMod.Modules.Characters
 
             if (itemDisplays != null)
             {
-                RoR2.RoR2Application.onLoad += SetItemDisplays;
+                RoR2.ContentManagement.ContentManager.onContentPacksAssigned += SetItemDisplays;
             }
         }
 
-        public void SetItemDisplays()
+        public void SetItemDisplays(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> obj)
         {
             itemDisplays.SetItemDisplays(characterBodyModel.itemDisplayRuleSet);
         }

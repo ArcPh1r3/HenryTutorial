@@ -11,7 +11,6 @@ namespace HenryMod.Modules.Characters {
             SetItemDisplayRules(itemDisplayRules);
 
             itemDisplayRuleSet.keyAssetRuleGroups = itemDisplayRules.ToArray();
-            itemDisplayRuleSet.GenerateRuntimeValues();
         }
 
         protected abstract void SetItemDisplayRules(List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules);
