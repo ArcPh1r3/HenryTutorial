@@ -83,16 +83,18 @@ There's plenty more to go over but these are the main ones you need to know. Rea
 
 ## Step 1 - Initial Setup
 
+This step is very important in order to avoid conflicts with other mods.
+
 The first thing you wanna do is go through and change the name of the character to your own.  
 
 Open up `HenryPlugin.cs`
 
 ![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step1-1_henryplugin.cs.png)
 
-Rename the `HenryMod` namespace to a name of you're choosing. As well, rename the class `HenryPlugin`.  
+<ins>Rename the `HenryMod` namespace to a name of you're choosing.</ins> As well, rename the class `HenryPlugin`.  
 In the Solution Explorer, go through and rename every instance of `Henry` to something else.
 
-If you haven't already, in `Assets.cs`, make sure you change the `assetbundleName` and `csProjName` as fits your assetbundle and csproj.  
+If you haven't already, in `Assets.cs`, <ins>make sure you change the `assetbundleName` and `csProjName`</ins> as fits your renamed assetbundle and csproj.  
 
 Back to your renamed `HenryPlugin.cs`, navigate to this section:
 
@@ -124,6 +126,7 @@ A few things to note:
 
 * The names of all the crosshair prefabs can be found [here](https://github.com/risk-of-thunder/R2Wiki/wiki/Resources-Paths)
 * Having duplicate body names tends to break the entire game so make sure the name you choose is something original. It's something the player never sees so it can be complete nonsense if you want.
+  * That said, it must match the naming of your prefabs in unity. If your prefab is "mdlHenry", the `bodyName` must be "Henry".
 * Stat scaling fields aren't shown here as there's a standard for those that should be followed, but there's nothing stopping you from changing it manually
 * Check out the BodyInfo class for more fields to mess with. the most important ones are here so you're likely not to need to.
 
@@ -219,12 +222,13 @@ So once you've created your `SkillDef`, `Skills.AddSecondarySkill()` will add it
 
 ## Step 5 - Skins
 
+If you don't have any skins, you don't need to worry about this section. A basic default skin is set up. All you might need to mess with are the name token and the icon.
 
 Skin creation isn't streamlined as much as I'd like but it's not too bad to work with as of now. Inside the `InitializeSkins` method, you'll see this code:
 
-![](https://cdn.discordapp.com/attachments/469291841859092488/814510796918489098/unknown.png) 
+![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step5-1_Skins.png)  
 
-Most of it can be ignored. It's just grabbing the necessary components and adding the `ModelSkinController` as well as creating a `List` of our `SkinDefs`. The line at the end is for `GameObjectActivations` field, which serves as an example of how to use it but should be removed for your character.
+Most of it can be ignored. It's just grabbing the necessary components and adding the `ModelSkinController` as well as creating a `List` of our `SkinDefs`. The rest of the skin code is below.  
 
 Not too keen on explaining it all since it's so poorly written but the rest of this method should be fairly easy to understand. If not feel free to harass timesweeper with your questions.
 
@@ -238,7 +242,7 @@ Thankfully `KingEnderBrine` has made a tool that streamlines this process to an 
 
 The code responsible for setting it up can be found up near your bodyInfo and customRendererInfos:  
 ![](https://raw.githubusercontent.com/TheTimeSweeper/the/master/Ass/HenryTutorialImages/Step6-1_itemdisplays.png)  
-All of the initialization is handled for you. If you don't want displays yet,   
+All of the initialization is handled for you. If you don't want displays yet, simply set that to null.  
 Go into the `HenryItemDisplays` class and all the items rules have been written, so all you need to do is install that tool, run the game, press `F2` on the main menu, select your character and start dragging items around.
 
 Seriously, this section would've been a lot longer without that tool.

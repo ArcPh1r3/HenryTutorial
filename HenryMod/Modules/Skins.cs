@@ -8,12 +8,7 @@ namespace HenryMod.Modules
 {
     internal static class Skins
     {
-        internal static SkinDef CreateSkinDef(string skinName, Sprite skinIcon, CharacterModel.RendererInfo[] rendererInfos, SkinnedMeshRenderer mainRenderer, GameObject root)
-        {
-            return CreateSkinDef(skinName, skinIcon, rendererInfos, mainRenderer, root, null);
-        }
-
-        internal static SkinDef CreateSkinDef(string skinName, Sprite skinIcon, CharacterModel.RendererInfo[] rendererInfos, SkinnedMeshRenderer mainRenderer, GameObject root, UnlockableDef unlockableDef)
+        internal static SkinDef CreateSkinDef(string skinName, Sprite skinIcon, CharacterModel.RendererInfo[] defaultRendererInfos, GameObject root, UnlockableDef unlockableDef = null)
         {
             SkinDefInfo skinDefInfo = new SkinDefInfo
             {
@@ -25,7 +20,7 @@ namespace HenryMod.Modules
                 Name = skinName,
                 NameToken = skinName,
                 ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-                RendererInfos = rendererInfos,
+                RendererInfos = defaultRendererInfos,
                 RootObject = root,
                 UnlockableDef = unlockableDef
             };
@@ -37,6 +32,7 @@ namespace HenryMod.Modules
             skinDef.icon = skinDefInfo.Icon;
             skinDef.unlockableDef = skinDefInfo.UnlockableDef;
             skinDef.rootObject = skinDefInfo.RootObject;
+            defaultRendererInfos.CopyTo(skinDefInfo.RendererInfos, 0);
             skinDef.rendererInfos = skinDefInfo.RendererInfos;
             skinDef.gameObjectActivations = skinDefInfo.GameObjectActivations;
             skinDef.meshReplacements = skinDefInfo.MeshReplacements;
@@ -89,7 +85,7 @@ namespace HenryMod.Modules
             return newRendererInfos;
         }
         /// <summary>
-        /// pass in strings for mesh assets in your project. pass the same amount and order as you have renderers, filling with null as needed
+        /// pass in strings for mesh assets in your bundle. pass the same amount and order based on your rendererinfos, filling with null as needed
         /// <code>
         /// myskindef.meshReplacements = Modules.Skins.getMeshReplacements(defaultRenderers,
         ///    "meshHenrySword",
@@ -97,15 +93,15 @@ namespace HenryMod.Modules
         ///    "meshHenry");
         /// </code>
         /// </summary>
-        /// <param name="rendererinfos">your skindef's rendererinfos to access the renderers</param>
+        /// <param name="defaultRendererInfos">your skindef's rendererinfos to access the renderers</param>
         /// <param name="meshes">name of the mesh assets in your project</param>
         /// <returns></returns>
-        internal static SkinDef.MeshReplacement[] getMeshReplacements(CharacterModel.RendererInfo[] rendererinfos, params string[] meshes)
+        internal static SkinDef.MeshReplacement[] getMeshReplacements(CharacterModel.RendererInfo[] defaultRendererInfos, params string[] meshes)
         {
 
             List<SkinDef.MeshReplacement> meshReplacements = new List<SkinDef.MeshReplacement>();
 
-            for (int i = 0; i < rendererinfos.Length; i++)
+            for (int i = 0; i < defaultRendererInfos.Length; i++)
             {
                 if (string.IsNullOrEmpty(meshes[i]))
                     continue;
@@ -113,7 +109,7 @@ namespace HenryMod.Modules
                 meshReplacements.Add(
                 new SkinDef.MeshReplacement
                 {
-                    renderer = rendererinfos[i].renderer,
+                    renderer = defaultRendererInfos[i].renderer,
                     mesh = Assets.mainAssetBundle.LoadAsset<Mesh>(meshes[i])
                 });
             }

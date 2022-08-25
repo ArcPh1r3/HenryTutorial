@@ -12,9 +12,7 @@ namespace HenryMod.Modules
 {
     internal static class Assets
     {
-        // the assetbundle to load assets from
-        internal static AssetBundle mainAssetBundle;
-
+        #region henry's stuff
         // particle effects
         internal static GameObject swordSwingEffect;
         internal static GameObject swordHitImpactEffect;
@@ -23,11 +21,10 @@ namespace HenryMod.Modules
 
         // networked hit sounds
         internal static NetworkSoundEventDef swordHitSoundEvent;
+        #endregion
 
-        // cache these and use to create our own materials
-        internal static Shader hotpoo = RoR2.LegacyResourcesAPI.Load<Shader>("Shaders/Deferred/HGStandard");
-        internal static Material commandoMat;
-        private static string[] assetNames = new string[0];
+        // the assetbundle to load assets from
+        internal static AssetBundle mainAssetBundle;
 
         // CHANGE THIS
         private const string assetbundleName = "myassetbundle";
@@ -64,8 +61,6 @@ namespace HenryMod.Modules
                 Log.Error("Failed to load assetbundle. Make sure your assetbundle name is setup correctly\n" + e);
                 return;
             }
-
-            assetNames = mainAssetBundle.GetAllAssetNames();
         }
 
         internal static void LoadSoundbank()
@@ -176,7 +171,7 @@ namespace HenryMod.Modules
         public static GameObject LoadSurvivorModel(string modelName) {
             GameObject model = mainAssetBundle.LoadAsset<GameObject>(modelName);
             if (model == null) {
-                Log.Error("Trying to load a null model- check to see if the name in your code matches the name of the object in Unity");
+                Log.Error("Trying to load a null model- check to see if the BodyName in your code matches the prefab name of the object in Unity\nFor Example, if your prefab in unity is 'mdlHenry', then your BodyName must be 'Henry'");
                 return null;
             }
 
@@ -211,23 +206,13 @@ namespace HenryMod.Modules
 
         private static GameObject LoadEffect(string resourceName, string soundName, bool parentToTransform)
         {
-            bool assetExists = false;
-            for (int i = 0; i < assetNames.Length; i++)
-            {
-                if (assetNames[i].Contains(resourceName.ToLowerInvariant()))
-                {
-                    assetExists = true;
-                    i = assetNames.Length;
-                }
-            }
+            GameObject newEffect = mainAssetBundle.LoadAsset<GameObject>(resourceName);
 
-            if (!assetExists)
+            if (!newEffect)
             {
                 Log.Error("Failed to load effect: " + resourceName + " because it does not exist in the AssetBundle");
                 return null;
             }
-
-            GameObject newEffect = mainAssetBundle.LoadAsset<GameObject>(resourceName);
 
             newEffect.AddComponent<DestroyOnTimer>().duration = 12;
             newEffect.AddComponent<NetworkIdentity>();
