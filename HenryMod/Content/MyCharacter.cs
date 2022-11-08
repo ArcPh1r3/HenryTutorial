@@ -10,17 +10,20 @@ namespace HenryMod.Modules.Survivors
 {
     internal class MyCharacter : SurvivorBase
     {
+        //used when building your character using the prefabs you set up in unity
+        //don't upload to thunderstore without changing this
         public override string bodyName => "Henry";
 
-        public const string HENRY_PREFIX = HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_";
+        public const string HENRY_PREFIX = HenryPlugin.DEVELOPER_PREFIX + "_HENRYTUTORIAL_BODY_";
+
         //used when registering your survivor's language tokens
         public override string survivorTokenPrefix => HENRY_PREFIX;
 
         public override BodyInfo bodyInfo { get; set; } = new BodyInfo
         {
-            bodyName = "HenryBody",
-            bodyNameToken = HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_NAME",
-            subtitleNameToken = HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_SUBTITLE",
+            bodyName = "HenryTutorialBody",
+            bodyNameToken = HENRY_PREFIX + "NAME",
+            subtitleNameToken = HENRY_PREFIX + "SUBTITLE",
 
             characterPortrait = Assets.mainAssetBundle.LoadAsset<Texture>("texHenryIcon"),
             bodyColor = Color.white,
@@ -190,13 +193,10 @@ namespace HenryMod.Modules.Survivors
 
         public override void InitializeSkins()
         {
-            GameObject model = bodyPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
-            CharacterModel characterModel = model.GetComponent<CharacterModel>();
+            ModelSkinController skinController = prefabCharacterModel.gameObject.AddComponent<ModelSkinController>();
+            ChildLocator childLocator = prefabCharacterModel.GetComponent<ChildLocator>();
 
-            ModelSkinController skinController = model.AddComponent<ModelSkinController>();
-            ChildLocator childLocator = model.GetComponent<ChildLocator>();
-
-            CharacterModel.RendererInfo[] defaultRendererinfos = characterModel.baseRendererInfos;
+            CharacterModel.RendererInfo[] defaultRendererinfos = prefabCharacterModel.baseRendererInfos;
 
             List<SkinDef> skins = new List<SkinDef>();
 
@@ -205,11 +205,11 @@ namespace HenryMod.Modules.Survivors
             SkinDef defaultSkin = Modules.Skins.CreateSkinDef(HENRY_PREFIX + "DEFAULT_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMainSkin"),
                 defaultRendererinfos,
-                model);
+                prefabCharacterModel.gameObject);
 
             //these are your Mesh Replacements. The order here is based on your CustomRendererInfos from earlier
             //pass in meshes as they are named in your assetbundle
-            //defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(defaultRenderers,
+            //defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(defaultRendererinfos,
             //    "meshHenrySword",
             //    "meshHenryGun",
             //    "meshHenry");
@@ -225,7 +225,7 @@ namespace HenryMod.Modules.Survivors
             SkinDef masterySkin = Modules.Skins.CreateSkinDef(HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_MASTERY_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
                 defaultRendererinfos,
-                model,
+                prefabCharacterModel.gameObject,
                 masterySkinUnlockableDef);
 
             //adding the mesh replacements as above. 

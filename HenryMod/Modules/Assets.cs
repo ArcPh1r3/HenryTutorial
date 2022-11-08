@@ -84,7 +84,7 @@ namespace HenryMod.Modules
 
             // feel free to delete everything in here and load in your own assets instead
             // it should work fine even if left as is- even if the assets aren't in the bundle
-
+            
             swordHitSoundEvent = CreateNetworkSoundEventDef("HenrySwordHit");
 
             bombExplosionEffect = LoadEffect("BombExplosionEffect", "HenryBombExplosion");
@@ -176,11 +176,6 @@ namespace HenryMod.Modules
             }
 
             return PrefabAPI.InstantiateClone(model, model.name, false);
-        }
-
-        internal static Texture LoadCharacterIconGeneric(string characterName)
-        {
-            return mainAssetBundle.LoadAsset<Texture>("tex" + characterName + "Icon");
         }
 
         internal static GameObject LoadCrosshair(string crosshairName)

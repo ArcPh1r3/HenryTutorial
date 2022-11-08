@@ -7,8 +7,6 @@ namespace HenryMod.Modules.Characters
 {
     internal abstract class CharacterBase
     {
-        public static CharacterBase instance;
-
         public abstract string bodyName { get; }
 
         public abstract BodyInfo bodyInfo { get; set; }
@@ -21,12 +19,12 @@ namespace HenryMod.Modules.Characters
         public virtual ItemDisplaysBase itemDisplays { get; } = null;
 
         public virtual GameObject bodyPrefab { get; set; }
-        public virtual CharacterModel characterBodyModel { get; set; }
+        public virtual CharacterBody prefabCharacterBody { get; set; }
+        public virtual CharacterModel prefabCharacterModel { get; set; }
         public string fullBodyName => bodyName + "Body";
 
         public virtual void Initialize()
         {
-            instance = this;
             InitializeCharacter();
         }
 
@@ -50,11 +48,12 @@ namespace HenryMod.Modules.Characters
         protected virtual void InitializeCharacterBodyAndModel()
         {
             bodyPrefab = Modules.Prefabs.CreateBodyPrefab(bodyName + "Body", "mdl" + bodyName, bodyInfo);
+            prefabCharacterBody = bodyPrefab.GetComponent<CharacterBody>();
             InitializeCharacterModel();
         }
         protected virtual void InitializeCharacterModel()
         {
-            characterBodyModel = Modules.Prefabs.SetupCharacterModel(bodyPrefab, customRendererInfos);
+            prefabCharacterModel = Modules.Prefabs.SetupCharacterModel(bodyPrefab, customRendererInfos);
         }
 
         protected virtual void InitializeCharacterMaster() { }
@@ -82,7 +81,7 @@ namespace HenryMod.Modules.Characters
 
         public virtual void InitializeDoppelganger(string clone)
         {
-            Modules.Prefabs.CreateGenericDoppelganger(instance.bodyPrefab, bodyName + "MonsterMaster", clone);
+            Modules.Prefabs.CreateGenericDoppelganger(bodyPrefab, bodyName + "MonsterMaster", clone);
         }
 
         public virtual void InitializeItemDisplays()
@@ -90,7 +89,7 @@ namespace HenryMod.Modules.Characters
             ItemDisplayRuleSet itemDisplayRuleSet = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
             itemDisplayRuleSet.name = "idrs" + bodyName;
 
-            characterBodyModel.itemDisplayRuleSet = itemDisplayRuleSet;
+            prefabCharacterModel.itemDisplayRuleSet = itemDisplayRuleSet;
 
             if (itemDisplays != null)
             {
@@ -100,7 +99,7 @@ namespace HenryMod.Modules.Characters
 
         public void SetItemDisplays(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> obj)
         {
-            itemDisplays.SetItemDisplays(characterBodyModel.itemDisplayRuleSet);
+            itemDisplays.SetItemDisplays(prefabCharacterModel.itemDisplayRuleSet);
         }
 
     }
