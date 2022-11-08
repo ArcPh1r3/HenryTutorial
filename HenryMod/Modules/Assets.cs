@@ -64,8 +64,7 @@ namespace HenryMod.Modules
         }
 
         internal static void LoadSoundbank()
-        {                                                                
-            //soundbank currently broke, but this is how you should load yours
+        {
             using (Stream manifestResourceStream2 = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{csProjName}.HenryBank.bnk"))
             {
                 byte[] array = new byte[manifestResourceStream2.Length];

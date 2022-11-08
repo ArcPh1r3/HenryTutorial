@@ -44,7 +44,7 @@ namespace HenryMod.Modules.Survivors
 
         protected virtual void InitializeDisplayPrefab()
         {
-            displayPrefab = Modules.Prefabs.CreateDisplayPrefab(bodyName + "Display", bodyPrefab, bodyInfo);
+            displayPrefab = Modules.Prefabs.CreateDisplayPrefab(prefabBodyName + "Display", bodyPrefab, bodyInfo);
         }
         public virtual void InitializeUnlockables()
         {

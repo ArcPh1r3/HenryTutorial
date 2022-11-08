@@ -12,9 +12,9 @@ namespace HenryMod.Modules.Survivors
     {
         //used when building your character using the prefabs you set up in unity
         //don't upload to thunderstore without changing this
-        public override string bodyName => "Henry";
+        public override string prefabBodyName => "Henry";
 
-        public const string HENRY_PREFIX = HenryPlugin.DEVELOPER_PREFIX + "_HENRYTUTORIAL_BODY_";
+        public const string HENRY_PREFIX = HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_";
 
         //used when registering your survivor's language tokens
         public override string survivorTokenPrefix => HENRY_PREFIX;
@@ -80,11 +80,10 @@ namespace HenryMod.Modules.Survivors
         public override void InitializeHitboxes()
         {
             ChildLocator childLocator = bodyPrefab.GetComponentInChildren<ChildLocator>();
-            GameObject model = childLocator.gameObject;
 
             //example of how to create a hitbox
             //Transform hitboxTransform = childLocator.FindChild("SwordHitbox");
-            //Modules.Prefabs.SetupHitbox(model, hitboxTransform, "Sword");
+            //Modules.Prefabs.SetupHitbox(prefabCharacterModel.gameObject, hitboxTransform, "Sword");
         }
 
         public override void InitializeSkills()
@@ -190,7 +189,7 @@ namespace HenryMod.Modules.Survivors
             Modules.Skills.AddSpecialSkills(bodyPrefab, bombSkillDef);
             #endregion
         }
-
+        
         public override void InitializeSkins()
         {
             ModelSkinController skinController = prefabCharacterModel.gameObject.AddComponent<ModelSkinController>();

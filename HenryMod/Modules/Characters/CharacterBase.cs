@@ -7,7 +7,7 @@ namespace HenryMod.Modules.Characters
 {
     internal abstract class CharacterBase
     {
-        public abstract string bodyName { get; }
+        public abstract string prefabBodyName { get; }
 
         public abstract BodyInfo bodyInfo { get; set; }
 
@@ -21,7 +21,7 @@ namespace HenryMod.Modules.Characters
         public virtual GameObject bodyPrefab { get; set; }
         public virtual CharacterBody prefabCharacterBody { get; set; }
         public virtual CharacterModel prefabCharacterModel { get; set; }
-        public string fullBodyName => bodyName + "Body";
+        public string fullBodyName => prefabBodyName + "Body";
 
         public virtual void Initialize()
         {
@@ -47,7 +47,7 @@ namespace HenryMod.Modules.Characters
 
         protected virtual void InitializeCharacterBodyAndModel()
         {
-            bodyPrefab = Modules.Prefabs.CreateBodyPrefab(bodyName + "Body", "mdl" + bodyName, bodyInfo);
+            bodyPrefab = Modules.Prefabs.CreateBodyPrefab(prefabBodyName + "Body", "mdl" + prefabBodyName, bodyInfo);
             prefabCharacterBody = bodyPrefab.GetComponent<CharacterBody>();
             InitializeCharacterModel();
         }
@@ -81,13 +81,13 @@ namespace HenryMod.Modules.Characters
 
         public virtual void InitializeDoppelganger(string clone)
         {
-            Modules.Prefabs.CreateGenericDoppelganger(bodyPrefab, bodyName + "MonsterMaster", clone);
+            Modules.Prefabs.CreateGenericDoppelganger(bodyPrefab, bodyInfo.bodyName + "MonsterMaster", clone);
         }
 
         public virtual void InitializeItemDisplays()
         {
             ItemDisplayRuleSet itemDisplayRuleSet = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
-            itemDisplayRuleSet.name = "idrs" + bodyName;
+            itemDisplayRuleSet.name = "idrs" + prefabBodyName;
 
             prefabCharacterModel.itemDisplayRuleSet = itemDisplayRuleSet;
 
