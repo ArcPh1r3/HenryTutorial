@@ -62,11 +62,11 @@ namespace HenryMod.Modules {
             bodyComponent._defaultCrosshairPrefab = bodyInfo.crosshair;
             bodyComponent.hideCrosshair = false;
             bodyComponent.preferredPodPrefab = bodyInfo.podPrefab;
-
+            
             //stats
             bodyComponent.baseMaxHealth = bodyInfo.maxHealth;
             bodyComponent.baseRegen = bodyInfo.healthRegen;
-            bodyComponent.levelArmor = bodyInfo.armorGrowth;
+            bodyComponent.baseArmor = bodyInfo.armor;
             bodyComponent.baseMaxShield = bodyInfo.shield;
 
             bodyComponent.baseDamage = bodyInfo.damage;
@@ -79,18 +79,36 @@ namespace HenryMod.Modules {
             //level stats
             bodyComponent.autoCalculateLevelStats = bodyInfo.autoCalculateLevelStats;
 
-            bodyComponent.levelDamage = bodyInfo.damageGrowth;
-            bodyComponent.levelAttackSpeed = bodyInfo.attackSpeedGrowth;
-            bodyComponent.levelCrit = bodyInfo.critGrowth;
+            if (bodyInfo.autoCalculateLevelStats) {
 
-            bodyComponent.levelMaxHealth = bodyInfo.healthGrowth;
-            bodyComponent.levelRegen = bodyInfo.regenGrowth;
-            bodyComponent.baseArmor = bodyInfo.armor;
-            bodyComponent.levelMaxShield = bodyInfo.shieldGrowth;
+                bodyComponent.levelMaxHealth = Mathf.Round(bodyComponent.baseMaxHealth * 0.3f);
+                bodyComponent.levelMaxShield = Mathf.Round(bodyComponent.baseMaxShield * 0.3f);
+                bodyComponent.levelRegen = bodyComponent.baseRegen * 0.2f;
 
-            bodyComponent.levelMoveSpeed = bodyInfo.moveSpeedGrowth;
-            bodyComponent.levelJumpPower = bodyInfo.jumpPowerGrowth;
+                bodyComponent.levelMoveSpeed = 0f;
+                bodyComponent.levelJumpPower = 0f;
 
+                bodyComponent.levelDamage = bodyComponent.baseDamage * 0.2f;
+                bodyComponent.levelAttackSpeed = 0f;
+                bodyComponent.levelCrit = 0f;
+
+                bodyComponent.levelArmor = 0f;
+
+            } else {
+
+                bodyComponent.levelMaxHealth = bodyInfo.healthGrowth;
+                bodyComponent.levelMaxShield = bodyInfo.shieldGrowth;
+                bodyComponent.levelRegen = bodyInfo.regenGrowth;
+
+                bodyComponent.levelMoveSpeed = bodyInfo.moveSpeedGrowth;
+                bodyComponent.levelJumpPower = bodyInfo.jumpPowerGrowth;
+
+                bodyComponent.levelDamage = bodyInfo.damageGrowth;
+                bodyComponent.levelAttackSpeed = bodyInfo.attackSpeedGrowth;
+                bodyComponent.levelCrit = bodyInfo.critGrowth;
+
+                bodyComponent.levelArmor = bodyInfo.armorGrowth;
+            }
             //other
             bodyComponent.baseAcceleration = bodyInfo.acceleration;
 
