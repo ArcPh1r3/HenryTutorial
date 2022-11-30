@@ -20,7 +20,7 @@ namespace HenryMod.Modules
                 Name = skinName,
                 NameToken = skinName,
                 ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-                RendererInfos = defaultRendererInfos,
+                RendererInfos = new CharacterModel.RendererInfo[defaultRendererInfos.Length],
                 RootObject = root,
                 UnlockableDef = unlockableDef
             };

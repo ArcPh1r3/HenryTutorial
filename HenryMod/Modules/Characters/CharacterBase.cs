@@ -148,15 +148,16 @@ namespace HenryMod.Modules.Characters
         //stat growth
         /// <summary>
         /// Leave this alone, and you don't need to worry about setting any of the stat growth values. They'll be set at the consistent ratio that all vanilla survivors have.
+        /// <para>If You do, healthGrowth should be maxHealth * 0.3f, regenGrowth should be healthRegen * 0.2f, damageGrowth should be damage * 0.2f</para>
         /// </summary>
         public bool autoCalculateLevelStats = true;
 
-        public float healthGrowth = 30f;
-        public float regenGrowth = 0.2f;
+        public float healthGrowth = 100f * 0.3f;
+        public float regenGrowth = 1f * 0.2f;
         public float armorGrowth = 0f;
         public float shieldGrowth = 0f;
 
-        public float damageGrowth = 2.4f;
+        public float damageGrowth = 12f * 0.2f;
         public float attackSpeedGrowth = 0f;
         public float critGrowth = 0f;
 
