@@ -8,7 +8,7 @@ Creating a character is a daunting task. Between modeling, animation, coding, sk
 
 The first step would be cloning this repo and opening up `HenryMod.sln` in `Visual Studio`.
 
-The recommended starting point is skill creation. [This](https://github.com/risk-of-thunder/R2Wiki/wiki/Custom-Skill-Creation-&-Adding-skills "Custom Skill Creation & Adding Skills") tutorial is a good place to start, HOWEVER- step 1 goes over adding the skill to a body, which is already streamlined with Henry. I recommend starting from step 2 and working with his existing skills to make what you want.
+The recommended starting point is skill creation. [This](https://risk-of-thunder.github.io/R2Wiki/Mod-Creation/Assets/Skills/) tutorial is a good place to start, HOWEVER- step 1 goes over adding the skill to a body, which is already streamlined with Henry. I recommend starting from step 2 and working with his existing skills to make what you want.
 
 Creating skills is a pretty specific process that involves a lot of hard coding that greatly differs depending on what you want the skill to do, so there's not a whole lot that can be explained here. 3 basic types of attacks, OverlapAttacks (melee), BulletAttacks (hitscan) and Projectiles have been included as examples. 
 
@@ -44,7 +44,7 @@ Once that's done, follow these steps:
   8. Once again, drag it into the `Project` window to create another prefab, and when prompted, make a `Prefab Variant`. Then change the name of this to "MyCharacterNameDisplay", using the same name MyCharacterName from before. This will be your display prefab used in the lobby. Here we usually the `Animator` to a new one that just plays the lobby animation. 
   9. Once this is all done, open the AssetBundle Browser and create a new AssetBundle (If you don't have the AssetBundle Browser window, go to Windows > Packages and there you can install it). Drag whatever assets you're using into there and build it. I like to have everything I need in a single folder and just drag that to keep things simple.
   10. Put the AssetBundle you've just created into your C# project. In visual studio, find the file in the Solution Explorer, right click it and hit Properties. Set Build Action to Embedded Resource.  
-  *10-1. Note: Yes, there is a [better way](https://github.com/risk-of-thunder/R2Wiki/wiki/Loading-Resources-Into-the-Game-(The-actual-sane-way)) to load assetbundles with your project, and I recommend looking into that when you can, especially if your assetbundle starts to get big, but for now, the embedded way is simpler for tutorial purposes.*
+  *10-1. Note: Embedding your bundle like this causes duplicate allocations in ram. There is a [better way](https://risk-of-thunder.github.io/R2Wiki/Mod-Creation/Assets/Loading-Assets/) to load assetbundles with your project. Definitely look into that if your bundle is getting big. For now, the embedded method is simpler for tutorial purposes.*
 
 If this was done right, you should be able to navigate to where you built the AssetBundle and see a game ready bundle. Next step is hooking it all up in your code.
 
@@ -124,9 +124,9 @@ This code right here is what sets up your entire `CharacterBody` prefab. You can
 
 A few things to note:
 
-* The names of all the crosshair prefabs can be found [here](https://github.com/risk-of-thunder/R2Wiki/wiki/Resources-Paths)
+* The names of all the crosshair prefabs can be found [here](https://risk-of-thunder.github.io/R2Wiki/Mod-Creation/Developer-Reference/Addressables-Assets-Keys/)
 * Having duplicate body names tends to break the entire game so make sure the name you choose is something original. It's something the player never sees so it can be complete nonsense if you want.
-  * That said, it must match the naming of your prefabs in unity. If your prefab is "mdlHenry", the `bodyName` must be "Henry".
+  * That said, it must match the naming of your prefabs in unity. If your prefab is "mdlFrederick", the `bodyName` must be "Frederick".
 * Stat scaling fields aren't shown here as there's a standard for those that should be followed, but there's nothing stopping you from changing it manually
 * Check out the BodyInfo class for more fields to mess with. the most important ones are here so you're likely not to need to.
 
