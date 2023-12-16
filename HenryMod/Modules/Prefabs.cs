@@ -7,7 +7,6 @@ using HenryMod.Modules.Characters;
 namespace HenryMod.Modules {
     // module for creating body prefabs and whatnot
     // recommended to simply avoid touching this unless you REALLY need to
-    // oh boy do I need to
 
     internal static class Prefabs
     {
@@ -38,7 +37,7 @@ namespace HenryMod.Modules {
                 return null;
             }
 
-            GameObject newBodyPrefab = PrefabAPI.InstantiateClone(clonedBody, bodyName);
+            GameObject newBodyPrefab = PrefabAPI.InstantiateClone(clonedBody, bodyInfo.bodyName);
 
             Transform modelBaseTransform = null;
             GameObject model = null;
@@ -53,7 +52,6 @@ namespace HenryMod.Modules {
             #region CharacterBody
             CharacterBody bodyComponent = newBodyPrefab.GetComponent<CharacterBody>();
             //identity
-            bodyComponent.name = bodyInfo.bodyName;
             bodyComponent.baseNameToken = bodyInfo.bodyNameToken;
             bodyComponent.subtitleNameToken = bodyInfo.subtitleNameToken;
             bodyComponent.portraitIcon = bodyInfo.characterPortrait;

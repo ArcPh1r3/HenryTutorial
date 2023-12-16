@@ -8,13 +8,13 @@ using UnityEngine;
 
 namespace HenryMod.Modules.Survivors
 {
-    internal class MyCharacter : SurvivorBase
+    internal class HenrySurvivor : SurvivorBase
     {
         //used when building your character using the prefabs you set up in unity
         //don't upload to thunderstore without changing this
         public override string prefabBodyName => "Henry";
 
-        public const string HENRY_PREFIX = HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_";
+        public const string HENRY_PREFIX = HenryPlugin.DEVELOPER_PREFIX + "_HENRY_";
 
         //used when registering your survivor's language tokens
         public override string survivorTokenPrefix => HENRY_PREFIX;
@@ -93,13 +93,16 @@ namespace HenryMod.Modules.Survivors
 
             #region Primary
             //Creates a skilldef for a typical primary 
-            SkillDef primarySkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo(prefix + "_HENRY_BODY_PRIMARY_SLASH_NAME",
-                                                                                      prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION",
-                                                                                      Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
-                                                                                      new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)),
-                                                                                      "Weapon",
-                                                                                      true));
-
+            SteppedSkillDef primarySkillDef = Modules.Skills.CreateSkillDef<SteppedSkillDef>
+                (new SkillDefInfo(prefix + "_HENRY_BODY_PRIMARY_SLASH_NAME",
+                prefix + "_HENRY_BODY_PRIMARY_SLASH_DESCRIPTION",
+                Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)),
+                "Weapon",
+                true));
+            //only needed if your skill is a steppedSkilldef
+            primarySkillDef.stepCount = 2;
+            primarySkillDef.stepGraceDuration = 1;
 
             Modules.Skills.AddPrimarySkills(bodyPrefab, primarySkillDef);
             #endregion

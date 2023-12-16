@@ -1,13 +1,14 @@
 ﻿using EntityStates;
 using RoR2;
 using RoR2.Audio;
+using RoR2.Skills;
 using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace HenryMod.SkillStates.BaseStates
 {
-    public class BaseMeleeAttack : BaseSkillState
+    public class BaseMeleeAttack : BaseSkillState, SteppedSkillDef.IStepSetter
     {
         public int swingIndex;
 
@@ -19,9 +20,9 @@ namespace HenryMod.SkillStates.BaseStates
         protected float pushForce = 300f;
         protected Vector3 bonusForce = Vector3.zero;
         protected float baseDuration = 1f;
-        protected float attackStartTime = 0.2f;
-        protected float attackEndTime = 0.4f;
-        protected float baseEarlyExitTime = 0.4f;
+        protected float attackStartPercentTime = 0.2f;
+        protected float attackEndPercentTime = 0.4f;
+        protected float earlyExitPercentTime = 0.4f;
         protected float hitStopDuration = 0.012f;
         protected float attackRecoil = 0.75f;
         protected float hitHopVelocity = 4f;
@@ -30,11 +31,11 @@ namespace HenryMod.SkillStates.BaseStates
         protected string swingSoundString = "";
         protected string hitSoundString = "";
         protected string muzzleString = "SwingCenter";
+        protected string playbackRateParam = "Slash.playbackRate";
         protected GameObject swingEffectPrefab;
         protected GameObject hitEffectPrefab;
         protected NetworkSoundEventIndex impactSound;
 
-        private float earlyExitTime;
         public float duration;
         private bool hasFired;
         private float hitPauseTimer;
@@ -50,7 +51,6 @@ namespace HenryMod.SkillStates.BaseStates
         {
             base.OnEnter();
             this.duration = this.baseDuration / this.attackSpeedStat;
-            this.earlyExitTime = this.baseEarlyExitTime / this.attackSpeedStat;
             this.hasFired = false;
             this.animator = base.GetModelAnimator();
             base.StartAimMode(0.5f + this.duration, false);
@@ -84,7 +84,7 @@ namespace HenryMod.SkillStates.BaseStates
 
         protected virtual void PlayAttackAnimation()
         {
-            base.PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), "Slash.playbackRate", this.duration, 0.05f);
+            base.PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), playbackRateParam, this.duration, 0.05f);
         }
 
         public override void OnExit()
@@ -118,7 +118,7 @@ namespace HenryMod.SkillStates.BaseStates
             if (!this.inHitPause && this.hitStopDuration > 0f)
             {
                 this.storedVelocity = base.characterMotor.velocity;
-                this.hitStopCachedState = base.CreateHitStopCachedState(base.characterMotor, this.animator, "Slash.playbackRate");
+                this.hitStopCachedState = base.CreateHitStopCachedState(base.characterMotor, this.animator, playbackRateParam);
                 this.hitPauseTimer = this.hitStopDuration / this.attackSpeedStat;
                 this.inHitPause = true;
             }
@@ -147,18 +147,6 @@ namespace HenryMod.SkillStates.BaseStates
             }
         }
 
-        protected virtual void SetNextState()
-        {
-            int index = this.swingIndex;
-            if (index == 0) index = 1;
-            else index = 0;
-
-            this.outer.SetNextState(new BaseMeleeAttack
-            {
-                swingIndex = index
-            });
-        }
-
         public override void FixedUpdate()
         {
             base.FixedUpdate();
@@ -179,22 +167,12 @@ namespace HenryMod.SkillStates.BaseStates
             else
             {
                 if (base.characterMotor) base.characterMotor.velocity = Vector3.zero;
-                if (this.animator) this.animator.SetFloat("Swing.playbackRate", 0f);
+                if (this.animator) this.animator.SetFloat(playbackRateParam, 0f);
             }
 
-            if (this.stopwatch >= (this.duration * this.attackStartTime) && this.stopwatch <= (this.duration * this.attackEndTime))
+            if (this.stopwatch >= (this.duration * this.attackStartPercentTime) && this.stopwatch <= (this.duration * this.attackEndPercentTime))
             {
                 this.FireAttack();
-            }
-
-            if (this.stopwatch >= (this.duration - this.earlyExitTime) && base.isAuthority)
-            {
-                if (base.inputBank.skill1.down)
-                {
-                    if (!this.hasFired) this.FireAttack();
-                    this.SetNextState();
-                    return;
-                }
             }
 
             if (this.stopwatch >= this.duration && base.isAuthority)
@@ -206,6 +184,10 @@ namespace HenryMod.SkillStates.BaseStates
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
+            if (this.stopwatch >= this.duration * this.earlyExitPercentTime)
+            {
+                return InterruptPriority.Any;
+            }
             return InterruptPriority.Skill;
         }
 
@@ -219,6 +201,11 @@ namespace HenryMod.SkillStates.BaseStates
         {
             base.OnDeserialize(reader);
             this.swingIndex = reader.ReadInt32();
+        }
+
+        public void SetStep(int i)
+        {
+            swingIndex = i;
         }
     }
 }

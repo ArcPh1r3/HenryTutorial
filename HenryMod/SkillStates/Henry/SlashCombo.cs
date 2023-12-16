@@ -16,9 +16,9 @@ namespace HenryMod.SkillStates
             this.pushForce = 300f;
             this.bonusForce = Vector3.zero;
             this.baseDuration = 1f;
-            this.attackStartTime = 0.2f;
-            this.attackEndTime = 0.4f;
-            this.baseEarlyExitTime = 0.4f;
+            this.attackStartPercentTime = 0.2f;
+            this.attackEndPercentTime = 0.4f;
+            this.earlyExitPercentTime = 0.4f;
             this.hitStopDuration = 0.012f;
             this.attackRecoil = 0.5f;
             this.hitHopVelocity = 4f;
@@ -26,6 +26,7 @@ namespace HenryMod.SkillStates
             this.swingSoundString = "HenrySwordSwing";
             this.hitSoundString = "";
             this.muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
+            this.playbackRateParam = "Slash.playbackRate";
             this.swingEffectPrefab = Modules.Assets.swordSwingEffect;
             this.hitEffectPrefab = Modules.Assets.swordHitImpactEffect;
 
@@ -36,7 +37,7 @@ namespace HenryMod.SkillStates
 
         protected override void PlayAttackAnimation()
         {
-            base.PlayAttackAnimation();
+            base.PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), playbackRateParam, this.duration, 0.1f * duration);
         }
 
         protected override void PlaySwingEffect()
@@ -47,18 +48,6 @@ namespace HenryMod.SkillStates
         protected override void OnHitEnemyAuthority()
         {
             base.OnHitEnemyAuthority();
-        }
-
-        protected override void SetNextState()
-        {
-            int index = this.swingIndex;
-            if (index == 0) index = 1;
-            else index = 0;
-
-            this.outer.SetNextState(new SlashCombo
-            {
-                swingIndex = index
-            });
         }
 
         public override void OnExit()

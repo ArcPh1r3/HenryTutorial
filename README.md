@@ -74,7 +74,7 @@ A simple component that's used to easily reference child objects. This is useful
 
 #### InputBankTest
 
-The `InputBank` is used to cache inputs from players as well as fake inputs from AI. You shouldn't need to use this much aside from a few skill interactions, like primary attack combos.
+The `InputBank` is used to cache inputs from players as well as fake inputs from AI. Mainly used to see if a button is being held down. You shouldn't need to use this much aside from a specific skill interactions, like held/charged attacks for example.
 
 * * *
 

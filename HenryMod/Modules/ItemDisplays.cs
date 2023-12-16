@@ -11,8 +11,7 @@ namespace HenryMod.Modules
 
         internal static void PopulateDisplays()
         {
-            PopulateFromBody("MageBody"); //commando is actually missing some displays
-            PopulateFromBody("LunarExploderBody"); //solely for the perfected crown
+            PopulateFromBody("MercBody");
 
             PopulateCustomLightningArm();
 
