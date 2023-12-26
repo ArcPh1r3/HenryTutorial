@@ -3,8 +3,12 @@ using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
 using HenryMod.Modules.Characters;
+using RoR2.CharacterAI;
+using static RoR2.CharacterAI.AISkillDriver;
+using RoR2.Skills;
 
-namespace HenryMod.Modules {
+namespace HenryMod.Modules
+{
     // module for creating body prefabs and whatnot
     // recommended to simply avoid touching this unless you REALLY need to
 
@@ -13,43 +17,73 @@ namespace HenryMod.Modules {
         // cache this just to give our ragdolls the same physic material as vanilla stuff
         private static PhysicMaterial ragdollMaterial;
 
-        public static GameObject CreateDisplayPrefab(string displayModelName, GameObject prefab, BodyInfo bodyInfo)
+        public static GameObject CreateDisplayPrefab(AssetBundle assetBundle, string displayPrefabName, GameObject prefab)
         {
-            GameObject model = Assets.LoadSurvivorModel(displayModelName);
+            GameObject model = assetBundle.LoadAsset<GameObject>(displayPrefabName);
+            if (model == null)
+            {
+                Log.Error($"could not load display prefab {displayPrefabName}. Make sure this prefab exists in assetbundle {assetBundle.name}");
+                return null;
+            }
 
             CharacterModel characterModel = model.GetComponent<CharacterModel>();
-            if (!characterModel) {
+            if (!characterModel)
+            {
                 characterModel = model.AddComponent<CharacterModel>();
             }
             characterModel.baseRendererInfos = prefab.GetComponentInChildren<CharacterModel>().baseRendererInfos;
 
+            //todo material
             Modules.Assets.ConvertAllRenderersToHopooShader(model);
 
             return model.gameObject;
         }
 
-        public static GameObject CreateBodyPrefab(string bodyName, string modelName, BodyInfo bodyInfo)
+        public static GameObject CreateBodyPrefab(AssetBundle assetBundle, string modelName, BodyInfo bodyInfo)
         {
             GameObject clonedBody = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/" + bodyInfo.bodyNameToClone + "Body");
             if (!clonedBody)
             {
-                Log.Error(bodyInfo.bodyNameToClone + "Body is not a valid body, character creation failed");
+                Log.Error(bodyInfo.bodyNameToClone + "Body to clone is not a valid body, character creation failed");
                 return null;
             }
 
             GameObject newBodyPrefab = PrefabAPI.InstantiateClone(clonedBody, bodyInfo.bodyName);
 
-            Transform modelBaseTransform = null;
-            GameObject model = null;
-            if (modelName != "mdl")
+            GameObject model = assetBundle.LoadAsset<GameObject>(modelName);
+            if (model == null)
             {
-                model = Assets.LoadSurvivorModel(modelName);
-                if (model == null) model = newBodyPrefab.GetComponentInChildren<CharacterModel>().gameObject;
-
-                    modelBaseTransform = AddCharacterModelToSurvivorBody(newBodyPrefab, model.transform, bodyInfo);
+                Log.Error($"could not load model prefab {modelName}. Make sure this prefab exists in assetbundle {assetBundle.name}");
+                return null;
             }
 
-            #region CharacterBody
+            //todo funny: why have this backup if you're going to delete it in this next function?
+            //if (model == null) model = newBodyPrefab.GetComponentInChildren<CharacterModel>().gameObject;
+
+            Transform modelBaseTransform = AddCharacterModelToSurvivorBody(newBodyPrefab, model.transform, bodyInfo);
+
+            SetupCharacterBody(newBodyPrefab, bodyInfo);
+
+            //todo setup
+            SetupCameraTargetParams(newBodyPrefab, bodyInfo);
+            SetupModelLocator(newBodyPrefab, modelBaseTransform, model.transform);
+            //SetupRigidbody(newPrefab);
+            SetupCapsuleCollider(newBodyPrefab);
+            SetupMainHurtbox(newBodyPrefab, model);
+
+            SetupAimAnimator(newBodyPrefab, model);
+
+            if (modelBaseTransform != null) SetupCharacterDirection(newBodyPrefab, modelBaseTransform, model.transform);
+            SetupFootstepController(model);
+            SetupRagdoll(model);
+
+            Modules.Content.AddCharacterBodyPrefab(newBodyPrefab);
+
+            return newBodyPrefab;
+        }
+
+        private static void SetupCharacterBody(GameObject newBodyPrefab, BodyInfo bodyInfo)
+        {
             CharacterBody bodyComponent = newBodyPrefab.GetComponent<CharacterBody>();
             //identity
             bodyComponent.baseNameToken = bodyInfo.bodyNameToken;
@@ -60,7 +94,7 @@ namespace HenryMod.Modules {
             bodyComponent._defaultCrosshairPrefab = bodyInfo.crosshair;
             bodyComponent.hideCrosshair = false;
             bodyComponent.preferredPodPrefab = bodyInfo.podPrefab;
-            
+
             //stats
             bodyComponent.baseMaxHealth = bodyInfo.maxHealth;
             bodyComponent.baseRegen = bodyInfo.healthRegen;
@@ -77,7 +111,8 @@ namespace HenryMod.Modules {
             //level stats
             bodyComponent.autoCalculateLevelStats = bodyInfo.autoCalculateLevelStats;
 
-            if (bodyInfo.autoCalculateLevelStats) {
+            if (bodyInfo.autoCalculateLevelStats)
+            {
 
                 bodyComponent.levelMaxHealth = Mathf.Round(bodyComponent.baseMaxHealth * 0.3f);
                 bodyComponent.levelMaxShield = Mathf.Round(bodyComponent.baseMaxShield * 0.3f);
@@ -92,7 +127,9 @@ namespace HenryMod.Modules {
 
                 bodyComponent.levelArmor = 0f;
 
-            } else {
+            }
+            else
+            {
 
                 bodyComponent.levelMaxHealth = bodyInfo.healthGrowth;
                 bodyComponent.levelMaxShield = bodyInfo.shieldGrowth;
@@ -120,38 +157,14 @@ namespace HenryMod.Modules {
             bodyComponent.hullClassification = HullClassification.Human;
 
             bodyComponent.isChampion = false;
-            #endregion
-
-            SetupCameraTargetParams(newBodyPrefab, bodyInfo);
-            SetupModelLocator(newBodyPrefab, modelBaseTransform, model.transform);
-            //SetupRigidbody(newPrefab);
-            SetupCapsuleCollider(newBodyPrefab);
-            SetupMainHurtbox(newBodyPrefab, model);
-
-            SetupAimAnimator(newBodyPrefab, model);
-
-            if (modelBaseTransform != null) SetupCharacterDirection(newBodyPrefab, modelBaseTransform, model.transform);
-            SetupFootstepController(model);
-            SetupRagdoll(model);
-
-            Modules.Content.AddCharacterBodyPrefab(newBodyPrefab);
-
-            return newBodyPrefab;
-        }
-
-        public static void CreateGenericDoppelganger(GameObject bodyPrefab, string masterName, string masterToCopy)
-        {
-            GameObject newMaster = PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterMasters/" + masterToCopy + "MonsterMaster"), masterName, true);
-            newMaster.GetComponent<CharacterMaster>().bodyPrefab = bodyPrefab;
-
-            Modules.Content.AddMasterPrefab(newMaster);
         }
 
         #region ModelSetup
 
-        private static Transform AddCharacterModelToSurvivorBody(GameObject bodyPrefab, Transform modelTransform, BodyInfo bodyInfo) 
+        private static Transform AddCharacterModelToSurvivorBody(GameObject bodyPrefab, Transform modelTransform, BodyInfo bodyInfo)
         {
-            for (int i = bodyPrefab.transform.childCount - 1; i >= 0; i--) {
+            for (int i = bodyPrefab.transform.childCount - 1; i >= 0; i--)
+            {
 
                 Object.DestroyImmediate(bodyPrefab.transform.GetChild(i).gameObject);
             }
@@ -179,7 +192,8 @@ namespace HenryMod.Modules {
             return modelBase.transform;
         }
         public static CharacterModel SetupCharacterModel(GameObject prefab) => SetupCharacterModel(prefab, null);
-        public static CharacterModel SetupCharacterModel(GameObject prefab, CustomRendererInfo[] customInfos) {
+        public static CharacterModel SetupCharacterModel(GameObject prefab, CustomRendererInfo[] customInfos)
+        {
 
             CharacterModel characterModel = prefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<CharacterModel>();
             bool preattached = characterModel != null;
@@ -192,51 +206,67 @@ namespace HenryMod.Modules {
             characterModel.invisibilityCount = 0;
             characterModel.temporaryOverlays = new List<TemporaryOverlay>();
 
-            if (!preattached) {
+            if (!preattached)
+            {
                 SetupCustomRendererInfos(characterModel, customInfos);
             }
-            else {
+            else
+            {
                 SetupPreAttachedRendererInfos(characterModel);
             }
             return characterModel;
         }
 
-        public static void SetupPreAttachedRendererInfos(CharacterModel characterModel) {
-            for (int i = 0; i < characterModel.baseRendererInfos.Length; i++) {
+        public static void SetupPreAttachedRendererInfos(CharacterModel characterModel)
+        {
+            for (int i = 0; i < characterModel.baseRendererInfos.Length; i++)
+            {
                 if (characterModel.baseRendererInfos[i].defaultMaterial == null)
                     characterModel.baseRendererInfos[i].defaultMaterial = characterModel.baseRendererInfos[i].renderer.sharedMaterial;
-                characterModel.baseRendererInfos[i].defaultMaterial.SetHopooMaterial();
+                characterModel.baseRendererInfos[i].defaultMaterial.ConvertDefaultShaderToHopoo();
             }
         }
 
-        public static void SetupCustomRendererInfos(CharacterModel characterModel, CustomRendererInfo[] customInfos) {
+        public static void SetupCustomRendererInfos(CharacterModel characterModel, CustomRendererInfo[] customInfos)
+        {
 
             ChildLocator childLocator = characterModel.GetComponent<ChildLocator>();
-            if (!childLocator) {
+            if (!childLocator)
+            {
                 Log.Error("Failed CharacterModel setup: ChildLocator component does not exist on the model");
                 return;
             }
 
             List<CharacterModel.RendererInfo> rendererInfos = new List<CharacterModel.RendererInfo>();
 
-            for (int i = 0; i < customInfos.Length; i++) {
-                if (!childLocator.FindChild(customInfos[i].childName)) {
+            for (int i = 0; i < customInfos.Length; i++)
+            {
+                if (!childLocator.FindChild(customInfos[i].childName))
+                {
                     Log.Error("Trying to add a RendererInfo for a renderer that does not exist: " + customInfos[i].childName);
-                } else {
+                }
+                else
+                {
                     Renderer rend = childLocator.FindChild(customInfos[i].childName).GetComponent<Renderer>();
-                    if (rend) {
+                    if (rend)
+                    {
 
                         Material mat = customInfos[i].material;
 
-                        if (mat == null) {
-                            if (customInfos[i].dontHotpoo) {
+                        if (mat == null)
+                        {
+                            if (customInfos[i].dontHotpoo)
+                            {
                                 mat = rend.material;
-                            } else {
-                                mat = rend.material.SetHopooMaterial();
+                            }
+                            else
+                            {
+                                mat = rend.material.ConvertDefaultShaderToHopoo();
                             }
                         }
 
-                        rendererInfos.Add(new CharacterModel.RendererInfo {
+                        rendererInfos.Add(new CharacterModel.RendererInfo
+                        {
                             renderer = rend,
                             defaultMaterial = mat,
                             ignoreOverlays = customInfos[i].ignoreOverlays,
@@ -251,6 +281,7 @@ namespace HenryMod.Modules {
         #endregion
 
         #region ComponentSetup
+        //todo ser see which ones of these are fuckinnnnnnnnnnnnnnn serialized
         private static void SetupCharacterDirection(GameObject prefab, Transform modelBaseTransform, Transform modelTransform)
         {
             if (!prefab.GetComponent<CharacterDirection>())
@@ -270,7 +301,6 @@ namespace HenryMod.Modules {
             CameraTargetParams cameraTargetParams = prefab.GetComponent<CameraTargetParams>();
             cameraTargetParams.cameraParams = bodyInfo.cameraParams;
             cameraTargetParams.cameraPivotTransform = prefab.transform.Find("CameraPivot");
-            //cameraTargetParams.aimMode = CameraTargetParams.AimType.Standard;
         }
 
         private static void SetupModelLocator(GameObject prefab, Transform modelBaseTransform, Transform modelTransform)
@@ -286,7 +316,8 @@ namespace HenryMod.Modules {
         //    rigidbody.mass = 100f;
         //}
 
-        private static void SetupCapsuleCollider(GameObject prefab) {
+        private static void SetupCapsuleCollider(GameObject prefab)
+        {
             CapsuleCollider capsuleCollider = prefab.GetComponent<CapsuleCollider>();
             capsuleCollider.center = new Vector3(0f, 0f, 0f);
             capsuleCollider.radius = 0.5f;
@@ -322,13 +353,16 @@ namespace HenryMod.Modules {
             hurtBoxGroup.bullseyeCount = 1;
         }
 
-        public static void SetupHurtBoxes(GameObject bodyPrefab) {
+        public static void SetupHurtBoxes(GameObject bodyPrefab)
+        {
 
             HealthComponent healthComponent = bodyPrefab.GetComponent<HealthComponent>();
 
-            foreach (HurtBoxGroup hurtboxGroup in bodyPrefab.GetComponentsInChildren<HurtBoxGroup>()) {
+            foreach (HurtBoxGroup hurtboxGroup in bodyPrefab.GetComponentsInChildren<HurtBoxGroup>())
+            {
                 hurtboxGroup.mainHurtBox.healthComponent = healthComponent;
-                for (int i = 0; i < hurtboxGroup.hurtBoxes.Length; i++) {
+                for (int i = 0; i < hurtboxGroup.hurtBoxes.Length; i++)
+                {
                     hurtboxGroup.hurtBoxes[i].healthComponent = healthComponent;
                 }
             }
@@ -379,46 +413,175 @@ namespace HenryMod.Modules {
             aimAnimator.giveupDuration = 3f;
             aimAnimator.inputBank = prefab.GetComponent<InputBankTest>();
         }
-
-        public static void SetupHitbox(GameObject prefab, Transform hitboxTransform, string hitboxName)
+        #endregion ComponentSetup
+        //todo windows editorconfig
+        public static void CreateGenericDoppelganger(GameObject bodyPrefab, string masterName, string masterToCopy) => CloneDopplegangerMaster(bodyPrefab, masterName, masterToCopy);
+        public static GameObject CloneDopplegangerMaster(GameObject bodyPrefab, string masterName, string masterToCopy)
         {
-            HitBoxGroup hitBoxGroup = prefab.AddComponent<HitBoxGroup>();
+            GameObject newMaster = PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterMasters/" + masterToCopy + "MonsterMaster"), masterName, true);
+            newMaster.GetComponent<CharacterMaster>().bodyPrefab = bodyPrefab;
 
-            HitBox hitBox = hitboxTransform.gameObject.AddComponent<HitBox>();
-            hitboxTransform.gameObject.layer = LayerIndex.projectile.intVal;
-
-            hitBoxGroup.hitBoxes = new HitBox[]
-            {
-                hitBox
-            };
-
-            hitBoxGroup.groupName = hitboxName;
+            Modules.Content.AddMasterPrefab(newMaster);
+            return newMaster;
         }
 
+        public static GameObject CreateBlankMasterPrefab(GameObject bodyPrefab, string masterName)
+        {
+            GameObject masterObject = PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterMasters/CommandoMonsterMaster"), masterName, true);
+            //should the user call this themselves?
+            Modules.ContentPacks.masterPrefabs.Add(masterObject);
+
+            CharacterMaster characterMaster = masterObject.GetComponent<CharacterMaster>();
+            characterMaster.bodyPrefab = bodyPrefab;
+
+            AISkillDriver[] drivers = masterObject.GetComponents<AISkillDriver>();
+            for (int i = 0; i < drivers.Length; i++)
+            {
+                UnityEngine.Object.Destroy(drivers[i]);
+            }
+
+            return masterObject;
+        }
+
+        public static GameObject LoadMaster(this AssetBundle assetBundle, string assetName, GameObject bodyPrefab)
+        {
+            GameObject newMaster = assetBundle.LoadAsset<GameObject>(assetName);
+            //todo ser
+            //should we add and initialize a new master if one doesn't exist? or should we simply require one be put on the prefab in unity?
+            newMaster.GetComponent<CharacterMaster>().bodyPrefab = bodyPrefab;
+
+            Modules.Content.AddMasterPrefab(newMaster);
+            return newMaster;
+        }
+
+        //nevermind actually adding a component and just editing it is better because you get default values
+        public struct AISkillDriverInfo
+        {
+            //just gonna leave this here while I learn for now
+            [Tooltip("The name of this skill driver for reference purposes.")]
+            public string customName;
+
+            [Tooltip("The slot of the associated skill. Set to None to allow this behavior to run regardless of skill availability.")]
+            public SkillSlot skillSlot;
+
+            [Header("Selection Conditions")]
+            [Tooltip("The skill that the specified slot must have for this behavior to run. Set to none to allow any skill.")]
+            public SkillDef requiredSkill;
+
+            [Tooltip("If set, this cannot be the dominant driver while the skill is on cooldown or out of stock.")]
+            public bool requireSkillReady;
+
+            [Tooltip("If set, this cannot be the dominant driver while the equipment is on cooldown or out of stock.")]
+            public bool requireEquipmentReady;
+
+            [Tooltip("The minimum health fraction required of the user for this behavior.")]
+            public float minUserHealthFraction;
+
+            [Tooltip("The maximum health fraction required of the user for this behavior.")]
+            public float maxUserHealthFraction;
+
+            [Tooltip("The minimum health fraction required of the target for this behavior.")]
+            public float minTargetHealthFraction;
+
+            [Tooltip("The maximum health fraction required of the target for this behavior.")]
+            public float maxTargetHealthFraction;
+
+            [Tooltip("The minimum distance from the target required for this behavior.")]
+            public float minDistance;
+
+            [Tooltip("The maximum distance from the target required for this behavior.")]
+            public float maxDistance;
+
+            public bool selectionRequiresTargetLoS;
+
+            public bool selectionRequiresOnGround;
+
+            public bool selectionRequiresAimTarget;
+
+            [Tooltip("The maximum number of times that this skill can be selected.  If the value is < 0, then there is no maximum.")]
+            public int maxTimesSelected;
+
+            [Header("Behavior")]
+            [Tooltip("The type of object targeted for movement.")]
+            public TargetType moveTargetType;
+
+            [Tooltip("If set, this skill will not be activated unless there is LoS to the target.")]
+            public bool activationRequiresTargetLoS;
+
+            [Tooltip("If set, this skill will not be activated unless there is LoS to the aim target.")]
+            public bool activationRequiresAimTargetLoS;
+
+            [Tooltip("If set, this skill will not be activated unless the aim vector is pointing close to the target.")]
+            public bool activationRequiresAimConfirmation;
+
+            [Tooltip("The movement type to use while this is the dominant skill driver.")]
+            public MovementType movementType;
+
+            public float moveInputScale;
+
+            [Tooltip("Where to look while this is the dominant skill driver")]
+            public AimType aimType;
+
+            [Tooltip("If set, the nodegraph will not be used to direct the local navigator while this is the dominant skill driver. Direction toward the target will be used instead.")]
+            public bool ignoreNodeGraph;
+
+            [Tooltip("If true, the AI will attempt to sprint while this is the dominant skill driver.")]
+            public bool shouldSprint;
+
+            public bool shouldFireEquipment;
+
+            public ButtonPressType buttonPressType;
+
+            [Header("Transition Behavior")]
+            [Tooltip("If non-negative, this value will be used for the driver evaluation timer while this is the dominant skill driver.")]
+            public float driverUpdateTimerOverride;
+
+            [Tooltip("If set and this is the dominant skill driver, the current enemy will be reset at the time of the next evaluation.")]
+            public bool resetCurrentEnemyOnNextDriverSelection;
+
+            [Tooltip("If true, this skill driver cannot be chosen twice in a row.")]
+            public bool noRepeat;
+
+            [Tooltip("The AI skill driver that will be treated as having top priority after this one.")]
+            public AISkillDriver nextHighPriorityOverride;
+        }
+
+        public static void SetupHitbox(GameObject prefab, Transform hitboxTransform, string hitboxName) => SetupHitbox(prefab, hitboxName, hitboxTransform);
         public static void SetupHitbox(GameObject prefab, string hitboxName, params Transform[] hitboxTransforms)
         {
-            HitBoxGroup hitBoxGroup = prefab.AddComponent<HitBoxGroup>();
             List<HitBox> hitBoxes = new List<HitBox>();
 
             foreach (Transform i in hitboxTransforms)
             {
+                if (i == null)
+                {
+                    Log.Error($"Error setting up hitboxGroup for {hitboxName}: hitbox transform was null");
+                    continue;
+                }
                 HitBox hitBox = i.gameObject.AddComponent<HitBox>();
                 i.gameObject.layer = LayerIndex.projectile.intVal;
                 hitBoxes.Add(hitBox);
             }
+
+            if(hitBoxes.Count == 0)
+            {
+                Log.Error($"No hitboxes were set up. aborting setting up hitboxGroup for {hitboxName}");
+                return;
+            }
+
+            HitBoxGroup hitBoxGroup = prefab.AddComponent<HitBoxGroup>();
 
             hitBoxGroup.hitBoxes = hitBoxes.ToArray();
 
             hitBoxGroup.groupName = hitboxName;
         }
 
-        #endregion ComponentSetup
     }
 
     // for simplifying rendererinfo creation
     public class CustomRendererInfo
     {
-        //the childname according to how it's set upin your childlocator
+        //the childname according to how it's set up in your childlocator
         public string childName;
         //the material to use. pass in null to use the material in the bundle
         public Material material = null;

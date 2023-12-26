@@ -438,8 +438,8 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: forwardSpeed
     m_Mirror: 0
-  m_BlendParameter: forwardSpeed
-  m_BlendParameterY: rightSpeed
+  m_BlendParameter: rightSpeed
+  m_BlendParameterY: forwardSpeed
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
@@ -3839,7 +3839,7 @@ AnimatorStateMachine:
     m_Position: {x: 530, y: 40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102117556514851194}
-    m_Position: {x: 240, y: 36, z: 0}
+    m_Position: {x: 240, y: 40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102960202541341604}
     m_Position: {x: 240, y: 168, z: 0}

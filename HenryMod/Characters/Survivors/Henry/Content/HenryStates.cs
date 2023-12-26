@@ -1,15 +1,9 @@
 ﻿using HenryMod.SkillStates;
-using HenryMod.SkillStates.BaseStates;
-using System.Collections.Generic;
-using System;
 
-namespace HenryMod.Modules
-{
-    public static class States
-    {
-        internal static void RegisterStates()
-        {
-            Modules.Content.AddEntityState(typeof(BaseMeleeAttack));
+//todo windows change namespace
+namespace HenryMod.Characters.Survivors.Henry.Content {
+    public static class HenryStates {
+        public static void Init() {
             Modules.Content.AddEntityState(typeof(SlashCombo));
 
             Modules.Content.AddEntityState(typeof(Shoot));

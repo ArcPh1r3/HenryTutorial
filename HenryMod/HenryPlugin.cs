@@ -15,13 +15,6 @@ namespace HenryMod
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
-    [R2APISubmoduleDependency(new string[]
-    {
-        "PrefabAPI",
-        "LanguageAPI",
-        "SoundAPI",
-        "UnlockableAPI"
-    })]
 
     public class HenryPlugin : BaseUnityPlugin
     {
@@ -42,41 +35,16 @@ namespace HenryMod
             instance = this;
 
             Log.Init(Logger);
-            Modules.Assets.Initialize(); // load assets and read config
-            Modules.Config.ReadConfig();
-            Modules.States.RegisterStates(); // register states for networking
-            Modules.Buffs.RegisterBuffs(); // add and register custom buffs/debuffs
-            Modules.Projectiles.RegisterProjectiles(); // add and register custom projectiles
-            Modules.Tokens.AddTokens(); // register name tokens
-            Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
+            Modules.Language.Init();
+            
+            // collect item display prefabs for use in our display rules
+            Modules.ItemDisplays.PopulateDisplays();
 
-            // survivor initialization
-            new HenrySurvivor().Initialize();
+            // character initialization. this should be after itemdisplays
+            HenrySurvivor.instance.Initialize();
 
-            // now make a content pack and add it- this part will change with the next update
+            // now make a content pack and add it this has to be last
             new Modules.ContentPacks().Initialize();
-
-            Hook();
-        }
-
-        private void Hook()
-        {
-            // run hooks here, disabling one is as simple as commenting out the line
-            On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
-        }
-
-        private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
-        {
-            orig(self);
-
-            // a simple stat hook, adds armor after stats are recalculated
-            if (self)
-            {
-                if (self.HasBuff(Modules.Buffs.armorBuff))
-                {
-                    self.armor += 300f;
-                }
-            }
         }
     }
 }

@@ -3,8 +3,7 @@ using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace HenryMod.SkillStates
-{
+namespace HenryMod.SkillStates {
     public class Roll : BaseSkillState
     {
         public static float duration = 0.5f;
@@ -51,7 +50,7 @@ namespace HenryMod.SkillStates
 
             if (NetworkServer.active)
             {
-                base.characterBody.AddTimedBuff(Modules.Buffs.armorBuff, 3f * Roll.duration);
+                base.characterBody.AddTimedBuff(HenryMod.Characters.Survivors.Henry.Content.HenryBuffs.armorBuff, 3f * Roll.duration);
                 base.characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.5f * Roll.duration);
             }
         }

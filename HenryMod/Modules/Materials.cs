@@ -9,31 +9,39 @@ namespace HenryMod.Modules
 
         internal static Shader hotpoo = RoR2.LegacyResourcesAPI.Load<Shader>("Shaders/Deferred/HGStandard");
 
-        public static Material CreateHopooMaterial(string materialName)
+        //todo modules: to assets?
+        //todo material: detect shader I suppose
+            //but wait I wanted to do it on assetbundle load. cache them?
+        public static Material LoadMaterial(this AssetBundle assetBundle, string materialName) => CreateHopooMaterialFromBundle(assetBundle, materialName);
+        public static Material CreateHopooMaterialFromBundle(AssetBundle assetBundle, string materialName)
         {
             Material tempMat = cachedMaterials.Find(mat =>
             {
                 materialName.Replace(" (Instance)", "");
                 return mat.name.Contains(materialName);
             });
-            if (tempMat)
+            if (tempMat) {
+                Log.Debug($"{tempMat.name} has already been loaded. returning cached");
                 return tempMat;
-
-            tempMat = Assets.mainAssetBundle.LoadAsset<Material>(materialName);
+            }
+            tempMat = assetBundle.LoadAsset<Material>(materialName);
 
             if (!tempMat)
             {
-                Log.Error("Failed to load material: " + materialName + " - Check to see that the material in your Unity project matches this name");
+                Log.ErrorAssetBundle(materialName, assetBundle.name);
                 return new Material(hotpoo);
             }
 
-            return tempMat.SetHopooMaterial();
+            return tempMat.ConvertDefaultShaderToHopoo();
         }
 
-        public static Material SetHopooMaterial(this Material tempMat)
+        public static Material SetHopooMaterial(this Material tempMat) => ConvertDefaultShaderToHopoo(tempMat);
+        public static Material ConvertDefaultShaderToHopoo(this Material tempMat)
         {
-            if (cachedMaterials.Contains(tempMat))
+            if (cachedMaterials.Contains(tempMat)) {
+                Log.Debug($"{tempMat.name} has already been loaded. returning cached");
                 return tempMat;
+            }
 
             float? bumpScale = null;
             Color? emissionColor = null;
@@ -122,5 +130,6 @@ namespace HenryMod.Modules
             material.SetInt("_Cull", cull ? 1 : 0);
             return material;
         }
+        //todo joe specular
     }
 }

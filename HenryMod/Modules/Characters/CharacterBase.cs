@@ -5,58 +5,91 @@ using UnityEngine;
 
 namespace HenryMod.Modules.Characters
 {
-    internal abstract class CharacterBase
+    internal abstract class CharacterBase<T> where T : CharacterBase<T>, new()
     {
-        public abstract string prefabBodyName { get; }
+        public abstract string assetBundleName { get; }
 
-        public abstract BodyInfo bodyInfo { get; set; }
+        public abstract string bodyName { get; }
+        public abstract string modelPrefabName { get; }
 
-        public abstract CustomRendererInfo[] customRendererInfos { get; set; }
+        public abstract BodyInfo bodyInfo { get; }
 
-        public abstract Type characterMainState { get; }
+        public abstract CustomRendererInfo[] customRendererInfos { get; }
+
+        public virtual Type characterMainState { get; }
         public virtual Type characterSpawnState { get; }
 
         public virtual ItemDisplaysBase itemDisplays { get; } = null;
 
-        public virtual GameObject bodyPrefab { get; set; }
-        public virtual CharacterBody prefabCharacterBody { get; set; }
-        public virtual CharacterModel prefabCharacterModel { get; set; }
-        public string fullBodyName => prefabBodyName + "Body";
+        public GameObject bodyPrefab;
+        public CharacterBody prefabCharacterBody;
+        public CharacterModel prefabCharacterModel;
+
+        private static T _instance;
+        public static T instance {
+            get {
+                if(instance == null) {
+                    _instance = new T();
+                }
+                return _instance;
+            }
+        }
+
+
+        private AssetBundle _assetBundle;
+        public AssetBundle assetBundle {
+            get {
+                if(_assetBundle == null) {
+                    _assetBundle = Assets.LoadAssetBundle(assetBundleName);
+                }
+                return _assetBundle;
+            }
+        }
 
         public virtual void Initialize()
         {
             InitializeCharacter();
         }
 
+        //todo setup
         public virtual void InitializeCharacter()
         {
             InitializeCharacterBodyAndModel();
-            InitializeCharacterMaster();
-
-            InitializeEntityStateMachine();
-            InitializeSkills();
-
-            InitializeHitboxes();
-            InitializeHurtboxes();
-
-            InitializeSkins();
             InitializeItemDisplays();
 
-            InitializeDoppelganger("Merc");
+            InitializeEntityStateMachine();
         }
 
         protected virtual void InitializeCharacterBodyAndModel()
         {
-            bodyPrefab = Modules.Prefabs.CreateBodyPrefab(prefabBodyName + "Body", "mdl" + prefabBodyName, bodyInfo);
+            bodyPrefab = Modules.Prefabs.CreateBodyPrefab(assetBundle, modelPrefabName, bodyInfo);
             prefabCharacterBody = bodyPrefab.GetComponent<CharacterBody>();
+
             InitializeCharacterModel();
+            //todo setup
+            Modules.Prefabs.SetupHurtBoxes(bodyPrefab);
         }
+        //todo setup
         protected virtual void InitializeCharacterModel()
         {
             prefabCharacterModel = Modules.Prefabs.SetupCharacterModel(bodyPrefab, customRendererInfos);
         }
 
-        protected virtual void InitializeCharacterMaster() { }
+        public virtual void InitializeItemDisplays() {
+            ItemDisplayRuleSet itemDisplayRuleSet = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
+            itemDisplayRuleSet.name = "idrs" + bodyName;
+
+            prefabCharacterModel.itemDisplayRuleSet = itemDisplayRuleSet;
+
+            if (itemDisplays != null) {
+                RoR2.ContentManagement.ContentManager.onContentPacksAssigned += SetItemDisplays;
+            }
+        }
+
+        public void SetItemDisplays(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> obj) {
+            itemDisplays.SetItemDisplays(prefabCharacterModel.itemDisplayRuleSet);
+        }
+
         protected virtual void InitializeEntityStateMachine()
         {
             bodyPrefab.GetComponent<EntityStateMachine>().mainStateType = new EntityStates.SerializableEntityStateType(characterMainState);
@@ -70,37 +103,9 @@ namespace HenryMod.Modules.Characters
 
         public abstract void InitializeSkills();
 
-        public virtual void InitializeHitboxes() { }
+        public abstract void InitializeSkins();
 
-        public virtual void InitializeHurtboxes()
-        {
-            Modules.Prefabs.SetupHurtBoxes(bodyPrefab);
-        }
-
-        public virtual void InitializeSkins() { }
-
-        public virtual void InitializeDoppelganger(string clone)
-        {
-            Modules.Prefabs.CreateGenericDoppelganger(bodyPrefab, bodyInfo.bodyName + "MonsterMaster", clone);
-        }
-
-        public virtual void InitializeItemDisplays()
-        {
-            ItemDisplayRuleSet itemDisplayRuleSet = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
-            itemDisplayRuleSet.name = "idrs" + prefabBodyName;
-
-            prefabCharacterModel.itemDisplayRuleSet = itemDisplayRuleSet;
-
-            if (itemDisplays != null)
-            {
-                RoR2.ContentManagement.ContentManager.onContentPacksAssigned += SetItemDisplays;
-            }
-        }
-
-        public void SetItemDisplays(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> obj)
-        {
-            itemDisplays.SetItemDisplays(prefabCharacterModel.itemDisplayRuleSet);
-        }
+        public abstract void InitializeCharacterMaster();
 
     }
 
@@ -165,6 +170,7 @@ namespace HenryMod.Modules.Characters
         public float jumpPowerGrowth = 0f;// jump power per level exists for some reason
         #endregion Stats
 
+        //todo setup
         #region Camera
         public Vector3 aimOriginPosition = new Vector3(0f, 1.6f, 0f);
         public Vector3 modelBasePosition = new Vector3(0f, -0.92f, 0f);

@@ -16,8 +16,8 @@ namespace HenryMod.SkillStates
         public static float DamageCoefficient = 1.6f;
 
         public override void OnEnter()
-        {
-            base.projectilePrefab = Modules.Projectiles.bombPrefab;
+        {                                  //todo postrewrite this too long?
+            base.projectilePrefab = HenryMod.Characters.Survivors.Henry.Content.HenryAssets.bombProjectilePrefab;
             //base.effectPrefab = Modules.Assets.SomeMuzzleEffect;
             //targetmuzzle = "muzzleThrow"
 

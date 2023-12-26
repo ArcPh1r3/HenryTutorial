@@ -8,6 +8,7 @@ namespace HenryMod.Modules
 {
     internal static class Skins
     {
+        //todo to r2api
         internal static SkinDef CreateSkinDef(string skinName, Sprite skinIcon, CharacterModel.RendererInfo[] defaultRendererInfos, GameObject root, UnlockableDef unlockableDef = null)
         {
             SkinDefInfo skinDefInfo = new SkinDefInfo
@@ -93,10 +94,11 @@ namespace HenryMod.Modules
         ///    "meshHenry");
         /// </code>
         /// </summary>
+        /// <param name="assetBundle">your skindef's rendererinfos to access the renderers</param>
         /// <param name="defaultRendererInfos">your skindef's rendererinfos to access the renderers</param>
         /// <param name="meshes">name of the mesh assets in your project</param>
         /// <returns></returns>
-        internal static SkinDef.MeshReplacement[] getMeshReplacements(CharacterModel.RendererInfo[] defaultRendererInfos, params string[] meshes)
+        internal static SkinDef.MeshReplacement[] getMeshReplacements(AssetBundle assetBundle, CharacterModel.RendererInfo[] defaultRendererInfos, params string[] meshes)
         {
 
             List<SkinDef.MeshReplacement> meshReplacements = new List<SkinDef.MeshReplacement>();
@@ -110,7 +112,7 @@ namespace HenryMod.Modules
                 new SkinDef.MeshReplacement
                 {
                     renderer = defaultRendererInfos[i].renderer,
-                    mesh = Assets.mainAssetBundle.LoadAsset<Mesh>(meshes[i])
+                    mesh = assetBundle.LoadAsset<Mesh>(meshes[i])
                 });
             }
 

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HenryMod.Modules.Characters
-{
+//todo windows change namespace
+
+namespace HenryMod.Modules.Characters {
     internal class HenryItemDisplays : ItemDisplaysBase
     {
         protected override void SetItemDisplayRules(List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules)

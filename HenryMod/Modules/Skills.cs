@@ -8,12 +8,31 @@ using UnityEngine;
 
 namespace HenryMod.Modules
 {
-
     internal static class Skills
     {
         #region genericskills
-        public static void CreateSkillFamilies(GameObject targetPrefab, bool destroyExisting = true)
+        /// <summary>
+        /// Create 4 GenericSkills for primary, secondary, utility, and special, and create skillfamilies for them
+        /// </summary>
+        /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
+        /// <param name="destroyExisting">Destroy any existing GenericSkills on the body prefab so you can replace them?</param>
+        public static void CreateSkillFamilies(GameObject targetPrefab, bool destroyExisting = true) => CreateSkillFamilies(targetPrefab, destroyExisting, SkillSlot.Primary, SkillSlot.Secondary, SkillSlot.Utility, SkillSlot.Utility);
+        /// <summary>
+        /// Destroy existing GenericSkills, create in order the GenericSkills for the skillslots desired, and create skillfamilies for them.
+        /// </summary>
+        /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
+        /// <param name="slots">Order of slots to add to the body prefab. Input SkillSlot.None to create a GenericSkill on the prefab outside of usual 4. For example, mul-t's selectable second primary, a selectable passive like acrid, etc</param>
+        public static void CreateSkillFamilies(GameObject targetPrefab, params SkillSlot[] slots) => CreateSkillFamilies(targetPrefab, true, slots);
+
+        /// <summary>
+        /// Create in order the GenericSkills for the skillslots desired, and create skillfamilies for them.
+        /// </summary>
+        /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
+        /// <param name="destroyExisting">Destroy any existing GenericSkills on the body prefab so you can replace them?</param>
+        /// <param name="slots">Order of slots to add to the body prefab. <para>Input SkillSlot.None to create a GenericSkill on the prefab outside of usual 4. These will be called GenericSkill1, with the number being its order on the loadout screen</para><para>For example, mul-t's selectable second primary, a selectable passive like acrid, etc</para></param>
+        public static void CreateSkillFamilies(GameObject targetPrefab, bool destroyExisting, params SkillSlot[] slots)
         {
+            //should this even be a thing here
             if (destroyExisting)
             {
                 foreach (GenericSkill obj in targetPrefab.GetComponentsInChildren<GenericSkill>())
@@ -24,10 +43,28 @@ namespace HenryMod.Modules
 
             SkillLocator skillLocator = targetPrefab.GetComponent<SkillLocator>();
 
-            skillLocator.primary = CreateGenericSkillWithSkillFamily(targetPrefab, "Primary");
-            skillLocator.secondary = CreateGenericSkillWithSkillFamily(targetPrefab, "Secondary");
-            skillLocator.utility = CreateGenericSkillWithSkillFamily(targetPrefab, "Utility");
-            skillLocator.special = CreateGenericSkillWithSkillFamily(targetPrefab, "Special");
+            for (int i = 0; i < slots.Length; i++)
+            {
+                switch (slots[i])
+                {
+                    case SkillSlot.Primary:
+                        skillLocator.primary = CreateGenericSkillWithSkillFamily(targetPrefab, "Primary");
+                        break;
+                    case SkillSlot.Secondary:
+                        skillLocator.secondary = CreateGenericSkillWithSkillFamily(targetPrefab, "Secondary");
+                        break;
+                    case SkillSlot.Utility:
+                        skillLocator.utility = CreateGenericSkillWithSkillFamily(targetPrefab, "Utility");
+                        break;
+                    case SkillSlot.Special:
+                        skillLocator.special = CreateGenericSkillWithSkillFamily(targetPrefab, "Special");
+                        break;
+                    case SkillSlot.None:
+                        CreateGenericSkillWithSkillFamily(targetPrefab, "GenericSkill" + i+1);
+                        break;
+                }
+            }
+
         }
 
         public static GenericSkill CreateGenericSkillWithSkillFamily(GameObject targetPrefab, string familyName, bool hidden = false)
@@ -123,20 +160,24 @@ namespace HenryMod.Modules
 
             skillDef.activationState = skillDefInfo.activationState;
             skillDef.activationStateMachineName = skillDefInfo.activationStateMachineName;
+            skillDef.interruptPriority = skillDefInfo.interruptPriority;
+
             skillDef.baseMaxStock = skillDefInfo.baseMaxStock;
             skillDef.baseRechargeInterval = skillDefInfo.baseRechargeInterval;
+
+            skillDef.rechargeStock = skillDefInfo.rechargeStock;
+            skillDef.requiredStock = skillDefInfo.requiredStock;
+            skillDef.stockToConsume = skillDefInfo.stockToConsume;
+
+            skillDef.dontAllowPastMaxStocks = skillDefInfo.dontAllowPastMaxStocks;
             skillDef.beginSkillCooldownOnSkillEnd = skillDefInfo.beginSkillCooldownOnSkillEnd;
             skillDef.canceledFromSprinting = skillDefInfo.canceledFromSprinting;
             skillDef.forceSprintDuringState = skillDefInfo.forceSprintDuringState;
             skillDef.fullRestockOnAssign = skillDefInfo.fullRestockOnAssign;
-            skillDef.interruptPriority = skillDefInfo.interruptPriority;
             skillDef.resetCooldownTimerOnUse = skillDefInfo.resetCooldownTimerOnUse;
             skillDef.isCombatSkill = skillDefInfo.isCombatSkill;
             skillDef.mustKeyPress = skillDefInfo.mustKeyPress;
             skillDef.cancelSprintingOnActivation = skillDefInfo.cancelSprintingOnActivation;
-            skillDef.rechargeStock = skillDefInfo.rechargeStock;
-            skillDef.requiredStock = skillDefInfo.requiredStock;
-            skillDef.stockToConsume = skillDefInfo.stockToConsume;
 
             skillDef.keywordTokens = skillDefInfo.keywordTokens;
 
@@ -160,25 +201,26 @@ namespace HenryMod.Modules
         public Sprite skillIcon;
 
         public SerializableEntityStateType activationState;
-        public InterruptPriority interruptPriority;
         public string activationStateMachineName;
-
-        public float baseRechargeInterval;
+        public InterruptPriority interruptPriority;
 
         public int baseMaxStock = 1;
+        public float baseRechargeInterval;
+
         public int rechargeStock = 1;
         public int requiredStock = 1;
         public int stockToConsume = 1;
 
-        public bool isCombatSkill = true;
-        public bool canceledFromSprinting;
-        public bool forceSprintDuringState;
-        public bool cancelSprintingOnActivation = true;
-
-        public bool beginSkillCooldownOnSkillEnd;
+        public bool resetCooldownTimerOnUse = false;
         public bool fullRestockOnAssign = true;
-        public bool resetCooldownTimerOnUse;
-        public bool mustKeyPress;
+        public bool dontAllowPastMaxStocks = false;
+        public bool beginSkillCooldownOnSkillEnd = false;
+        public bool mustKeyPress = false;
+
+        public bool isCombatSkill = true;
+        public bool canceledFromSprinting = false;
+        public bool cancelSprintingOnActivation = true;
+        public bool forceSprintDuringState = false;
 
         #region constructors
         public SkillDefInfo() { }
@@ -186,7 +228,8 @@ namespace HenryMod.Modules
         /// Creates a skilldef for a typical primary.
         /// <para>combat skill, cooldown: 0, required stock: 0, InterruptPriority: Any</para>
         /// </summary>
-        public SkillDefInfo(string skillNameToken,
+        public SkillDefInfo(string skillName,
+                            string skillNameToken,
                             string skillDescriptionToken,
                             Sprite skillIcon,
 
@@ -194,7 +237,7 @@ namespace HenryMod.Modules
                             string activationStateMachineName = "Weapon",
                             bool agile = false)
         {
-            this.skillName = skillNameToken;
+            this.skillName = skillName;
             this.skillNameToken = skillNameToken;
             this.skillDescriptionToken = skillDescriptionToken;
             this.skillIcon = skillIcon;
@@ -202,16 +245,16 @@ namespace HenryMod.Modules
             this.activationState = activationState;
             this.activationStateMachineName = activationStateMachineName;
 
+            this.cancelSprintingOnActivation = !agile;
+
+            if (agile) this.keywordTokens = new string[] { "KEYWORD_AGILE" };
+
             this.interruptPriority = InterruptPriority.Any;
             this.isCombatSkill = true;
             this.baseRechargeInterval = 0;
 
             this.requiredStock = 0;
             this.stockToConsume = 0;
-
-            this.cancelSprintingOnActivation = !agile;
-
-            if (agile) this.keywordTokens = new string[] { "KEYWORD_AGILE" };
 
         }
         #endregion construction complete

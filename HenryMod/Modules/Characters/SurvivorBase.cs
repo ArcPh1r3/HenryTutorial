@@ -6,50 +6,38 @@ using UnityEngine;
 using System.Collections.Generic;
 using RoR2.Skills;
 
+//todo windows change namespace
 namespace HenryMod.Modules.Survivors
 {
-    internal abstract class SurvivorBase : CharacterBase
+    internal abstract class SurvivorBase<T> : CharacterBase<T> where T: SurvivorBase<T>, new()
     {
+        public abstract string displayPrefabName { get; }
+
         public abstract string survivorTokenPrefix { get; }
         
         public abstract UnlockableDef characterUnlockableDef { get; }
-
-        public virtual ConfigEntry<bool> characterEnabledConfig { get; }
 
         public virtual GameObject displayPrefab { get; set; }
 
         public override void InitializeCharacter()
         {
-
-            if (characterEnabledConfig != null && !characterEnabledConfig.Value)
-                return;
-
-            InitializeUnlockables();
-
             base.InitializeCharacter();
+            InitializeDisplayPrefab();
 
             InitializeSurvivor();
         }
 
-        protected override void InitializeCharacterBodyAndModel()
-        {
-            base.InitializeCharacterBodyAndModel();
-            InitializeDisplayPrefab();
-        }
-
-        protected virtual void InitializeSurvivor()
-        {
-            RegisterNewSurvivor(bodyPrefab, displayPrefab, Color.grey, survivorTokenPrefix, characterUnlockableDef, bodyInfo.sortPosition);
-        }
-
         protected virtual void InitializeDisplayPrefab()
         {
-            displayPrefab = Modules.Prefabs.CreateDisplayPrefab(prefabBodyName + "Display", bodyPrefab, bodyInfo);
-        }
-        public virtual void InitializeUnlockables()
-        {
+            displayPrefab = Modules.Prefabs.CreateDisplayPrefab(assetBundle, displayPrefabName, bodyPrefab);
         }
 
+        protected virtual void InitializeSurvivor() {      
+            RegisterNewSurvivor(bodyPrefab, displayPrefab, bodyInfo.bodyColor, survivorTokenPrefix, characterUnlockableDef, bodyInfo.sortPosition);
+        }
+
+        //todo funny? also why does this have overloads if it's one of the ones we don't want the user to have to see?
+        //survivorinfo?
         public static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, null, 100f); }
         public static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, float sortPosition) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, null, sortPosition); }
         public static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, UnlockableDef unlockableDef) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, unlockableDef, 100f); }
