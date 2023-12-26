@@ -13,7 +13,7 @@ namespace HenryMod.Modules
         //todo material: detect shader I suppose
             //but wait I wanted to do it on assetbundle load. cache them?
         public static Material LoadMaterial(this AssetBundle assetBundle, string materialName) => CreateHopooMaterialFromBundle(assetBundle, materialName);
-        public static Material CreateHopooMaterialFromBundle(AssetBundle assetBundle, string materialName)
+        public static Material CreateHopooMaterialFromBundle(this AssetBundle assetBundle, string materialName)
         {
             Material tempMat = cachedMaterials.Find(mat =>
             {
@@ -131,5 +131,6 @@ namespace HenryMod.Modules
             return material;
         }
         //todo joe specular
+        //todo apparently normal
     }
 }

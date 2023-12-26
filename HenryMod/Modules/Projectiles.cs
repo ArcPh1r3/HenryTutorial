@@ -43,7 +43,7 @@ namespace HenryMod.Modules
             if (!ghostPrefab.GetComponent<ProjectileGhostController>()) ghostPrefab.AddComponent<ProjectileGhostController>();
 
             //todo material this is a no go if people want to use fuckin real ass projectile shaders
-            //though I guess if you're using this to create a ghost prefab yea nvm you're not really editor savvy
+            //though I guess if you're using this to create a ghost prefab yea nvm you're not really editor friendly
             Modules.Assets.ConvertAllRenderersToHopooShader(ghostPrefab);
 
             return ghostPrefab;

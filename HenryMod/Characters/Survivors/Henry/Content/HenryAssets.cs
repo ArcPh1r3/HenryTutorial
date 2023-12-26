@@ -77,7 +77,7 @@ namespace HenryMod.Characters.Survivors.Henry.Content {
 
             ProjectileImpactExplosion bombImpactExplosion = bombProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
             Modules.Projectiles.InitializeImpactExplosion(bombImpactExplosion);
-            //todo funny why have a function to set all tis values if you're going to just set all the values here anyways?
+            //todo funny why have a function to set all its values if you're going to just set all the values here anyways?
             bombImpactExplosion.blastRadius = 16f;
             bombImpactExplosion.destroyOnEnemy = true;
             bombImpactExplosion.lifetime = 12f;

@@ -414,7 +414,6 @@ namespace HenryMod.Modules
             aimAnimator.inputBank = prefab.GetComponent<InputBankTest>();
         }
         #endregion ComponentSetup
-        //todo windows editorconfig
         public static void CreateGenericDoppelganger(GameObject bodyPrefab, string masterName, string masterToCopy) => CloneDopplegangerMaster(bodyPrefab, masterName, masterToCopy);
         public static GameObject CloneDopplegangerMaster(GameObject bodyPrefab, string masterName, string masterToCopy)
         {
