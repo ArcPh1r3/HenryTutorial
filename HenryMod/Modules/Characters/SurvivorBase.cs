@@ -1,6 +1,5 @@
 ﻿using BepInEx.Configuration;
 using RoR2;
-using System;
 using HenryMod.Modules.Characters;
 using UnityEngine;
 using System.Collections.Generic;
@@ -22,6 +21,7 @@ namespace HenryMod.Modules.Survivors
         public override void InitializeCharacter()
         {
             base.InitializeCharacter();
+
             InitializeDisplayPrefab();
 
             InitializeSurvivor();
@@ -38,26 +38,9 @@ namespace HenryMod.Modules.Survivors
 
         //todo funny? also why does this have overloads if it's one of the ones we don't want the user to have to see?
         //survivorinfo?
-        public static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, null, 100f); }
-        public static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, float sortPosition) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, null, sortPosition); }
-        public static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, UnlockableDef unlockableDef) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, unlockableDef, 100f); }
         public static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, UnlockableDef unlockableDef, float sortPosition)
         {
-            SurvivorDef survivorDef = ScriptableObject.CreateInstance<SurvivorDef>();
-            survivorDef.bodyPrefab = bodyPrefab;
-            survivorDef.displayPrefab = displayPrefab;
-            survivorDef.primaryColor = charColor;
-
-            survivorDef.cachedName = bodyPrefab.name.Replace("Body", "");
-            survivorDef.displayNameToken = tokenPrefix + "NAME";
-            survivorDef.descriptionToken = tokenPrefix + "DESCRIPTION";
-            survivorDef.outroFlavorToken = tokenPrefix + "OUTRO_FLAVOR";
-            survivorDef.mainEndingEscapeFailureFlavorToken = tokenPrefix + "OUTRO_FAILURE";
-
-            survivorDef.desiredSortPosition = sortPosition;
-            survivorDef.unlockableDef = unlockableDef;
-
-            Modules.Content.AddSurvivorDef(survivorDef);
+            Modules.Content.CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, unlockableDef, sortPosition);
         }
 
         #region CharacterSelectSurvivorPreviewDisplayController

@@ -6,6 +6,8 @@ using HenryMod.Modules.Characters;
 using RoR2.CharacterAI;
 using static RoR2.CharacterAI.AISkillDriver;
 using RoR2.Skills;
+using System;
+using System.Linq;
 
 namespace HenryMod.Modules
 {
@@ -39,8 +41,29 @@ namespace HenryMod.Modules
             return model.gameObject;
         }
 
-        public static GameObject CreateBodyPrefab(AssetBundle assetBundle, string modelName, BodyInfo bodyInfo)
+        #region body setup
+
+        public static GameObject LoadCharacterModel(AssetBundle assetBundle, string modelName)
         {
+
+            GameObject model = assetBundle.LoadAsset<GameObject>(modelName);
+            if (model == null)
+            {
+                Log.Error($"could not load model prefab {modelName}. Make sure this prefab exists in assetbundle {assetBundle.name}");
+                return null;
+            }
+            return model;
+        }
+
+        public static GameObject CreateBodyPrefab(AssetBundle assetBundle, string modelName, BodyInfo bodyInfo) => CreateBodyPrefab(LoadCharacterModel(assetBundle, modelName), bodyInfo);
+        public static GameObject CreateBodyPrefab(GameObject model, BodyInfo bodyInfo)
+        {
+            if(model == null)
+            {
+                Log.Error($"No model prefab for body {bodyInfo.bodyName}. character creation failed");
+                return null;
+            }
+
             GameObject clonedBody = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/" + bodyInfo.bodyNameToClone + "Body");
             if (!clonedBody)
             {
@@ -50,12 +73,12 @@ namespace HenryMod.Modules
 
             GameObject newBodyPrefab = PrefabAPI.InstantiateClone(clonedBody, bodyInfo.bodyName);
 
-            GameObject model = assetBundle.LoadAsset<GameObject>(modelName);
-            if (model == null)
-            {
-                Log.Error($"could not load model prefab {modelName}. Make sure this prefab exists in assetbundle {assetBundle.name}");
-                return null;
-            }
+            //GameObject model = assetBundle.LoadAsset<GameObject>(modelName);
+            //if (model == null)
+            //{
+            //    Log.Error($"could not load model prefab {modelName}. Make sure this prefab exists in assetbundle {assetBundle.name}");
+            //    return null;
+            //}
 
             //todo funny: why have this backup if you're going to delete it in this next function?
             //if (model == null) model = newBodyPrefab.GetComponentInChildren<CharacterModel>().gameObject;
@@ -69,13 +92,9 @@ namespace HenryMod.Modules
             SetupModelLocator(newBodyPrefab, modelBaseTransform, model.transform);
             //SetupRigidbody(newPrefab);
             SetupCapsuleCollider(newBodyPrefab);
-            SetupMainHurtbox(newBodyPrefab, model);
 
-            SetupAimAnimator(newBodyPrefab, model);
-
+            //todo funny why only check this here?
             if (modelBaseTransform != null) SetupCharacterDirection(newBodyPrefab, modelBaseTransform, model.transform);
-            SetupFootstepController(model);
-            SetupRagdoll(model);
 
             Modules.Content.AddCharacterBodyPrefab(newBodyPrefab);
 
@@ -159,14 +178,24 @@ namespace HenryMod.Modules
             bodyComponent.isChampion = false;
         }
 
-        #region ModelSetup
+        public static void ClearEntityStateMachines(GameObject bodyPrefab)
+        {
+            EntityStateMachine[] machines = bodyPrefab.GetComponentsInChildren<EntityStateMachine>();
+
+            for (int i = machines.Length - 1; i >= 0; i--)
+            {
+                UnityEngine.Object.Destroy(machines[i]);
+            }
+            //todo ser
+            NetworkStateMachine networkMachine = bodyPrefab.GetComponent<NetworkStateMachine>();
+            networkMachine.stateMachines = new EntityStateMachine[0];
+        }
 
         private static Transform AddCharacterModelToSurvivorBody(GameObject bodyPrefab, Transform modelTransform, BodyInfo bodyInfo)
         {
             for (int i = bodyPrefab.transform.childCount - 1; i >= 0; i--)
             {
-
-                Object.DestroyImmediate(bodyPrefab.transform.GetChild(i).gameObject);
+                UnityEngine.Object.DestroyImmediate(bodyPrefab.transform.GetChild(i).gameObject);
             }
 
             Transform modelBase = new GameObject("ModelBase").transform;
@@ -191,16 +220,62 @@ namespace HenryMod.Modules
 
             return modelBase.transform;
         }
-        public static CharacterModel SetupCharacterModel(GameObject prefab) => SetupCharacterModel(prefab, null);
-        public static CharacterModel SetupCharacterModel(GameObject prefab, CustomRendererInfo[] customInfos)
+        //todo ser see which ones of these are fuckinnnnnnnnnnnnnnn serialized
+        private static void SetupCharacterDirection(GameObject prefab, Transform modelBaseTransform, Transform modelTransform)
+        {
+            if (!prefab.GetComponent<CharacterDirection>())
+                return;
+
+            CharacterDirection characterDirection = prefab.GetComponent<CharacterDirection>();
+            characterDirection.targetTransform = modelBaseTransform;
+            characterDirection.overrideAnimatorForwardTransform = null;
+            characterDirection.rootMotionAccumulator = null;
+            characterDirection.modelAnimator = modelTransform.GetComponent<Animator>();
+            characterDirection.driveFromRootRotation = false;
+            characterDirection.turnSpeed = 720f;
+        }
+
+        private static void SetupCameraTargetParams(GameObject prefab, BodyInfo bodyInfo)
+        {
+            CameraTargetParams cameraTargetParams = prefab.GetComponent<CameraTargetParams>();
+            cameraTargetParams.cameraParams = bodyInfo.cameraParams;
+            cameraTargetParams.cameraPivotTransform = prefab.transform.Find("CameraPivot");
+        }
+
+        private static void SetupModelLocator(GameObject prefab, Transform modelBaseTransform, Transform modelTransform)
+        {
+            ModelLocator modelLocator = prefab.GetComponent<ModelLocator>();
+            modelLocator.modelTransform = modelTransform;
+            modelLocator.modelBaseTransform = modelBaseTransform;
+        }
+
+        //private static void SetupRigidbody(GameObject prefab)
+        //{
+        //    Rigidbody rigidbody = prefab.GetComponent<Rigidbody>();
+        //    rigidbody.mass = 100f;
+        //}
+
+        //todo setup see if this affects kinematiccharactercontroller
+        private static void SetupCapsuleCollider(GameObject prefab)
+        {
+            CapsuleCollider capsuleCollider = prefab.GetComponent<CapsuleCollider>();
+            capsuleCollider.center = new Vector3(0f, 0f, 0f);
+            capsuleCollider.radius = 0.5f;
+            capsuleCollider.height = 1.82f;
+            capsuleCollider.direction = 1;
+        }
+        #endregion body setup
+
+        #region ModelSetup
+        public static CharacterModel SetupCharacterModel(GameObject bodyPrefab, CustomRendererInfo[] customInfos = null)
         {
 
-            CharacterModel characterModel = prefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<CharacterModel>();
+            CharacterModel characterModel = bodyPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<CharacterModel>();
             bool preattached = characterModel != null;
             if (!preattached)
-                characterModel = prefab.GetComponent<ModelLocator>().modelTransform.gameObject.AddComponent<CharacterModel>();
+                characterModel = bodyPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.AddComponent<CharacterModel>();
 
-            characterModel.body = prefab.GetComponent<CharacterBody>();
+            characterModel.body = bodyPrefab.GetComponent<CharacterBody>();
 
             characterModel.autoPopulateLightInfos = true;
             characterModel.invisibilityCount = 0;
@@ -214,6 +289,13 @@ namespace HenryMod.Modules
             {
                 SetupPreAttachedRendererInfos(characterModel);
             }
+
+            SetupMainHurtbox(bodyPrefab, characterModel.gameObject);
+            SetupHurtBoxes(bodyPrefab);
+            SetupAimAnimator(bodyPrefab, characterModel.gameObject);
+            SetupFootstepController(characterModel.gameObject);
+            SetupRagdoll(characterModel.gameObject);
+
             return characterModel;
         }
 
@@ -278,53 +360,9 @@ namespace HenryMod.Modules
 
             characterModel.baseRendererInfos = rendererInfos.ToArray();
         }
-        #endregion
 
-        #region ComponentSetup
-        //todo ser see which ones of these are fuckinnnnnnnnnnnnnnn serialized
-        private static void SetupCharacterDirection(GameObject prefab, Transform modelBaseTransform, Transform modelTransform)
-        {
-            if (!prefab.GetComponent<CharacterDirection>())
-                return;
 
-            CharacterDirection characterDirection = prefab.GetComponent<CharacterDirection>();
-            characterDirection.targetTransform = modelBaseTransform;
-            characterDirection.overrideAnimatorForwardTransform = null;
-            characterDirection.rootMotionAccumulator = null;
-            characterDirection.modelAnimator = modelTransform.GetComponent<Animator>();
-            characterDirection.driveFromRootRotation = false;
-            characterDirection.turnSpeed = 720f;
-        }
-
-        private static void SetupCameraTargetParams(GameObject prefab, BodyInfo bodyInfo)
-        {
-            CameraTargetParams cameraTargetParams = prefab.GetComponent<CameraTargetParams>();
-            cameraTargetParams.cameraParams = bodyInfo.cameraParams;
-            cameraTargetParams.cameraPivotTransform = prefab.transform.Find("CameraPivot");
-        }
-
-        private static void SetupModelLocator(GameObject prefab, Transform modelBaseTransform, Transform modelTransform)
-        {
-            ModelLocator modelLocator = prefab.GetComponent<ModelLocator>();
-            modelLocator.modelTransform = modelTransform;
-            modelLocator.modelBaseTransform = modelBaseTransform;
-        }
-
-        //private static void SetupRigidbody(GameObject prefab)
-        //{
-        //    Rigidbody rigidbody = prefab.GetComponent<Rigidbody>();
-        //    rigidbody.mass = 100f;
-        //}
-
-        private static void SetupCapsuleCollider(GameObject prefab)
-        {
-            CapsuleCollider capsuleCollider = prefab.GetComponent<CapsuleCollider>();
-            capsuleCollider.center = new Vector3(0f, 0f, 0f);
-            capsuleCollider.radius = 0.5f;
-            capsuleCollider.height = 1.82f;
-            capsuleCollider.direction = 1;
-        }
-
+        //todo joe
         private static void SetupMainHurtbox(GameObject prefab, GameObject model)
         {
             ChildLocator childLocator = model.GetComponent<ChildLocator>();
@@ -413,7 +451,12 @@ namespace HenryMod.Modules
             aimAnimator.giveupDuration = 3f;
             aimAnimator.inputBank = prefab.GetComponent<InputBankTest>();
         }
+        #endregion
+
+        #region ComponentSetup
         #endregion ComponentSetup
+
+        #region master
         public static void CreateGenericDoppelganger(GameObject bodyPrefab, string masterName, string masterToCopy) => CloneDopplegangerMaster(bodyPrefab, masterName, masterToCopy);
         public static GameObject CloneDopplegangerMaster(GameObject bodyPrefab, string masterName, string masterToCopy)
         {
@@ -446,7 +489,7 @@ namespace HenryMod.Modules
         {
             GameObject newMaster = assetBundle.LoadAsset<GameObject>(assetName);
             //todo ser
-            //should we add and initialize a new master if one doesn't exist? or should we simply require one be put on the prefab in unity?
+            //should we add and initialize a new CharacterMaster n BaseAi n shit if one doesn't exist? or should we simply require them be put on the prefab in unity?
             newMaster.GetComponent<CharacterMaster>().bodyPrefab = bodyPrefab;
 
             Modules.Content.AddMasterPrefab(newMaster);
@@ -543,6 +586,35 @@ namespace HenryMod.Modules
 
             [Tooltip("The AI skill driver that will be treated as having top priority after this one.")]
             public AISkillDriver nextHighPriorityOverride;
+        }
+        #endregion master
+        //todo ser
+        public static void AddEntityStateMachine(GameObject prefab, string machineName, Type mainStateType = null,  Type initalStateType = null)
+        {
+            EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(prefab, machineName);
+            if (entityStateMachine == null)
+            {
+                entityStateMachine = prefab.AddComponent<EntityStateMachine>();
+            } else
+            {
+                Log.Debug($"An Entity State Machine already exists with the name {machineName}. replacing.");
+            }
+            entityStateMachine.customName = machineName;
+
+            if (mainStateType == null)
+            {
+                mainStateType = typeof(EntityStates.Idle);
+            }
+            entityStateMachine.mainStateType = new EntityStates.SerializableEntityStateType(mainStateType);
+
+            if(initalStateType == null)
+            {
+                initalStateType = typeof(EntityStates.Idle);
+            }
+            entityStateMachine.initialStateType = new EntityStates.SerializableEntityStateType(initalStateType);
+
+            NetworkStateMachine networkMachine = prefab.GetComponent<NetworkStateMachine>();
+            networkMachine.stateMachines = networkMachine.stateMachines.Append(entityStateMachine).ToArray();
         }
 
         public static void SetupHitbox(GameObject prefab, Transform hitboxTransform, string hitboxName) => SetupHitbox(prefab, hitboxName, hitboxTransform);

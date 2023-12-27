@@ -16,25 +16,24 @@ namespace HenryMod.Modules.Characters
 
         public abstract CustomRendererInfo[] customRendererInfos { get; }
 
-        public virtual Type characterMainState { get; }
-        public virtual Type characterSpawnState { get; }
-
         public virtual ItemDisplaysBase itemDisplays { get; } = null;
 
         public GameObject bodyPrefab;
         public CharacterBody prefabCharacterBody;
+        public GameObject characterModelObject;
         public CharacterModel prefabCharacterModel;
 
+        //todo funny woops crash lmao
         private static T _instance;
         public static T instance {
             get {
                 if(instance == null) {
-                    _instance = new T();
+                    //todo try this
+                   return _instance = new T();
                 }
                 return _instance;
             }
         }
-
 
         private AssetBundle _assetBundle;
         public AssetBundle assetBundle {
@@ -46,30 +45,33 @@ namespace HenryMod.Modules.Characters
             }
         }
 
-        public virtual void Initialize()
+        public void Initialize()
         {
             InitializeCharacter();
         }
 
-        //todo setup
         public virtual void InitializeCharacter()
         {
-            InitializeCharacterBodyAndModel();
+            InitializeCharacterBodyWithModel();
+            InitializeCharacterModel();
+
             InitializeItemDisplays();
 
-            InitializeEntityStateMachine();
+            InitializeEntityStateMachines();
         }
 
-        protected virtual void InitializeCharacterBodyAndModel()
+        protected virtual void InitializeCharacterBodyWithModel()
         {
-            bodyPrefab = Modules.Prefabs.CreateBodyPrefab(assetBundle, modelPrefabName, bodyInfo);
-            prefabCharacterBody = bodyPrefab.GetComponent<CharacterBody>();
+            //ability to pass in an existing model
+            if(characterModelObject == null)
+            {
+                characterModelObject = Prefabs.LoadCharacterModel(assetBundle, modelPrefabName);
+            }
 
-            InitializeCharacterModel();
-            //todo setup
-            Modules.Prefabs.SetupHurtBoxes(bodyPrefab);
+            bodyPrefab = Modules.Prefabs.CreateBodyPrefab(characterModelObject, bodyInfo);
+            prefabCharacterBody = bodyPrefab.GetComponent<CharacterBody>();
         }
-        //todo setup
+
         protected virtual void InitializeCharacterModel()
         {
             prefabCharacterModel = Modules.Prefabs.SetupCharacterModel(bodyPrefab, customRendererInfos);
@@ -90,16 +92,7 @@ namespace HenryMod.Modules.Characters
             itemDisplays.SetItemDisplays(prefabCharacterModel.itemDisplayRuleSet);
         }
 
-        protected virtual void InitializeEntityStateMachine()
-        {
-            bodyPrefab.GetComponent<EntityStateMachine>().mainStateType = new EntityStates.SerializableEntityStateType(characterMainState);
-            Modules.Content.AddEntityState(characterMainState);
-            if (characterSpawnState != null)
-            {
-                bodyPrefab.GetComponent<EntityStateMachine>().initialStateType = new EntityStates.SerializableEntityStateType(characterSpawnState);
-                Modules.Content.AddEntityState(characterSpawnState);
-            }
-        }
+        public abstract void InitializeEntityStateMachines();
 
         public abstract void InitializeSkills();
 
