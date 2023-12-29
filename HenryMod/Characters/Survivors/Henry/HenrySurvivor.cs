@@ -1,6 +1,6 @@
 ﻿using BepInEx.Configuration;
-using HenryMod.Characters.Survivors.Henry.Content;
 using HenryMod.Henry.Components;
+using HenryMod.Modules;
 using HenryMod.Modules.Characters;
 using RoR2;
 using RoR2.Skills;
@@ -8,15 +8,17 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-//todo windows namespace
-namespace HenryMod.Modules.Survivors
+namespace HenryMod.Survivors.Henry
 {
     internal class HenrySurvivor : SurvivorBase<HenrySurvivor>
     {
         //todo guide
-        public override string assetBundleName => "myassetbundlee";
+        //
+        public override string assetBundleName => "myassetbundle";
 
+        //the name of the prfab. conventionally ending on "Body"
         public override string bodyName => "HenryBody";
+
         //used when building your character using the prefabs you set up in unity
         public override string modelPrefabName => "mdlHenry";
         public override string displayPrefabName => "HenryDisplay";
@@ -26,7 +28,7 @@ namespace HenryMod.Modules.Survivors
         //used when registering your survivor's language tokens
         public override string survivorTokenPrefix => HENRY_PREFIX;
 
-        public override BodyInfo bodyInfo { get; } = new BodyInfo
+        public override BodyInfo bodyInfo => new BodyInfo
         {
             bodyName = instance.bodyName,
             bodyNameToken = HENRY_PREFIX + "NAME",
@@ -35,8 +37,8 @@ namespace HenryMod.Modules.Survivors
             characterPortrait = instance.assetBundle.LoadAsset<Texture>("texHenryIcon"),
             bodyColor = Color.white,
 
-            crosshair = Modules.Assets.LoadCrosshair("Standard"),
-            podPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
+            crosshair = Assets.LoadCrosshair("Standard"),
+            podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 
             maxHealth = 110f,
             healthRegen = 1.5f,
@@ -45,12 +47,12 @@ namespace HenryMod.Modules.Survivors
             jumpCount = 1,
         };
 
-        public override CustomRendererInfo[] customRendererInfos { get; } = new CustomRendererInfo[] 
+        public override CustomRendererInfo[] customRendererInfos => new CustomRendererInfo[]
         {
                 new CustomRendererInfo
                 {
                     childName = "SwordModel",
-                    //material = instance.assetBundle.LoadMaterial("matHenrySword"),
+                    material = instance.assetBundle.LoadMaterial("matHenry"),
                 },
                 new CustomRendererInfo
                 {
@@ -66,12 +68,10 @@ namespace HenryMod.Modules.Survivors
 
         public override ItemDisplaysBase itemDisplays => new HenryItemDisplays();
 
-        public static ConfigEntry<bool> characterEnabled;
-
         public override void InitializeCharacter()
         {
             //uncomment if you have multiple characters
-            //characterEnabled = Config.CharacterEnableConfig("Survivors", "Henry");
+            //ConfigEntry<bool> characterEnabled = Config.CharacterEnableConfig("Survivors", "Henry");
 
             //if (!characterEnabled.Value)
             //    return;
@@ -101,39 +101,43 @@ namespace HenryMod.Modules.Survivors
             AddHooks();
         }
 
-        private void AdditionalBodySetup() {
+        private void AdditionalBodySetup()
+        {
             AddHitboxes();
             bodyPrefab.AddComponent<HenryWeaponComponent>();
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
         }
 
-        public void AddHitboxes() {
+        public void AddHitboxes()
+        {
             ChildLocator childLocator = bodyPrefab.GetComponentInChildren<ChildLocator>();
 
             //example of how to create a hitbox
             Transform hitboxTransform = childLocator.FindChild("SwordHitbox");
-            Modules.Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "Sword");
+            Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "Sword");
         }
 
-        public override void InitializeEntityStateMachines()
+        public override void InitializeEntityStateMachines() 
         {
+            Log.Message(Environment.StackTrace);
             //clear existing state machines from your cloned body probably commando
             //omit all this if you want to just keep his
-            Modules.Prefabs.ClearEntityStateMachines(bodyPrefab);
+            Prefabs.ClearEntityStateMachines(bodyPrefab);
 
             //if you set up a custom main characterstate, set it up here
             //don't forget to register custom entitystates in your HenryStates.cs
             //todo setup example state?
-            Modules.Prefabs.AddEntityStateMachine(bodyPrefab, "Body", typeof(EntityStates.GenericCharacterMain), typeof(EntityStates.GenericCharacterSpawnState));
-            Modules.Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
-            Modules.Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
+            Prefabs.AddEntityStateMachine(bodyPrefab, "Body", typeof(EntityStates.GenericCharacterMain), typeof(EntityStates.SpawnTeleporterState));
+            
+            Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
+            Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
         }
 
         #region skills
         public override void InitializeSkills()
         {
-            Modules.Skills.CreateSkillFamilies(bodyPrefab);
+            Skills.CreateSkillFamilies(bodyPrefab);
             AddPrmarySkills();
             AddSecondarySkills();
             AddUtiitySkills();
@@ -144,7 +148,7 @@ namespace HenryMod.Modules.Survivors
         private void AddSecondarySkills()
         {
             //here is a basic skill def with all fields accounted for
-            SkillDef gunSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef gunSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "HenryGun",
                 skillNameToken = HENRY_PREFIX + "SECONDARY_GUN_NAME",
@@ -176,14 +180,14 @@ namespace HenryMod.Modules.Survivors
 
             });
 
-            Modules.Skills.AddSecondarySkills(bodyPrefab, gunSkillDef);
+            Skills.AddSecondarySkills(bodyPrefab, gunSkillDef);
         }
 
         private void AddPrmarySkills()
         {
             //the primary skill is created using a constructor for a typical primary
             //it is also a SteppedSkillDef. Custom Skilldefs are very useful for custom behaviors related to casting a skill. see ror2's different skilldefs for reference
-            SteppedSkillDef slashSkillDef = Modules.Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
+            SteppedSkillDef slashSkillDef = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
                 (
                     "HenrySlash",
                     HENRY_PREFIX + "PRIMARY_SLASH_NAME",
@@ -197,13 +201,13 @@ namespace HenryMod.Modules.Survivors
             slashSkillDef.stepCount = 2;
             slashSkillDef.stepGraceDuration = 0.5f;
 
-            Modules.Skills.AddPrimarySkills(bodyPrefab, slashSkillDef);
+            Skills.AddPrimarySkills(bodyPrefab, slashSkillDef);
         }
 
         private void AddUtiitySkills()
         {
             //here's a skilldef of a typical movement skill. some fields are omitted and will just have default values
-            SkillDef rollSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef rollSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "HenryRoll",
                 skillNameToken = HENRY_PREFIX + "UTILITY_ROLL_NAME",
@@ -223,13 +227,13 @@ namespace HenryMod.Modules.Survivors
                 cancelSprintingOnActivation = false,
             });
 
-            Modules.Skills.AddUtilitySkills(bodyPrefab, rollSkillDef);
+            Skills.AddUtilitySkills(bodyPrefab, rollSkillDef);
         }
 
         private void AddSpecialSkills()
         {
             //a basic skill
-            SkillDef bombSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef bombSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "HenryBomb",
                 skillNameToken = HENRY_PREFIX + "SPECIAL_BOMB_NAME",
@@ -247,7 +251,7 @@ namespace HenryMod.Modules.Survivors
                 mustKeyPress = false,
             });
 
-            Modules.Skills.AddSpecialSkills(bodyPrefab, bombSkillDef);
+            Skills.AddSpecialSkills(bodyPrefab, bombSkillDef);
         }
         #endregion skills
 
@@ -263,7 +267,7 @@ namespace HenryMod.Modules.Survivors
 
             #region DefaultSkin
             //this creates a SkinDef with all default fields
-            SkinDef defaultSkin = Modules.Skins.CreateSkinDef("DEFAULT_SKIN",
+            SkinDef defaultSkin = Skins.CreateSkinDef("DEFAULT_SKIN",
                 assetBundle.LoadAsset<Sprite>("texMainSkin"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject);
@@ -271,7 +275,7 @@ namespace HenryMod.Modules.Survivors
             //these are your Mesh Replacements. The order here is based on your CustomRendererInfos from earlier
             //pass in meshes as they are named in your assetbundle
             //currently not needed as with only 1 skin they will simply take the default meshes
-                //uncomment this when you have another skin
+            //uncomment this when you have another skin
             //defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(defaultRendererinfos,
             //    "meshHenrySword",
             //    "meshHenryGun",
@@ -280,7 +284,7 @@ namespace HenryMod.Modules.Survivors
             //add new skindef to our list of skindefs. this is what we'll be passing to the SkinController
             skins.Add(defaultSkin);
             #endregion
-            
+
             //uncomment this when you have a mastery skin
             #region MasterySkin
             /*
@@ -324,7 +328,8 @@ namespace HenryMod.Modules.Survivors
         #endregion skins
 
         //Character Master is what governs the AI of your character when it is not controlled by a player (artifact of vengeance, goobo)
-        public override void InitializeCharacterMaster() {
+        public override void InitializeCharacterMaster()
+        {
             //if you're lazy or prototyping you can simply copy the AI of a different character to be used
             //Modules.Prefabs.CloneAndAddDopplegangerMaster(bodyPrefab, bodyName + "MonsterMaster", "Merc");
 
@@ -332,17 +337,20 @@ namespace HenryMod.Modules.Survivors
             HenryAI.Init(bodyPrefab);
 
             //how to load a master set up in unity (recommended)
-            Modules.Prefabs.LoadMaster(assetBundle, "HenryMaster", bodyPrefab);
+            //assetBundle.LoadMaster("HenryMaster", bodyPrefab);
         }
 
-        private void AddHooks() {
+        private void AddHooks()
+        {
 
             R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
         }
 
-        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, R2API.RecalculateStatsAPI.StatHookEventArgs args) {
+        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, R2API.RecalculateStatsAPI.StatHookEventArgs args)
+        {
 
-            if (sender.HasBuff(HenryBuffs.armorBuff)) {
+            if (sender.HasBuff(HenryBuffs.armorBuff))
+            {
                 args.armorAdd += 300;
             }
         }

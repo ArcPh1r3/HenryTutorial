@@ -1,14 +1,16 @@
-﻿using RoR2;
+﻿using HenryMod.Modules;
+using HenryMod.Modules.Characters;
+using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
 
-//todo windows change namespace
-
-namespace HenryMod.Modules.Characters {
-    internal class HenryItemDisplays : ItemDisplaysBase
+namespace HenryMod.Survivors.Henry
+{
+    public class HenryItemDisplays : ItemDisplaysBase
     {
         protected override void SetItemDisplayRules(List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules)
         {
+            //todo joe item display fun
             //paste all your displays here
             //sotv item displays not added yet. you can add them yourself from DLC1Content if you like. I believe in ya
             #region Item Displays

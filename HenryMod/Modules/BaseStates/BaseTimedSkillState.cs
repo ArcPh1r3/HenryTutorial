@@ -7,30 +7,30 @@ namespace HenryMod.SkillStates.BaseStates
     public class BaseTimedSkillState : BaseSkillState
     {
         //total duration of the move
-        public static float TimedBaseDuration;
+        public float TimedBaseDuration;
 
         //time relative to duration that the skill starts
         //for example, set 0.5 and the "cast" will happen halfway through the skill
-        public static float TimedBaseCastStartTime;
-        public static float TimedBaseCastEndTime;
+        public float TimedBaseCastStartTime;
+        public float TimedBaseCastEndTime;
 
         protected float duration;
-        protected float castStartTime;
-        protected float castEndTime;
+        protected float castStartPercentTime;
+        protected float castEndPercentTime;
         protected bool hasFired;
         protected bool isFiring;
         protected bool hasExited;
 
         //initialize your time values here
-        protected virtual void InitDurationValues(float baseDuration, float baseCastStartTime, float baseCastEndTime = 1)
+        protected virtual void InitDurationValues(float baseDuration, float castStartPercentTime, float castEndPercentTime = 1)
         {
             TimedBaseDuration = baseDuration;
-            TimedBaseCastStartTime = baseCastStartTime;
-            TimedBaseCastEndTime = baseCastEndTime;
+            TimedBaseCastStartTime = castStartPercentTime;
+            TimedBaseCastEndTime = castEndPercentTime;
 
             duration = TimedBaseDuration / base.attackSpeedStat;
-            castStartTime = baseCastStartTime * duration;
-            castEndTime = baseCastEndTime * duration;
+            this.castStartPercentTime = castStartPercentTime * duration;
+            this.castEndPercentTime = castEndPercentTime * duration;
         }
 
         protected virtual void OnCastEnter() { }
@@ -43,14 +43,14 @@ namespace HenryMod.SkillStates.BaseStates
             base.FixedUpdate();
 
             //wait start duration and fire
-            if(!hasFired && fixedAge > castStartTime)
+            if(!hasFired && fixedAge > castStartPercentTime)
             {
                 hasFired = true;
                 OnCastEnter();
             }
 
-            bool fireStarted = fixedAge >= castStartTime;
-            bool fireEnded = fixedAge >= castEndTime;
+            bool fireStarted = fixedAge >= castStartPercentTime;
+            bool fireEnded = fixedAge >= castEndPercentTime;
             isFiring = false;
 
             //to guarantee attack comes out if at high attack speed the fixedage skips past the endtime

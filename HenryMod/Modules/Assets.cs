@@ -17,7 +17,7 @@ namespace HenryMod.Modules
         internal static AssetBundle LoadAssetBundle(string bundleName, bool convertMaterials = true)
         {
 
-            if (bundleName == "myassetbundle")
+            if (bundleName == "myassetbundlee")
             {
                 Log.Error($"AssetBundle name hasn't been changed. not loading any assets to avoid conflicts.\nMake sure to rename your assetbundle filename and rename the AssetBundleName field in your character setup code ");
                 return null;
@@ -61,7 +61,7 @@ namespace HenryMod.Modules
             newTracer.GetComponent<Tracer>().speed = 250f;
             newTracer.GetComponent<Tracer>().length = 50f;
 
-            Modules.Content.CreateNewEffectDef(newTracer);
+            Modules.Content.CreateAndAddEffectDef(newTracer);
 
             return newTracer;
         }
@@ -117,7 +117,7 @@ namespace HenryMod.Modules
             effect.positionAtReferencedTransform = true;
             effect.soundName = soundName;
 
-            Modules.Content.CreateNewEffectDef(newEffect, soundName);
+            Modules.Content.CreateAndAddEffectDef(newEffect, soundName);
 
             return newEffect;
         }

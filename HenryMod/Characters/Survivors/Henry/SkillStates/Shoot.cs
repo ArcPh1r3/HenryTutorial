@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using HenryMod.Survivors.Henry;
 using RoR2;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace HenryMod.SkillStates
 {
     public class Shoot : BaseSkillState
     {
-        public static float damageCoefficient = Modules.HenryStaticValues.gunDamageCoefficient;
+        public static float damageCoefficient = HenryStaticValues.gunDamageCoefficient;
         public static float procCoefficient = 1f;
         public static float baseDuration = 0.6f;
         public static float force = 800f;

@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace HenryMod.Modules.Characters
 {
-    internal abstract class CharacterBase<T> where T : CharacterBase<T>, new()
+    public abstract class CharacterBase<T> where T : CharacterBase<T>, new()
     {
         public abstract string assetBundleName { get; }
 
         public abstract string bodyName { get; }
         public abstract string modelPrefabName { get; }
-
+        
         public abstract BodyInfo bodyInfo { get; }
 
         public abstract CustomRendererInfo[] customRendererInfos { get; }
@@ -23,30 +23,15 @@ namespace HenryMod.Modules.Characters
         public GameObject characterModelObject;
         public CharacterModel prefabCharacterModel;
 
-        //todo funny woops crash lmao
-        private static T _instance;
-        public static T instance {
-            get {
-                if(instance == null) {
-                    //todo try this
-                   return _instance = new T();
-                }
-                return _instance;
-            }
-        }
+        public static T instance { get; private set; }
 
-        private AssetBundle _assetBundle;
-        public AssetBundle assetBundle {
-            get {
-                if(_assetBundle == null) {
-                    _assetBundle = Assets.LoadAssetBundle(assetBundleName);
-                }
-                return _assetBundle;
-            }
-        }
+        public AssetBundle assetBundle { get; private set; }
 
         public void Initialize()
         {
+            instance = this as T;
+            assetBundle = Assets.LoadAssetBundle(assetBundleName);
+
             InitializeCharacter();
         }
 
@@ -56,8 +41,6 @@ namespace HenryMod.Modules.Characters
             InitializeCharacterModel();
 
             InitializeItemDisplays();
-
-            InitializeEntityStateMachines();
         }
 
         protected virtual void InitializeCharacterBodyWithModel()
@@ -80,7 +63,7 @@ namespace HenryMod.Modules.Characters
         public virtual void InitializeItemDisplays() {
             ItemDisplayRuleSet itemDisplayRuleSet = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
             itemDisplayRuleSet.name = "idrs" + bodyName;
-
+            
             prefabCharacterModel.itemDisplayRuleSet = itemDisplayRuleSet;
 
             if (itemDisplays != null) {
@@ -103,7 +86,7 @@ namespace HenryMod.Modules.Characters
     }
 
     // for simplifying characterbody creation
-    internal class BodyInfo
+    public class BodyInfo
     {
         #region Character
         public string bodyName = "";

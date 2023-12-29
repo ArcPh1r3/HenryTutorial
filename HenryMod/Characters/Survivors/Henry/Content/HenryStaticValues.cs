@@ -1,7 +1,6 @@
 ﻿using System;
 
-//todo windows namespace
-namespace HenryMod.Modules
+namespace HenryMod.Survivors.Henry
 {
     internal static class HenryStaticValues
     {

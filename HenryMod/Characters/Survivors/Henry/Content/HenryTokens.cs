@@ -1,13 +1,12 @@
-﻿//todo windows change namespace
-
-using System;
+﻿using System;
 using HenryMod.Modules;
 
-namespace HenryMod.Characters.Survivors.Henry.Content
+namespace HenryMod.Survivors.Henry
 {
-    public static class HenryTokens {
-
-        public static void Init() {
+    public static class HenryTokens
+    {
+        public static void Init()
+        {
             AddHenryTokens();
 
             //uncomment this to spit out a lanuage file with all the above tokens that people can translate
@@ -16,10 +15,11 @@ namespace HenryMod.Characters.Survivors.Henry.Content
             //todo guide
             //refer to guide on how to build and distribute your mod with the proper folders
         }
-        
-        public static void AddHenryTokens() {
+
+        public static void AddHenryTokens()
+        {
             #region Henry
-            string prefix = Modules.Survivors.HenrySurvivor.HENRY_PREFIX;
+            string prefix = HenrySurvivor.HENRY_PREFIX;
 
             string desc = "Henry is a skilled fighter who makes use of a wide arsenal of weaponry to take down his foes.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
              + "< ! > Sword is a good all-rounder while Boxing Gloves are better for laying a beatdown on more powerful foes." + Environment.NewLine + Environment.NewLine

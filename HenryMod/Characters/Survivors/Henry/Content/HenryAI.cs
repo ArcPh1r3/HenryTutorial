@@ -1,17 +1,14 @@
-﻿//todo windows change namespace
-
-using RoR2;
+﻿using RoR2;
 using RoR2.CharacterAI;
 using UnityEngine;
 
-namespace HenryMod.Characters.Survivors.Henry.Content
+namespace HenryMod.Survivors.Henry
 {
     public static class HenryAI
     {
-        internal static void Init(GameObject bodyPrefab)
+        public static void Init(GameObject bodyPrefab)
         {
             //todo ai mess with baseai?
-                //in which case todo ser
             GameObject master = Modules.Prefabs.CreateBlankMasterPrefab(bodyPrefab, "HenryMonsterMaster");
 
             AISkillDriver swingDriver = master.AddComponent<AISkillDriver>();

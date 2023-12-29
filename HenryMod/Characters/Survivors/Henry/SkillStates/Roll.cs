@@ -1,10 +1,11 @@
 ﻿using EntityStates;
-using HenryMod.Characters.Survivors.Henry.Content;
+using HenryMod.Survivors.Henry;
 using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace HenryMod.SkillStates {
+namespace HenryMod.SkillStates
+{
     public class Roll : BaseSkillState
     {
         public static float duration = 0.5f;

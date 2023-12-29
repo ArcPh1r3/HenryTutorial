@@ -1,16 +1,16 @@
-﻿//todo windows change namespace
-
-using RoR2;
+﻿using RoR2;
 using UnityEngine;
 
-namespace HenryMod.Characters.Survivors.Henry.Content {
-
-    public static class HenryBuffs {
+namespace HenryMod.Survivors.Henry
+{
+    public static class HenryBuffs
+    {
         // armor buff gained during roll
         public static BuffDef armorBuff;
 
-        internal static void Init(AssetBundle assetBundle) {
-            armorBuff = Modules.Content.CreateBuff("HenryArmorBuff",
+        public static void Init(AssetBundle assetBundle)
+        {
+            armorBuff = Modules.Content.CreateAndAddBuff("HenryArmorBuff",
                 LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,
                 Color.white,
                 false,

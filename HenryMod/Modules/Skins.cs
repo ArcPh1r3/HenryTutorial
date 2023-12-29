@@ -8,7 +8,6 @@ namespace HenryMod.Modules
 {
     internal static class Skins
     {
-        //todo to r2api
         internal static SkinDef CreateSkinDef(string skinName, Sprite skinIcon, CharacterModel.RendererInfo[] defaultRendererInfos, GameObject root, UnlockableDef unlockableDef = null)
         {
             SkinDefInfo skinDefInfo = new SkinDefInfo

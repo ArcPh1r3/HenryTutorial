@@ -1,5 +1,5 @@
 ﻿using BepInEx;
-using HenryMod.Modules.Survivors;
+using HenryMod.Survivors.Henry;
 using R2API.Utils;
 using RoR2;
 using System.Collections.Generic;
@@ -41,7 +41,7 @@ namespace HenryMod
             Modules.ItemDisplays.PopulateDisplays();
 
             // character initialization. this should be after itemdisplays
-            HenrySurvivor.instance.Initialize();
+            new HenrySurvivor().Initialize();
 
             // now make a content pack and add it this has to be last
             new Modules.ContentPacks().Initialize();

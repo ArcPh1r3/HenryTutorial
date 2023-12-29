@@ -178,19 +178,6 @@ namespace HenryMod.Modules
             bodyComponent.isChampion = false;
         }
 
-        public static void ClearEntityStateMachines(GameObject bodyPrefab)
-        {
-            EntityStateMachine[] machines = bodyPrefab.GetComponentsInChildren<EntityStateMachine>();
-
-            for (int i = machines.Length - 1; i >= 0; i--)
-            {
-                UnityEngine.Object.Destroy(machines[i]);
-            }
-            //todo ser
-            NetworkStateMachine networkMachine = bodyPrefab.GetComponent<NetworkStateMachine>();
-            networkMachine.stateMachines = new EntityStateMachine[0];
-        }
-
         private static Transform AddCharacterModelToSurvivorBody(GameObject bodyPrefab, Transform modelTransform, BodyInfo bodyInfo)
         {
             for (int i = bodyPrefab.transform.childCount - 1; i >= 0; i--)
@@ -290,8 +277,7 @@ namespace HenryMod.Modules
                 SetupPreAttachedRendererInfos(characterModel);
             }
 
-            SetupMainHurtbox(bodyPrefab, characterModel.gameObject);
-            SetupHurtBoxes(bodyPrefab);
+            SetupHurtboxGroup(bodyPrefab, characterModel.gameObject);
             SetupAimAnimator(bodyPrefab, characterModel.gameObject);
             SetupFootstepController(characterModel.gameObject);
             SetupRagdoll(characterModel.gameObject);
@@ -361,39 +347,76 @@ namespace HenryMod.Modules
             characterModel.baseRendererInfos = rendererInfos.ToArray();
         }
 
+        private static void SetupHurtboxGroup(GameObject bodyPrefab, GameObject model) 
+        {         
+            SetupMainHurtboxesFromChildLocator(bodyPrefab, model);
 
-        //todo joe
-        private static void SetupMainHurtbox(GameObject prefab, GameObject model)
+            SetHurtboxesHealthComponents(bodyPrefab);
+        }
+        /// <summary>
+        /// Sets up the main Hurtbox from a collider assigned to the child locator called "MainHurtbox".
+        /// <para>If a "HeadHurtbox" child is also set up, automatically sets that one up and assigns that one as a sniper weakpoint. if not, MainHurtbox is set as a sniper weakpoint.</para>
+        /// </summary>
+        private static void SetupMainHurtboxesFromChildLocator(GameObject bodyPrefab, GameObject model)
         {
             ChildLocator childLocator = model.GetComponent<ChildLocator>();
 
             if (!childLocator.FindChild("MainHurtbox"))
             {
-                Debug.LogWarning("Could not set up main hurtbox: make sure you have a transform pair in your prefab's ChildLocator component called 'MainHurtbox'");
+                if (bodyPrefab.GetComponent<HurtBoxGroup>() == null)
+                {
+                    Log.Error("Could not set up main hurtbox: make sure you have a transform pair in your prefab's ChildLocator called 'MainHurtbox'");
+                }
                 return;
             }
 
             HurtBoxGroup hurtBoxGroup = model.AddComponent<HurtBoxGroup>();
-            HurtBox mainHurtbox = childLocator.FindChild("MainHurtbox").gameObject.AddComponent<HurtBox>();
+
+            HurtBox headHurtbox = null;
+            GameObject headHurtboxObject = childLocator.FindChildGameObject("HeadHurtbox");
+            if (headHurtboxObject)
+            {
+                Log.Debug("HeadHurtboxFound. Setting up");
+                headHurtbox = headHurtboxObject.AddComponent<HurtBox>();
+                headHurtbox.gameObject.layer = LayerIndex.entityPrecise.intVal;
+                headHurtbox.healthComponent = bodyPrefab.GetComponent<HealthComponent>();
+                headHurtbox.isBullseye = false;
+                headHurtbox.isSniperTarget = true;
+                headHurtbox.damageModifier = HurtBox.DamageModifier.Normal;
+                headHurtbox.hurtBoxGroup = hurtBoxGroup;
+                headHurtbox.indexInGroup = 1;
+            }
+
+            HurtBox mainHurtbox = childLocator.FindChildGameObject("MainHurtbox").AddComponent<HurtBox>();
             mainHurtbox.gameObject.layer = LayerIndex.entityPrecise.intVal;
-            mainHurtbox.healthComponent = prefab.GetComponent<HealthComponent>();
+            mainHurtbox.healthComponent = bodyPrefab.GetComponent<HealthComponent>();
             mainHurtbox.isBullseye = true;
+            mainHurtbox.isSniperTarget = headHurtbox == null;
             mainHurtbox.damageModifier = HurtBox.DamageModifier.Normal;
             mainHurtbox.hurtBoxGroup = hurtBoxGroup;
             mainHurtbox.indexInGroup = 0;
 
-            hurtBoxGroup.hurtBoxes = new HurtBox[]
+            if (headHurtbox)
             {
-                mainHurtbox
-            };
-
+                hurtBoxGroup.hurtBoxes = new HurtBox[]
+                {
+                    mainHurtbox,
+                    headHurtbox
+                };
+            }
+            else
+            {
+                hurtBoxGroup.hurtBoxes = new HurtBox[]
+                {
+                    mainHurtbox,
+                };
+            }
             hurtBoxGroup.mainHurtBox = mainHurtbox;
             hurtBoxGroup.bullseyeCount = 1;
         }
 
-        public static void SetupHurtBoxes(GameObject bodyPrefab)
+        public static void SetHurtboxesHealthComponents(GameObject bodyPrefab)
         {
-
             HealthComponent healthComponent = bodyPrefab.GetComponent<HealthComponent>();
 
             foreach (HurtBoxGroup hurtboxGroup in bodyPrefab.GetComponentsInChildren<HurtBoxGroup>())
@@ -453,9 +476,6 @@ namespace HenryMod.Modules
         }
         #endregion
 
-        #region ComponentSetup
-        #endregion ComponentSetup
-
         #region master
         public static void CreateGenericDoppelganger(GameObject bodyPrefab, string masterName, string masterToCopy) => CloneDopplegangerMaster(bodyPrefab, masterName, masterToCopy);
         public static GameObject CloneDopplegangerMaster(GameObject bodyPrefab, string masterName, string masterToCopy)
@@ -488,107 +508,50 @@ namespace HenryMod.Modules
         public static GameObject LoadMaster(this AssetBundle assetBundle, string assetName, GameObject bodyPrefab)
         {
             GameObject newMaster = assetBundle.LoadAsset<GameObject>(assetName);
-            //todo ser
-            //should we add and initialize a new CharacterMaster n BaseAi n shit if one doesn't exist? or should we simply require them be put on the prefab in unity?
-            newMaster.GetComponent<CharacterMaster>().bodyPrefab = bodyPrefab;
+
+            BaseAI baseAI = newMaster.GetComponent<BaseAI>();
+            if(baseAI == null)
+            {
+                baseAI = newMaster.AddComponent<BaseAI>();
+                baseAI.aimVectorDampTime = 0.1f;
+                baseAI.aimVectorMaxSpeed = 360;
+            }
+            baseAI.scanState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.AI.Walker.Wander));
+
+            EntityStateMachine stateMachine = newMaster.GetComponent<EntityStateMachine>();
+            if(stateMachine == null)
+            {
+                AddEntityStateMachine(newMaster, "AI", typeof(EntityStates.AI.Walker.Wander), typeof(EntityStates.AI.Walker.Wander));
+            }
+
+            baseAI.stateMachine = stateMachine;
+
+            CharacterMaster characterMaster = newMaster.GetComponent<CharacterMaster>();
+            if(characterMaster == null)
+            {
+                characterMaster = newMaster.AddComponent<CharacterMaster>();
+            }
+            characterMaster.bodyPrefab = bodyPrefab;
+            characterMaster.teamIndex = TeamIndex.Monster;
 
             Modules.Content.AddMasterPrefab(newMaster);
             return newMaster;
         }
-
-        //nevermind actually adding a component and just editing it is better because you get default values
-        public struct AISkillDriverInfo
-        {
-            //just gonna leave this here while I learn for now
-            [Tooltip("The name of this skill driver for reference purposes.")]
-            public string customName;
-
-            [Tooltip("The slot of the associated skill. Set to None to allow this behavior to run regardless of skill availability.")]
-            public SkillSlot skillSlot;
-
-            [Header("Selection Conditions")]
-            [Tooltip("The skill that the specified slot must have for this behavior to run. Set to none to allow any skill.")]
-            public SkillDef requiredSkill;
-
-            [Tooltip("If set, this cannot be the dominant driver while the skill is on cooldown or out of stock.")]
-            public bool requireSkillReady;
-
-            [Tooltip("If set, this cannot be the dominant driver while the equipment is on cooldown or out of stock.")]
-            public bool requireEquipmentReady;
-
-            [Tooltip("The minimum health fraction required of the user for this behavior.")]
-            public float minUserHealthFraction;
-
-            [Tooltip("The maximum health fraction required of the user for this behavior.")]
-            public float maxUserHealthFraction;
-
-            [Tooltip("The minimum health fraction required of the target for this behavior.")]
-            public float minTargetHealthFraction;
-
-            [Tooltip("The maximum health fraction required of the target for this behavior.")]
-            public float maxTargetHealthFraction;
-
-            [Tooltip("The minimum distance from the target required for this behavior.")]
-            public float minDistance;
-
-            [Tooltip("The maximum distance from the target required for this behavior.")]
-            public float maxDistance;
-
-            public bool selectionRequiresTargetLoS;
-
-            public bool selectionRequiresOnGround;
-
-            public bool selectionRequiresAimTarget;
-
-            [Tooltip("The maximum number of times that this skill can be selected.  If the value is < 0, then there is no maximum.")]
-            public int maxTimesSelected;
-
-            [Header("Behavior")]
-            [Tooltip("The type of object targeted for movement.")]
-            public TargetType moveTargetType;
-
-            [Tooltip("If set, this skill will not be activated unless there is LoS to the target.")]
-            public bool activationRequiresTargetLoS;
-
-            [Tooltip("If set, this skill will not be activated unless there is LoS to the aim target.")]
-            public bool activationRequiresAimTargetLoS;
-
-            [Tooltip("If set, this skill will not be activated unless the aim vector is pointing close to the target.")]
-            public bool activationRequiresAimConfirmation;
-
-            [Tooltip("The movement type to use while this is the dominant skill driver.")]
-            public MovementType movementType;
-
-            public float moveInputScale;
-
-            [Tooltip("Where to look while this is the dominant skill driver")]
-            public AimType aimType;
-
-            [Tooltip("If set, the nodegraph will not be used to direct the local navigator while this is the dominant skill driver. Direction toward the target will be used instead.")]
-            public bool ignoreNodeGraph;
-
-            [Tooltip("If true, the AI will attempt to sprint while this is the dominant skill driver.")]
-            public bool shouldSprint;
-
-            public bool shouldFireEquipment;
-
-            public ButtonPressType buttonPressType;
-
-            [Header("Transition Behavior")]
-            [Tooltip("If non-negative, this value will be used for the driver evaluation timer while this is the dominant skill driver.")]
-            public float driverUpdateTimerOverride;
-
-            [Tooltip("If set and this is the dominant skill driver, the current enemy will be reset at the time of the next evaluation.")]
-            public bool resetCurrentEnemyOnNextDriverSelection;
-
-            [Tooltip("If true, this skill driver cannot be chosen twice in a row.")]
-            public bool noRepeat;
-
-            [Tooltip("The AI skill driver that will be treated as having top priority after this one.")]
-            public AISkillDriver nextHighPriorityOverride;
-        }
         #endregion master
-        //todo ser
+
+        public static void ClearEntityStateMachines(GameObject bodyPrefab)
+        {
+            EntityStateMachine[] machines = bodyPrefab.GetComponents<EntityStateMachine>();
+
+            for (int i = machines.Length - 1; i >= 0; i--)
+            {
+                UnityEngine.Object.DestroyImmediate(machines[i]);
+            }
+            //todo ser
+            NetworkStateMachine networkMachine = bodyPrefab.GetComponent<NetworkStateMachine>();
+            networkMachine.stateMachines = new EntityStateMachine[0];
+        }
+
         public static void AddEntityStateMachine(GameObject prefab, string machineName, Type mainStateType = null,  Type initalStateType = null)
         {
             EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(prefab, machineName);
@@ -597,8 +560,9 @@ namespace HenryMod.Modules
                 entityStateMachine = prefab.AddComponent<EntityStateMachine>();
             } else
             {
-                Log.Debug($"An Entity State Machine already exists with the name {machineName}. replacing.");
+                Log.Message($"An Entity State Machine already exists with the name {machineName}. replacing.");
             }
+
             entityStateMachine.customName = machineName;
 
             if (mainStateType == null)

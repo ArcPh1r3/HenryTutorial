@@ -16,7 +16,7 @@ namespace HenryMod.Modules
         /// </summary>
         /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
         /// <param name="destroyExisting">Destroy any existing GenericSkills on the body prefab so you can replace them?</param>
-        public static void CreateSkillFamilies(GameObject targetPrefab, bool destroyExisting = true) => CreateSkillFamilies(targetPrefab, destroyExisting, SkillSlot.Primary, SkillSlot.Secondary, SkillSlot.Utility, SkillSlot.Utility);
+        public static void CreateSkillFamilies(GameObject targetPrefab, bool destroyExisting = true) => CreateSkillFamilies(targetPrefab, destroyExisting, SkillSlot.Primary, SkillSlot.Secondary, SkillSlot.Utility, SkillSlot.Special);
         /// <summary>
         /// Destroy existing GenericSkills, create in order the GenericSkills for the skillslots desired, and create skillfamilies for them.
         /// </summary>

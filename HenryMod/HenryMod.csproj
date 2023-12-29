@@ -54,8 +54,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Characters\Survivors\" />
-    <Folder Include="Characters\Survivors\Henry\" />
     <Folder Include="BaseContent\" />
     <Folder Include="Modules\Characters\" />
     <Folder Include="Characters\Survivors\Henry\SkillStates\" />
@@ -64,7 +62,7 @@
     <Folder Include="Characters\Survivors\Henry\Components\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if &quot;$(Username)&quot; == &quot;MyPCUsername(don't dox yourself)&quot; copy &quot;$(TargetPath)&quot; &quot;C:\[PATH_TO_MY_R2MODMAN_PROFILE]\BepInEx\plugins&quot;" />
+    <Exec Command="REM change this to your username (or add yours if you're working in a team or somethin)&#xD;&#xA;if &quot;$(Username)&quot; == &quot;Erikbir&quot; set build=true&#xD;&#xA;&#xD;&#xA;if defined build (&#xD;&#xA;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\Build\plugins&quot;&#xD;&#xA;&#xD;&#xA;if exist &quot;$(ProjectDir)..\HenryUnityProject\AssetBundles\myassetbundle&quot; (&#xD;&#xA;copy &quot;$(ProjectDir)..\HenryUnityProject\AssetBundles\myassetbundle&quot; &quot;$(ProjectDir)..\Build\plugins\AssetBundles&quot;&#xD;&#xA;)&#xD;&#xA;Xcopy /E /I /Y &quot;$(ProjectDir)..\Build\plugins&quot; &quot;E:\r2Profiles\Blinx Returns\BepInEx\plugins\rob-henrymod\&quot;&#xD;&#xA;)&#xD;&#xA;" />
   </Target>
 
 </Project>

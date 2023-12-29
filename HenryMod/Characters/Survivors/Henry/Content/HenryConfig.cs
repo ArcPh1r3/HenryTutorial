@@ -1,10 +1,4 @@
-﻿//todo windows change namespace
-
-using BepInEx.Configuration;
-using HenryMod.Modules;
-using HenryMod.Modules.Survivors;
-
-namespace HenryMod.Characters.Survivors.Henry.Content
+﻿namespace HenryMod.Survivors.Henry
 {
     public static class HenryConfig
     {

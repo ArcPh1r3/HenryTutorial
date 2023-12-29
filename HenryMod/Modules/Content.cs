@@ -28,8 +28,6 @@ namespace HenryMod.Modules
 
             ContentPacks.survivorDefs.Add(survivorDef);
         }
-        //todo funny?
-        //survivorinfo?
         public static void CreateSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix) { CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, null, 100f); }
         public static void CreateSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, float sortPosition) { CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, null, sortPosition); }
         public static void CreateSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, UnlockableDef unlockableDef) { CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, unlockableDef, 100f); }
@@ -56,6 +54,17 @@ namespace HenryMod.Modules
         {
             ContentPacks.unlockableDefs.Add(unlockableDef);
         }
+        public static UnlockableDef CreateAndAddUnlockbleDef(string identifier, string nameToken, Sprite achievementIcon)
+        {
+            UnlockableDef unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>();
+            unlockableDef.cachedName = identifier;
+            unlockableDef.nameToken = nameToken;
+            unlockableDef.achievementIcon = achievementIcon;
+
+            AddUnlockableDef(unlockableDef);
+
+            return unlockableDef;
+        }
 
         public static void AddSkillDef(SkillDef skillDef)
         {
@@ -77,7 +86,7 @@ namespace HenryMod.Modules
             ContentPacks.buffDefs.Add(buffDef);
         }
         // simple helper method
-        internal static BuffDef CreateBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff)
+        internal static BuffDef CreateAndAddBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff)
         {
             BuffDef buffDef = ScriptableObject.CreateInstance<BuffDef>();
             buffDef.name = buffName;
@@ -97,23 +106,25 @@ namespace HenryMod.Modules
             ContentPacks.effectDefs.Add(effectDef);
         }
         //todo ser
-        internal static void CreateNewEffectDef(GameObject effectPrefab, string soundName = "")
+        internal static EffectDef CreateAndAddEffectDef(GameObject effectPrefab, string soundName = "")
         {
-            EffectDef newEffectDef = new EffectDef();
-            newEffectDef.prefab = effectPrefab;
-            newEffectDef.prefabEffectComponent = effectPrefab.GetComponent<EffectComponent>();
-            newEffectDef.prefabName = effectPrefab.name;
-            newEffectDef.prefabVfxAttributes = effectPrefab.GetComponent<VFXAttributes>();
-            newEffectDef.spawnSoundEventName = soundName;
+            EffectDef effectDef = new EffectDef();
+            effectDef.prefab = effectPrefab;
+            effectDef.prefabEffectComponent = effectPrefab.GetComponent<EffectComponent>();
+            effectDef.prefabName = effectPrefab.name;
+            effectDef.prefabVfxAttributes = effectPrefab.GetComponent<VFXAttributes>();
+            effectDef.spawnSoundEventName = soundName;
 
-            AddEffectDef(newEffectDef);
+            AddEffectDef(effectDef);
+
+            return effectDef;
         }
 
         public static void AddNetworkSoundEventDef(NetworkSoundEventDef networkSoundEventDef)
         {
             ContentPacks.networkSoundEventDefs.Add(networkSoundEventDef);
         }
-        internal static NetworkSoundEventDef CreateNetworkSoundEventDef(string eventName)
+        internal static NetworkSoundEventDef CreateAndAddNetworkSoundEventDef(string eventName)
         {
             NetworkSoundEventDef networkSoundEventDef = ScriptableObject.CreateInstance<NetworkSoundEventDef>();
             networkSoundEventDef.akId = AkSoundEngine.GetIDFromString(eventName);

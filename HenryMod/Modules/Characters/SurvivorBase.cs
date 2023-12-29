@@ -1,19 +1,17 @@
 ﻿using BepInEx.Configuration;
 using RoR2;
-using HenryMod.Modules.Characters;
 using UnityEngine;
 using System.Collections.Generic;
 using RoR2.Skills;
 
-//todo windows change namespace
-namespace HenryMod.Modules.Survivors
+namespace HenryMod.Modules.Characters
 {
-    internal abstract class SurvivorBase<T> : CharacterBase<T> where T: SurvivorBase<T>, new()
+    public abstract class SurvivorBase<T> : CharacterBase<T> where T : SurvivorBase<T>, new()
     {
         public abstract string displayPrefabName { get; }
 
         public abstract string survivorTokenPrefix { get; }
-        
+
         public abstract UnlockableDef characterUnlockableDef { get; }
 
         public virtual GameObject displayPrefab { get; set; }
@@ -29,18 +27,17 @@ namespace HenryMod.Modules.Survivors
 
         protected virtual void InitializeDisplayPrefab()
         {
-            displayPrefab = Modules.Prefabs.CreateDisplayPrefab(assetBundle, displayPrefabName, bodyPrefab);
+            displayPrefab = Prefabs.CreateDisplayPrefab(assetBundle, displayPrefabName, bodyPrefab);
         }
 
-        protected virtual void InitializeSurvivor() {      
+        protected virtual void InitializeSurvivor()
+        {
             RegisterNewSurvivor(bodyPrefab, displayPrefab, bodyInfo.bodyColor, survivorTokenPrefix, characterUnlockableDef, bodyInfo.sortPosition);
         }
 
-        //todo funny? also why does this have overloads if it's one of the ones we don't want the user to have to see?
-        //survivorinfo?
         public static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, UnlockableDef unlockableDef, float sortPosition)
         {
-            Modules.Content.CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, unlockableDef, sortPosition);
+            Content.CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, unlockableDef, sortPosition);
         }
 
         #region CharacterSelectSurvivorPreviewDisplayController
