@@ -9,9 +9,6 @@ namespace HenryMod.Modules
 
         internal static Shader hotpoo = RoR2.LegacyResourcesAPI.Load<Shader>("Shaders/Deferred/HGStandard");
 
-        //todo modules: to assets?
-        //todo material: detect shader I suppose
-            //but wait I wanted to do it on assetbundle load. cache them?
         public static Material LoadMaterial(this AssetBundle assetBundle, string materialName) => CreateHopooMaterialFromBundle(assetBundle, materialName);
         public static Material CreateHopooMaterialFromBundle(this AssetBundle assetBundle, string materialName)
         {
@@ -60,14 +57,13 @@ namespace HenryMod.Modules
             tempMat.shader = hotpoo;
 
             //apply values after shader is set
-            tempMat.SetColor("_Color", tempMat.GetColor("_Color"));
-            tempMat.SetTexture("_MainTex", tempMat.GetTexture("_MainTex"));
             tempMat.SetTexture("_EmTex", tempMat.GetTexture("_EmissionMap"));
             tempMat.EnableKeyword("DITHER");
-
+            
             if (bumpScale != null)
             {
                 tempMat.SetFloat("_NormalStrength", (float)bumpScale);
+                tempMat.SetTexture("_NormalTex", tempMat.GetTexture("_BumpMap"));
             }
             if (emissionColor != null)
             {
@@ -131,6 +127,5 @@ namespace HenryMod.Modules
             return material;
         }
         //todo joe specular
-        //todo apparently normal
     }
 }

@@ -35,7 +35,6 @@ namespace HenryMod.Modules
             }
             characterModel.baseRendererInfos = prefab.GetComponentInChildren<CharacterModel>().baseRendererInfos;
 
-            //todo material
             Modules.Assets.ConvertAllRenderersToHopooShader(model);
 
             return model.gameObject;
@@ -45,7 +44,6 @@ namespace HenryMod.Modules
 
         public static GameObject LoadCharacterModel(AssetBundle assetBundle, string modelName)
         {
-
             GameObject model = assetBundle.LoadAsset<GameObject>(modelName);
             if (model == null)
             {
@@ -67,34 +65,21 @@ namespace HenryMod.Modules
             GameObject clonedBody = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/" + bodyInfo.bodyNameToClone + "Body");
             if (!clonedBody)
             {
-                Log.Error(bodyInfo.bodyNameToClone + "Body to clone is not a valid body, character creation failed");
+                Log.Error(bodyInfo.bodyNameToClone + " Body to clone is not a valid body, character creation failed");
                 return null;
             }
 
             GameObject newBodyPrefab = PrefabAPI.InstantiateClone(clonedBody, bodyInfo.bodyName);
 
-            //GameObject model = assetBundle.LoadAsset<GameObject>(modelName);
-            //if (model == null)
-            //{
-            //    Log.Error($"could not load model prefab {modelName}. Make sure this prefab exists in assetbundle {assetBundle.name}");
-            //    return null;
-            //}
-
-            //todo funny: why have this backup if you're going to delete it in this next function?
-            //if (model == null) model = newBodyPrefab.GetComponentInChildren<CharacterModel>().gameObject;
-
             Transform modelBaseTransform = AddCharacterModelToSurvivorBody(newBodyPrefab, model.transform, bodyInfo);
 
             SetupCharacterBody(newBodyPrefab, bodyInfo);
 
-            //todo setup
             SetupCameraTargetParams(newBodyPrefab, bodyInfo);
             SetupModelLocator(newBodyPrefab, modelBaseTransform, model.transform);
             //SetupRigidbody(newPrefab);
             SetupCapsuleCollider(newBodyPrefab);
-
-            //todo funny why only check this here?
-            if (modelBaseTransform != null) SetupCharacterDirection(newBodyPrefab, modelBaseTransform, model.transform);
+            SetupCharacterDirection(newBodyPrefab, modelBaseTransform, model.transform);
 
             Modules.Content.AddCharacterBodyPrefab(newBodyPrefab);
 
@@ -207,7 +192,7 @@ namespace HenryMod.Modules
 
             return modelBase.transform;
         }
-        //todo ser see which ones of these are fuckinnnnnnnnnnnnnnn serialized
+
         private static void SetupCharacterDirection(GameObject prefab, Transform modelBaseTransform, Transform modelTransform)
         {
             if (!prefab.GetComponent<CharacterDirection>())
@@ -245,6 +230,7 @@ namespace HenryMod.Modules
         //todo setup see if this affects kinematiccharactercontroller
         private static void SetupCapsuleCollider(GameObject prefab)
         {
+            //character collider MUST be commando's size!
             CapsuleCollider capsuleCollider = prefab.GetComponent<CapsuleCollider>();
             capsuleCollider.center = new Vector3(0f, 0f, 0f);
             capsuleCollider.radius = 0.5f;
@@ -547,7 +533,7 @@ namespace HenryMod.Modules
             {
                 UnityEngine.Object.DestroyImmediate(machines[i]);
             }
-            //todo ser
+
             NetworkStateMachine networkMachine = bodyPrefab.GetComponent<NetworkStateMachine>();
             networkMachine.stateMachines = new EntityStateMachine[0];
         }

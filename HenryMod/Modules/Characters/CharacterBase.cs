@@ -93,10 +93,9 @@ namespace HenryMod.Modules.Characters
         public string bodyNameToken = "";
         public string subtitleNameToken = "";
 
-        // body prefab you're cloning for your character- commando is the safest
+        /// <summary> body prefab you're cloning for your character- commando is the safest </summary>
         public string bodyNameToClone = "Commando";
 
-        // the color of your characters name and skills and such in the lobby
         public Color bodyColor = Color.white;
 
         public Texture characterPortrait = null;
@@ -146,7 +145,6 @@ namespace HenryMod.Modules.Characters
         public float jumpPowerGrowth = 0f;// jump power per level exists for some reason
         #endregion Stats
 
-        //todo setup
         #region Camera
         public Vector3 aimOriginPosition = new Vector3(0f, 1.6f, 0f);
         public Vector3 modelBasePosition = new Vector3(0f, -0.92f, 0f);

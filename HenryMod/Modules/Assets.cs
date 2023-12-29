@@ -6,6 +6,7 @@ using RoR2;
 using System.IO;
 using System.Collections.Generic;
 using RoR2.UI;
+using RoR2.Projectile;
 
 namespace HenryMod.Modules
 {
@@ -14,7 +15,7 @@ namespace HenryMod.Modules
         //cache bundles if multiple characters use the same one
         internal static Dictionary<string, AssetBundle> loadedBundles = new Dictionary<string, AssetBundle>();
 
-        internal static AssetBundle LoadAssetBundle(string bundleName, bool convertMaterials = true)
+        internal static AssetBundle LoadAssetBundle(string bundleName)
         {
 
             if (bundleName == "myassetbundlee")
@@ -33,12 +34,6 @@ namespace HenryMod.Modules
             if (assetBundle == null)
             {                                                       //todo guide
                 Log.Error($"Could not find assetbundle, {bundleName}. Follow the guide to build and install your mod correctly!");
-            }
-
-            //todo materials
-            if (convertMaterials)
-            {
-                //ConvertAllMaterials(assetBundle);
             }
 
             loadedBundles[bundleName] = assetBundle;
@@ -66,9 +61,6 @@ namespace HenryMod.Modules
             return newTracer;
         }
 
-        //todo material
-        //do this on loading assetbundle
-        //probably wait for stubbedstubbedshader
         internal static void ConvertAllRenderersToHopooShader(GameObject objectToConvert)
         {
             if (!objectToConvert) return;
@@ -79,7 +71,6 @@ namespace HenryMod.Modules
             }
         }
 
-        //todo funny?
         internal static GameObject LoadCrosshair(string crosshairName)
         {
             GameObject loadedCrosshair = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Crosshair/" + crosshairName + "Crosshair");
@@ -93,11 +84,8 @@ namespace HenryMod.Modules
             return loadedCrosshair;
         }
 
-        //todo funny
-        public static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName) => LoadEffect(assetBundle, resourceName, "", false);
-        public static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName, string soundName) => LoadEffect(assetBundle, resourceName, soundName, false);
-        public static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName, bool parentToTransform) => LoadEffect(assetBundle, resourceName, "", parentToTransform);
-        public static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName, string soundName, bool parentToTransform)
+        internal static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName, bool parentToTransform) => LoadEffect(assetBundle, resourceName, "", parentToTransform);
+        internal static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName, string soundName = "", bool parentToTransform = false)
         {
             GameObject newEffect = assetBundle.LoadAsset<GameObject>(resourceName);
 
@@ -117,9 +105,30 @@ namespace HenryMod.Modules
             effect.positionAtReferencedTransform = true;
             effect.soundName = soundName;
 
-            Modules.Content.CreateAndAddEffectDef(newEffect, soundName);
+            Modules.Content.CreateAndAddEffectDef(newEffect);
 
             return newEffect;
+        }
+
+        internal static GameObject CreateProjectileGhostPrefab(this AssetBundle assetBundle, string ghostName)
+        {
+            GameObject ghostPrefab = assetBundle.LoadAsset<GameObject>(ghostName);
+            if (ghostPrefab == null)
+            {
+                Log.Error($"Failed to load ghost prefab {ghostName}");
+            }
+            if (!ghostPrefab.GetComponent<NetworkIdentity>()) ghostPrefab.AddComponent<NetworkIdentity>();
+            if (!ghostPrefab.GetComponent<ProjectileGhostController>()) ghostPrefab.AddComponent<ProjectileGhostController>();
+
+            Modules.Assets.ConvertAllRenderersToHopooShader(ghostPrefab);
+
+            return ghostPrefab;
+        }
+
+        internal static GameObject CloneProjectilePrefab(string prefabName, string newPrefabName)
+        {
+            GameObject newPrefab = PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/" + prefabName), newPrefabName);
+            return newPrefab;
         }
     }
 }

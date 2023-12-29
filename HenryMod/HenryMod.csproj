@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -12,24 +12,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="HenryBank.bnk" />
-    <None Remove="Modules\Characters\Henry.cs~RF6221a098.TMP" />
-    <None Remove="myassetbundle" />
-    <None Remove="Content\Henry\" />
-    <None Remove="Content\Henry\Achievements\" />
-    <None Remove="Content\Henry\Content\" />
-    <None Remove="Characters\Survivors\" />
-    <None Remove="Characters\Survivors\Henry\" />
-    <None Remove="BaseContent\" />
-    <None Remove="Modules\Characters\" />
-    <None Remove="Characters\Survivors\Henry\SkillStates\" />
-    <None Remove="BaseContent\BaseStates\" />
-    <None Remove="BaseContent\Unlocks\" />
-    <None Remove="Characters\Survivors\Henry\Components\" />
-    <None Remove="RoR2-nstrip" />
-  </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="BepInEx.Analyzers" Version="1.0.*">
@@ -49,16 +31,12 @@
 		<PackageReference Include="R2API.Unlockable" Version="1.0.0" />
 		<PackageReference Include="R2API.DamageType" Version="1.0.0" />
 		<PackageReference Include="R2API.Sound" Version="1.0.0" />
-
 	</ItemGroup>
 
 
   <ItemGroup>
-    <Folder Include="BaseContent\" />
     <Folder Include="Modules\Characters\" />
     <Folder Include="Characters\Survivors\Henry\SkillStates\" />
-    <Folder Include="BaseContent\BaseStates\" />
-    <Folder Include="BaseContent\Unlocks\" />
     <Folder Include="Characters\Survivors\Henry\Components\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

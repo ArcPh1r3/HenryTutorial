@@ -120,14 +120,12 @@ namespace HenryMod.Survivors.Henry
 
         public override void InitializeEntityStateMachines() 
         {
-            Log.Message(Environment.StackTrace);
-            //clear existing state machines from your cloned body probably commando
-            //omit all this if you want to just keep his
+            //clear existing state machines from your cloned body (probably commando)
+            //omit all this if you want to just keep theirs
             Prefabs.ClearEntityStateMachines(bodyPrefab);
 
             //if you set up a custom main characterstate, set it up here
             //don't forget to register custom entitystates in your HenryStates.cs
-            //todo setup example state?
             Prefabs.AddEntityStateMachine(bodyPrefab, "Body", typeof(EntityStates.GenericCharacterMain), typeof(EntityStates.SpawnTeleporterState));
             
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
@@ -241,7 +239,7 @@ namespace HenryMod.Survivors.Henry
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
-                activationStateMachineName = "Weapon2",
+                activationStateMachineName = "Weapon2", //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
@@ -254,7 +252,7 @@ namespace HenryMod.Survivors.Henry
             Skills.AddSpecialSkills(bodyPrefab, bombSkillDef);
         }
         #endregion skills
-
+        
         #region skins
         public override void InitializeSkins()
         {

@@ -132,7 +132,7 @@ namespace HenryMod.SkillStates.BaseStates
             }
         }
 
-        private void OnFireAttackEnter()
+        private void EnterAttack()
         {
             this.hasFired = true;
             Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
@@ -173,7 +173,7 @@ namespace HenryMod.SkillStates.BaseStates
             {
                 if (!hasFired)
                 {
-                    OnFireAttackEnter();
+                    EnterAttack();
                 }
                 FireAttack();
             }

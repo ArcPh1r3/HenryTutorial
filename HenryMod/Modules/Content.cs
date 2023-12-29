@@ -105,15 +105,10 @@ namespace HenryMod.Modules
         {
             ContentPacks.effectDefs.Add(effectDef);
         }
-        //todo ser
-        internal static EffectDef CreateAndAddEffectDef(GameObject effectPrefab, string soundName = "")
+
+        internal static EffectDef CreateAndAddEffectDef(GameObject effectPrefab)
         {
-            EffectDef effectDef = new EffectDef();
-            effectDef.prefab = effectPrefab;
-            effectDef.prefabEffectComponent = effectPrefab.GetComponent<EffectComponent>();
-            effectDef.prefabName = effectPrefab.name;
-            effectDef.prefabVfxAttributes = effectPrefab.GetComponent<VFXAttributes>();
-            effectDef.spawnSoundEventName = soundName;
+            EffectDef effectDef = new EffectDef(effectPrefab);
 
             AddEffectDef(effectDef);
 
@@ -131,7 +126,7 @@ namespace HenryMod.Modules
             networkSoundEventDef.eventName = eventName;
 
             AddNetworkSoundEventDef(networkSoundEventDef);
-
+            
             return networkSoundEventDef;
         }
     }

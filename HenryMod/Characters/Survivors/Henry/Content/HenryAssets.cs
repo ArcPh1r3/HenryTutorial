@@ -77,12 +77,14 @@ namespace HenryMod.Survivors.Henry
         private static void CreateBombProjectile()
         {
             //highly recommend setting up projectiles in editor, but this is a quick and dirty way to prototype if you want //todo guide
-            bombProjectilePrefab = Projectiles.CloneProjectilePrefab("CommandoGrenadeProjectile", "HenryBombProjectile");
+            bombProjectilePrefab = Assets.CloneProjectilePrefab("CommandoGrenadeProjectile", "HenryBombProjectile");
 
-            ProjectileImpactExplosion bombImpactExplosion = bombProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
-            Projectiles.InitializeImpactExplosion(bombImpactExplosion);
-            //todo funny why have a function to set all its values if you're going to just set all the values here anyways?
+            //remove their ProjectileImpactExplosion component and start from default values
+            UnityEngine.Object.DestroyImmediate(bombProjectilePrefab.AddComponent<ProjectileImpactExplosion>());
+            ProjectileImpactExplosion bombImpactExplosion = bombProjectilePrefab.AddComponent<ProjectileImpactExplosion>();
+
             bombImpactExplosion.blastRadius = 16f;
+            bombImpactExplosion.falloffModel = BlastAttack.FalloffModel.None;
             bombImpactExplosion.destroyOnEnemy = true;
             bombImpactExplosion.lifetime = 12f;
             bombImpactExplosion.impactEffect = bombExplosionEffect;
@@ -93,7 +95,7 @@ namespace HenryMod.Survivors.Henry
             ProjectileController bombController = bombProjectilePrefab.GetComponent<ProjectileController>();
 
             if (_assetBundle.LoadAsset<GameObject>("HenryBombGhost") != null)
-                bombController.ghostPrefab = _assetBundle.CreateGhostPrefab("HenryBombGhost");
+                bombController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("HenryBombGhost");
             
             bombController.startSound = "";
         }

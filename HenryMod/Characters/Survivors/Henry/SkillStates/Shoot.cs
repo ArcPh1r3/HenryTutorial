@@ -59,7 +59,7 @@ namespace HenryMod.SkillStates
                         damage = Shoot.damageCoefficient * this.damageStat,
                         damageColorIndex = DamageColorIndex.Default,
                         damageType = DamageType.Generic,
-                        falloffModel = BulletAttack.FalloffModel.DefaultBullet,
+                        falloffModel = BulletAttack.FalloffModel.None,
                         maxDistance = Shoot.range,
                         force = Shoot.force,
                         hitMask = LayerIndex.CommonMasks.bullet,
