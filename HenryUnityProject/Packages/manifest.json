@@ -1,11 +1,9 @@
 {
   "dependencies": {
-    "com.passivepicasso.thunderkit": "https://github.com/PassivePicasso/ThunderKit.git#8.0.3",
     "com.unity.assetbundlebrowser": "1.7.0",
     "com.unity.ide.vscode": "1.2.3",
     "com.unity.textmeshpro": "2.1.1",
     "com.unity.ugui": "1.0.0",
-    "riskofthunder-ror2importextensions": "https://github.com/risk-of-thunder/RoR2ImportExtensions.git",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
