@@ -16,7 +16,7 @@ namespace HenryMod.Survivors.Henry
         //
         public override string assetBundleName => "myassetbundle";
 
-        //the name of the prfab. conventionally ending on "Body"
+        //the name of the prefab. conventionally ending in "Body"
         public override string bodyName => "HenryBody";
 
         //used when building your character using the prefabs you set up in unity
@@ -34,7 +34,7 @@ namespace HenryMod.Survivors.Henry
             bodyNameToken = HENRY_PREFIX + "NAME",
             subtitleNameToken = HENRY_PREFIX + "SUBTITLE",
 
-            characterPortrait = instance.assetBundle.LoadAsset<Texture>("texHenryIcon"),
+            characterPortrait = assetBundle.LoadAsset<Texture>("texHenryIcon"),
             bodyColor = Color.white,
 
             crosshair = Assets.LoadCrosshair("Standard"),
@@ -52,7 +52,7 @@ namespace HenryMod.Survivors.Henry
                 new CustomRendererInfo
                 {
                     childName = "SwordModel",
-                    material = instance.assetBundle.LoadMaterial("matHenry"),
+                    material = assetBundle.LoadMaterial("matHenry"),
                 },
                 new CustomRendererInfo
                 {
@@ -66,7 +66,7 @@ namespace HenryMod.Survivors.Henry
 
         public override UnlockableDef characterUnlockableDef => HenryUnlockables.characterUnlockableDef;
 
-        public override ItemDisplaysBase itemDisplays => new HenryItemDisplays();
+        public override ItemDisplaysBase itemDisplays { get; } = new HenryItemDisplays();
 
         public override void InitializeCharacter()
         {

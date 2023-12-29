@@ -16,7 +16,7 @@ namespace HenryMod.Modules.Characters
 
         public abstract CustomRendererInfo[] customRendererInfos { get; }
 
-        public virtual ItemDisplaysBase itemDisplays { get; } = null;
+        public virtual ItemDisplaysBase itemDisplays { get; };
 
         public GameObject bodyPrefab;
         public CharacterBody prefabCharacterBody;
