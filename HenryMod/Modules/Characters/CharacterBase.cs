@@ -14,18 +14,18 @@ namespace HenryMod.Modules.Characters
         
         public abstract BodyInfo bodyInfo { get; }
 
-        public abstract CustomRendererInfo[] customRendererInfos { get; }
+        public virtual CustomRendererInfo[] customRendererInfos { get; }
 
-        public virtual ItemDisplaysBase itemDisplays { get; };
+        public virtual ItemDisplaysBase itemDisplays { get; }
+
+        public static T instance { get; private set; }
+
+        public AssetBundle assetBundle { get; private set; }
 
         public GameObject bodyPrefab;
         public CharacterBody prefabCharacterBody;
         public GameObject characterModelObject;
         public CharacterModel prefabCharacterModel;
-
-        public static T instance { get; private set; }
-
-        public AssetBundle assetBundle { get; private set; }
 
         public void Initialize()
         {
@@ -37,13 +37,12 @@ namespace HenryMod.Modules.Characters
 
         public virtual void InitializeCharacter()
         {
-            InitializeCharacterBodyWithModel();
-            InitializeCharacterModel();
+            InitializeCharacterBodyPrefab();
 
             InitializeItemDisplays();
         }
 
-        protected virtual void InitializeCharacterBodyWithModel()
+        protected virtual void InitializeCharacterBodyPrefab()
         {
             //ability to pass in an existing model
             if(characterModelObject == null)
@@ -53,10 +52,7 @@ namespace HenryMod.Modules.Characters
 
             bodyPrefab = Modules.Prefabs.CreateBodyPrefab(characterModelObject, bodyInfo);
             prefabCharacterBody = bodyPrefab.GetComponent<CharacterBody>();
-        }
 
-        protected virtual void InitializeCharacterModel()
-        {
             prefabCharacterModel = Modules.Prefabs.SetupCharacterModel(bodyPrefab, customRendererInfos);
         }
 

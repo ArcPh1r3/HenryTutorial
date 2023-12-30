@@ -10,6 +10,8 @@ namespace HenryMod.SkillStates
         public static float damageCoefficient = HenryStaticValues.gunDamageCoefficient;
         public static float procCoefficient = 1f;
         public static float baseDuration = 0.6f;
+        //delay on firing is usually ass-feeling. only set this if you know what you're doing
+        public static float firePercentTime = 0.0f;
         public static float force = 800f;
         public static float recoil = 3f;
         public static float range = 256f;
@@ -24,7 +26,7 @@ namespace HenryMod.SkillStates
         {
             base.OnEnter();
             this.duration = Shoot.baseDuration / this.attackSpeedStat;
-            this.fireTime = 0.2f * this.duration;
+            this.fireTime = firePercentTime * this.duration;
             base.characterBody.SetAimTimer(2f);
             this.muzzleString = "Muzzle";
 
@@ -34,6 +36,22 @@ namespace HenryMod.SkillStates
         public override void OnExit()
         {
             base.OnExit();
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+            if (base.fixedAge >= this.fireTime)
+            {
+                this.Fire();
+            }
+
+            if (base.fixedAge >= this.duration && base.isAuthority)
+            {
+                this.outer.SetNextStateToMain();
+                return;
+            }
         }
 
         private void Fire()
@@ -82,22 +100,6 @@ namespace HenryMod.SkillStates
                         hitEffectPrefab = EntityStates.Commando.CommandoWeapon.FirePistol2.hitEffectPrefab,
                     }.Fire();
                 }
-            }
-        }
-
-        public override void FixedUpdate()
-        {
-            base.FixedUpdate();
-
-            if (base.fixedAge >= this.fireTime)
-            {
-                this.Fire();
-            }
-
-            if (base.fixedAge >= this.duration && base.isAuthority)
-            {
-                this.outer.SetNextStateToMain();
-                return;
             }
         }
 

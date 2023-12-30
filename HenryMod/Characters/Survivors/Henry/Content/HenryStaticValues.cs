@@ -2,12 +2,12 @@
 
 namespace HenryMod.Survivors.Henry
 {
-    internal static class HenryStaticValues
+    public static class HenryStaticValues
     {
-        internal const float swordDamageCoefficient = 2.8f;
+        public const float swordDamageCoefficient = 2.8f;
 
-        internal const float gunDamageCoefficient = 4.2f;
+        public const float gunDamageCoefficient = 4.2f;
 
-        internal const float bombDamageCoefficient = 16f;
+        public const float bombDamageCoefficient = 16f;
     }
 }

@@ -1,4 +1,5 @@
-﻿using HenryMod.SkillStates;
+﻿using HenryMod.Henry.SkillStates;
+using HenryMod.SkillStates;
 
 namespace HenryMod.Survivors.Henry
 {

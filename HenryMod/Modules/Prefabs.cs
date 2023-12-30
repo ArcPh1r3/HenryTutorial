@@ -345,14 +345,17 @@ namespace HenryMod.Modules
         /// </summary>
         private static void SetupMainHurtboxesFromChildLocator(GameObject bodyPrefab, GameObject model)
         {
+            if (bodyPrefab.GetComponent<HurtBoxGroup>() != null)
+            {
+                Log.Debug("Hitboxgroup already exists on model prefab. aborting code setup");
+                return;
+            }
+
             ChildLocator childLocator = model.GetComponent<ChildLocator>();
 
             if (!childLocator.FindChild("MainHurtbox"))
             {
-                if (bodyPrefab.GetComponent<HurtBoxGroup>() == null)
-                {
-                    Log.Error("Could not set up main hurtbox: make sure you have a transform pair in your prefab's ChildLocator called 'MainHurtbox'");
-                }
+                Log.Error("Could not set up main hurtbox: make sure you have a transform pair in your prefab's ChildLocator called 'MainHurtbox'");
                 return;
             }
 
@@ -536,8 +539,60 @@ namespace HenryMod.Modules
 
             NetworkStateMachine networkMachine = bodyPrefab.GetComponent<NetworkStateMachine>();
             networkMachine.stateMachines = new EntityStateMachine[0];
+
+            CharacterDeathBehavior deathBehavior = bodyPrefab.GetComponent<CharacterDeathBehavior>();
+            if (deathBehavior)
+            {
+                deathBehavior.idleStateMachine = new EntityStateMachine[0];
+            }
         }
 
+        public static void AddMainEntityStateMachine(GameObject bodyPrefab, string machineName = "Body", Type mainStateType = null, Type initalStateType = null)
+        {
+            EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(bodyPrefab, machineName);
+            if (entityStateMachine == null)
+            {
+                entityStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
+            }
+            else
+            {
+                Log.Message($"An Entity State Machine already exists with the name {machineName}. replacing.");
+            }
+
+            entityStateMachine.customName = machineName;
+
+            if (mainStateType == null)
+            {
+                mainStateType = typeof(EntityStates.GenericCharacterMain);
+            }
+            entityStateMachine.mainStateType = new EntityStates.SerializableEntityStateType(mainStateType);
+
+            if (initalStateType == null)
+            {
+                initalStateType = typeof(EntityStates.SpawnTeleporterState);
+            }
+            entityStateMachine.initialStateType = new EntityStates.SerializableEntityStateType(initalStateType);
+
+            NetworkStateMachine networkMachine = bodyPrefab.GetComponent<NetworkStateMachine>();
+            if (networkMachine)
+            {
+                networkMachine.stateMachines = networkMachine.stateMachines.Append(entityStateMachine).ToArray();
+            }
+
+            CharacterDeathBehavior deathBehavior = bodyPrefab.GetComponent<CharacterDeathBehavior>();
+            if (deathBehavior)
+            {
+                deathBehavior.deathStateMachine = entityStateMachine;
+            }
+
+            SetStateOnHurt setStateOnHurt = bodyPrefab.GetComponent<SetStateOnHurt>();
+            if (setStateOnHurt)
+            {
+                setStateOnHurt.targetStateMachine = entityStateMachine;
+            }
+        }
+
+        //this but in reverse https://media.discordapp.net/attachments/875473107891150878/896193331720237106/caption-7.gif?ex=65989f94&is=65862a94&hm=e1f51da3ad190c00c5da1f90269d5ef10bedb0ae063c0f20aa0dd8721608018a&
         public static void AddEntityStateMachine(GameObject prefab, string machineName, Type mainStateType = null,  Type initalStateType = null)
         {
             EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(prefab, machineName);
@@ -564,7 +619,22 @@ namespace HenryMod.Modules
             entityStateMachine.initialStateType = new EntityStates.SerializableEntityStateType(initalStateType);
 
             NetworkStateMachine networkMachine = prefab.GetComponent<NetworkStateMachine>();
-            networkMachine.stateMachines = networkMachine.stateMachines.Append(entityStateMachine).ToArray();
+            if (networkMachine)
+            {
+                networkMachine.stateMachines = networkMachine.stateMachines.Append(entityStateMachine).ToArray();
+            }
+
+            CharacterDeathBehavior deathBehavior = prefab.GetComponent<CharacterDeathBehavior>();
+            if (deathBehavior)
+            {
+                deathBehavior.idleStateMachine = deathBehavior.idleStateMachine.Append(entityStateMachine).ToArray();
+            }
+
+            SetStateOnHurt setStateOnHurt = prefab.GetComponent<SetStateOnHurt>();
+            if (setStateOnHurt)
+            {
+                setStateOnHurt.idleStateMachine = setStateOnHurt.idleStateMachine.Append(entityStateMachine).ToArray();
+            }
         }
 
         public static void SetupHitbox(GameObject prefab, Transform hitboxTransform, string hitboxName) => SetupHitbox(prefab, hitboxName, hitboxTransform);

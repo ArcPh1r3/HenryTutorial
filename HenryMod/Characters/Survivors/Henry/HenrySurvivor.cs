@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using HenryMod.Henry.Components;
+using HenryMod.Henry.SkillStates;
 using HenryMod.Modules;
 using HenryMod.Modules.Characters;
 using RoR2;
@@ -10,16 +11,16 @@ using UnityEngine;
 
 namespace HenryMod.Survivors.Henry
 {
-    internal class HenrySurvivor : SurvivorBase<HenrySurvivor>
+    public class HenrySurvivor : SurvivorBase<HenrySurvivor>
     {
         //todo guide
-        //
+        //used to load the assetbundle for this character. make sure to rename this
         public override string assetBundleName => "myassetbundle";
 
-        //the name of the prefab. conventionally ending in "Body"
+        //the name of the prefab we will create. conventionally ending in "Body"
         public override string bodyName => "HenryBody";
 
-        //used when building your character using the prefabs you set up in unity
+        //the names of the prefabs you set up in unity that we will use to build your character
         public override string modelPrefabName => "mdlHenry";
         public override string displayPrefabName => "HenryDisplay";
 
@@ -30,7 +31,7 @@ namespace HenryMod.Survivors.Henry
 
         public override BodyInfo bodyInfo => new BodyInfo
         {
-            bodyName = instance.bodyName,
+            bodyName = bodyName,
             bodyNameToken = HENRY_PREFIX + "NAME",
             subtitleNameToken = HENRY_PREFIX + "SUBTITLE",
 
@@ -65,8 +66,8 @@ namespace HenryMod.Survivors.Henry
         };
 
         public override UnlockableDef characterUnlockableDef => HenryUnlockables.characterUnlockableDef;
-
-        public override ItemDisplaysBase itemDisplays { get; } = new HenryItemDisplays();
+        
+        public override ItemDisplaysBase itemDisplays => new HenryItemDisplays();
 
         public override void InitializeCharacter()
         {
@@ -125,8 +126,9 @@ namespace HenryMod.Survivors.Henry
             Prefabs.ClearEntityStateMachines(bodyPrefab);
 
             //if you set up a custom main characterstate, set it up here
-            //don't forget to register custom entitystates in your HenryStates.cs
-            Prefabs.AddEntityStateMachine(bodyPrefab, "Body", typeof(EntityStates.GenericCharacterMain), typeof(EntityStates.SpawnTeleporterState));
+                //don't forget to register custom entitystates in your HenryStates.cs
+            //the main "body" state machine has some special properties
+            Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(EntityStates.GenericCharacterMain), typeof(EntityStates.SpawnTeleporterState));
             
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
@@ -212,7 +214,7 @@ namespace HenryMod.Survivors.Henry
                 skillDescriptionToken = HENRY_PREFIX + "UTILITY_ROLL_DESCRIPTION",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Roll)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(Roll)),
                 activationStateMachineName = "Body",
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
@@ -271,9 +273,9 @@ namespace HenryMod.Survivors.Henry
                 prefabCharacterModel.gameObject);
 
             //these are your Mesh Replacements. The order here is based on your CustomRendererInfos from earlier
-            //pass in meshes as they are named in your assetbundle
+                //pass in meshes as they are named in your assetbundle
             //currently not needed as with only 1 skin they will simply take the default meshes
-            //uncomment this when you have another skin
+                //uncomment this when you have another skin
             //defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(defaultRendererinfos,
             //    "meshHenrySword",
             //    "meshHenryGun",
@@ -287,24 +289,24 @@ namespace HenryMod.Survivors.Henry
             #region MasterySkin
             /*
             //creating a new skindef as we did before
-            SkinDef masterySkin = Modules.Skins.CreateSkinDef(HenryPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_MASTERY_SKIN_NAME",
-                Assets.mainAssetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
+            SkinDef masterySkin = Modules.Skins.CreateSkinDef(HENRY_PREFIX + "MASTERY_SKIN_NAME",
+                assetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject,
-                masterySkinUnlockableDef);
+                HenryUnlockables.masterySkinUnlockableDef);
 
             //adding the mesh replacements as above. 
             //if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
-            masterySkin.meshReplacements = Modules.Skins.getMeshReplacements(defaultRendererinfos,
+            masterySkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
                 "meshHenrySwordAlt",
                 null,//no gun mesh replacement. use same gun mesh
                 "meshHenryAlt");
 
             //masterySkin has a new set of RendererInfos (based on default rendererinfos)
-            //you can simply access the RendererInfos defaultMaterials and set them to the new materials for your skin.
-            masterySkin.rendererInfos[0].defaultMaterial = Modules.Materials.CreateHopooMaterial("matHenryAlt");
-            masterySkin.rendererInfos[1].defaultMaterial = Modules.Materials.CreateHopooMaterial("matHenryAlt");
-            masterySkin.rendererInfos[2].defaultMaterial = Modules.Materials.CreateHopooMaterial("matHenryAlt");
+            //you can simply access the RendererInfos' materials and set them to the new materials for your skin.
+            masterySkin.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            masterySkin.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            masterySkin.rendererInfos[2].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
 
             //here's a barebones example of using gameobjectactivations that could probably be streamlined or rewritten entirely, truthfully, but it works
             masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
@@ -329,7 +331,7 @@ namespace HenryMod.Survivors.Henry
         public override void InitializeCharacterMaster()
         {
             //if you're lazy or prototyping you can simply copy the AI of a different character to be used
-            //Modules.Prefabs.CloneAndAddDopplegangerMaster(bodyPrefab, bodyName + "MonsterMaster", "Merc");
+            //Modules.Prefabs.CloneAndAddDopplegangerMaster(bodyPrefab, "HenryMonsterMaster", "Merc");
 
             //how to set up AI in code
             HenryAI.Init(bodyPrefab);

@@ -7,6 +7,7 @@ using System.IO;
 using System.Collections.Generic;
 using RoR2.UI;
 using RoR2.Projectile;
+using Path = System.IO.Path;
 
 namespace HenryMod.Modules
 {
@@ -29,7 +30,7 @@ namespace HenryMod.Modules
                 return loadedBundles[bundleName];
             }
 
-            AssetBundle assetBundle = AssetBundle.LoadFromFile(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(HenryPlugin.instance.Info.Location), "AssetBundles", bundleName));
+            AssetBundle assetBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(HenryPlugin.instance.Info.Location), "AssetBundles", bundleName));
 
             if (assetBundle == null)
             {                                                       //todo guide
@@ -45,7 +46,8 @@ namespace HenryMod.Modules
         //oh wait it's probably in projectile or whatever
         internal static GameObject CloneTracer(string originalTracerName, string newTracerName)
         {
-            if (RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName) == null) return null;
+            if (RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName) == null) 
+                return null;
 
             GameObject newTracer = PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName), newTracerName, true);
 
