@@ -1,4 +1,5 @@
-﻿using RoR2;
+﻿using HenryMod.Survivors.Henry.Achievements;
+using RoR2;
 using UnityEngine;
 
 namespace HenryMod.Survivors.Henry
@@ -11,9 +12,9 @@ namespace HenryMod.Survivors.Henry
         public static void Init()
         {
             masterySkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
-                HenrySurvivor.HENRY_PREFIX + "masteryUnlockable",
-                HenrySurvivor.HENRY_PREFIX + "MASTERY_UNLOCKABLE",
-                HenrySurvivor.instance.assetBundle.LoadAsset<Sprite>("texHenryIcon"));
+                HenryMasteryAchievement.unlockableIdentifier,
+                Modules.Tokens.GetAchievementNameToken(HenryMasteryAchievement.identifier),
+                HenrySurvivor.instance.assetBundle.LoadAsset<Sprite>("texMasteryAchievement"));
         }
     }
 }

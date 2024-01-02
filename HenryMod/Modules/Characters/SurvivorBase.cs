@@ -8,6 +8,9 @@ namespace HenryMod.Modules.Characters
 {
     public abstract class SurvivorBase<T> : CharacterBase<T> where T : SurvivorBase<T>, new()
     {
+
+        public abstract string masterName { get; }
+
         public abstract string displayPrefabName { get; }
 
         public abstract string survivorTokenPrefix { get; }

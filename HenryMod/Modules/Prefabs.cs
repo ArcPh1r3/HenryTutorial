@@ -276,7 +276,14 @@ namespace HenryMod.Modules
             for (int i = 0; i < characterModel.baseRendererInfos.Length; i++)
             {
                 if (characterModel.baseRendererInfos[i].defaultMaterial == null)
+                {
                     characterModel.baseRendererInfos[i].defaultMaterial = characterModel.baseRendererInfos[i].renderer.sharedMaterial;
+                }
+
+                if (characterModel.baseRendererInfos[i].defaultMaterial == null)
+                {
+                    Log.Error($"no material for rendererinfo of this renderer: {characterModel.baseRendererInfos[i].renderer}");
+                }
                 characterModel.baseRendererInfos[i].defaultMaterial.ConvertDefaultShaderToHopoo();
             }
         }
@@ -494,7 +501,7 @@ namespace HenryMod.Modules
             return masterObject;
         }
 
-        public static GameObject LoadMaster(this AssetBundle assetBundle, string assetName, GameObject bodyPrefab)
+        public static GameObject LoadMaster(this AssetBundle assetBundle, GameObject bodyPrefab, string assetName)
         {
             GameObject newMaster = assetBundle.LoadAsset<GameObject>(assetName);
 

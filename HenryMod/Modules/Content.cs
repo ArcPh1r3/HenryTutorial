@@ -8,30 +8,30 @@ namespace HenryMod.Modules
     //consolidate contentaddition here in case something breaks and/or want to move to r2api
     internal class Content
     {
-        public static void AddCharacterBodyPrefab(GameObject bprefab)
+        internal static void AddCharacterBodyPrefab(GameObject bprefab)
         {
             ContentPacks.bodyPrefabs.Add(bprefab);
         }
 
-        public static void AddMasterPrefab(GameObject prefab)
+        internal static void AddMasterPrefab(GameObject prefab)
         {
             ContentPacks.masterPrefabs.Add(prefab);
         }
 
-        public static void AddProjectilePrefab(GameObject prefab)
+        internal static void AddProjectilePrefab(GameObject prefab)
         {
             ContentPacks.projectilePrefabs.Add(prefab);
         }
 
-        public static void AddSurvivorDef(SurvivorDef survivorDef)
+        internal static void AddSurvivorDef(SurvivorDef survivorDef)
         {
 
             ContentPacks.survivorDefs.Add(survivorDef);
         }
-        public static void CreateSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix) { CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, null, 100f); }
-        public static void CreateSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, float sortPosition) { CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, null, sortPosition); }
-        public static void CreateSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, UnlockableDef unlockableDef) { CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, unlockableDef, 100f); }
-        public static void CreateSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, UnlockableDef unlockableDef, float sortPosition)
+        internal static void CreateSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix) { CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, null, 100f); }
+        internal static void CreateSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, float sortPosition) { CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, null, sortPosition); }
+        internal static void CreateSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, UnlockableDef unlockableDef) { CreateSurvivor(bodyPrefab, displayPrefab, charColor, tokenPrefix, unlockableDef, 100f); }
+        internal static void CreateSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string tokenPrefix, UnlockableDef unlockableDef, float sortPosition)
         {
             SurvivorDef survivorDef = ScriptableObject.CreateInstance<SurvivorDef>();
             survivorDef.bodyPrefab = bodyPrefab;
@@ -50,11 +50,11 @@ namespace HenryMod.Modules
             Modules.Content.AddSurvivorDef(survivorDef);
         }
 
-        public static void AddUnlockableDef(UnlockableDef unlockableDef)
+        internal static void AddUnlockableDef(UnlockableDef unlockableDef)
         {
             ContentPacks.unlockableDefs.Add(unlockableDef);
         }
-        public static UnlockableDef CreateAndAddUnlockbleDef(string identifier, string nameToken, Sprite achievementIcon)
+        internal static UnlockableDef CreateAndAddUnlockbleDef(string identifier, string nameToken, Sprite achievementIcon)
         {
             UnlockableDef unlockableDef = ScriptableObject.CreateInstance<UnlockableDef>();
             unlockableDef.cachedName = identifier;
@@ -66,26 +66,25 @@ namespace HenryMod.Modules
             return unlockableDef;
         }
 
-        public static void AddSkillDef(SkillDef skillDef)
+        internal static void AddSkillDef(SkillDef skillDef)
         {
             ContentPacks.skillDefs.Add(skillDef);
         }
 
-        public static void AddSkillFamily(SkillFamily skillFamily)
+        internal static void AddSkillFamily(SkillFamily skillFamily)
         {
             ContentPacks.skillFamilies.Add(skillFamily);
         }
 
-        public static void AddEntityState(Type entityState)
+        internal static void AddEntityState(Type entityState)
         {
             ContentPacks.entityStates.Add(entityState);
         }
 
-        public static void AddBuffDef(BuffDef buffDef)
+        internal static void AddBuffDef(BuffDef buffDef)
         {
             ContentPacks.buffDefs.Add(buffDef);
         }
-        // simple helper method
         internal static BuffDef CreateAndAddBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff)
         {
             BuffDef buffDef = ScriptableObject.CreateInstance<BuffDef>();
@@ -101,11 +100,10 @@ namespace HenryMod.Modules
             return buffDef;
         }
 
-        public static void AddEffectDef(EffectDef effectDef)
+        internal static void AddEffectDef(EffectDef effectDef)
         {
             ContentPacks.effectDefs.Add(effectDef);
         }
-
         internal static EffectDef CreateAndAddEffectDef(GameObject effectPrefab)
         {
             EffectDef effectDef = new EffectDef(effectPrefab);
@@ -115,7 +113,7 @@ namespace HenryMod.Modules
             return effectDef;
         }
 
-        public static void AddNetworkSoundEventDef(NetworkSoundEventDef networkSoundEventDef)
+        internal static void AddNetworkSoundEventDef(NetworkSoundEventDef networkSoundEventDef)
         {
             ContentPacks.networkSoundEventDefs.Add(networkSoundEventDef);
         }

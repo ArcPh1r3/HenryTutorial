@@ -2130,7 +2130,6 @@ MonoBehaviour:
   - {fileID: 8315140139193320022}
   componentsToDisableOnRagdoll:
   - {fileID: 1209521308}
-  - {fileID: 0}
 --- !u!114 &1209521308
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -80,10 +80,11 @@ namespace HenryMod.Survivors.Henry
             bombProjectilePrefab = Assets.CloneProjectilePrefab("CommandoGrenadeProjectile", "HenryBombProjectile");
 
             //remove their ProjectileImpactExplosion component and start from default values
-            UnityEngine.Object.DestroyImmediate(bombProjectilePrefab.AddComponent<ProjectileImpactExplosion>());
+            UnityEngine.Object.DestroyImmediate(bombProjectilePrefab.GetComponent<ProjectileImpactExplosion>());
             ProjectileImpactExplosion bombImpactExplosion = bombProjectilePrefab.AddComponent<ProjectileImpactExplosion>();
-
+            
             bombImpactExplosion.blastRadius = 16f;
+            bombImpactExplosion.blastDamageCoefficient = 1f;
             bombImpactExplosion.falloffModel = BlastAttack.FalloffModel.None;
             bombImpactExplosion.destroyOnEnemy = true;
             bombImpactExplosion.lifetime = 12f;

@@ -3,7 +3,7 @@ using HenryMod.Survivors.Henry;
 using RoR2;
 using UnityEngine;
 
-namespace HenryMod.SkillStates
+namespace HenryMod.Survivors.Henry.SkillStates
 {
     public class Shoot : BaseSkillState
     {
@@ -15,7 +15,7 @@ namespace HenryMod.SkillStates
         public static float force = 800f;
         public static float recoil = 3f;
         public static float range = 256f;
-        public static GameObject tracerEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/TracerGoldGat");
+        public static GameObject tracerEffectPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/TracerGoldGat");
 
         private float duration;
         private float fireTime;
@@ -25,12 +25,12 @@ namespace HenryMod.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            this.duration = Shoot.baseDuration / this.attackSpeedStat;
-            this.fireTime = firePercentTime * this.duration;
-            base.characterBody.SetAimTimer(2f);
-            this.muzzleString = "Muzzle";
+            duration = baseDuration / attackSpeedStat;
+            fireTime = firePercentTime * duration;
+            characterBody.SetAimTimer(2f);
+            muzzleString = "Muzzle";
 
-            base.PlayAnimation("LeftArm, Override", "ShootGun", "ShootGun.playbackRate", 1.8f);
+            PlayAnimation("LeftArm, Override", "ShootGun", "ShootGun.playbackRate", 1.8f);
         }
 
         public override void OnExit()
@@ -42,58 +42,58 @@ namespace HenryMod.SkillStates
         {
             base.FixedUpdate();
 
-            if (base.fixedAge >= this.fireTime)
+            if (fixedAge >= fireTime)
             {
-                this.Fire();
+                Fire();
             }
 
-            if (base.fixedAge >= this.duration && base.isAuthority)
+            if (fixedAge >= duration && isAuthority)
             {
-                this.outer.SetNextStateToMain();
+                outer.SetNextStateToMain();
                 return;
             }
         }
 
         private void Fire()
         {
-            if (!this.hasFired)
+            if (!hasFired)
             {
-                this.hasFired = true;
+                hasFired = true;
 
-                base.characterBody.AddSpreadBloom(1.5f);
-                EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FirePistol2.muzzleEffectPrefab, base.gameObject, this.muzzleString, false);
-                Util.PlaySound("HenryShootPistol", base.gameObject);
+                characterBody.AddSpreadBloom(1.5f);
+                EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FirePistol2.muzzleEffectPrefab, gameObject, muzzleString, false);
+                Util.PlaySound("HenryShootPistol", gameObject);
 
-                if (base.isAuthority)
+                if (isAuthority)
                 {
-                    Ray aimRay = base.GetAimRay();
-                    base.AddRecoil(-1f * Shoot.recoil, -2f * Shoot.recoil, -0.5f * Shoot.recoil, 0.5f * Shoot.recoil);
+                    Ray aimRay = GetAimRay();
+                    AddRecoil(-1f * recoil, -2f * recoil, -0.5f * recoil, 0.5f * recoil);
 
                     new BulletAttack
                     {
                         bulletCount = 1,
                         aimVector = aimRay.direction,
                         origin = aimRay.origin,
-                        damage = Shoot.damageCoefficient * this.damageStat,
+                        damage = damageCoefficient * damageStat,
                         damageColorIndex = DamageColorIndex.Default,
                         damageType = DamageType.Generic,
                         falloffModel = BulletAttack.FalloffModel.None,
-                        maxDistance = Shoot.range,
-                        force = Shoot.force,
+                        maxDistance = range,
+                        force = force,
                         hitMask = LayerIndex.CommonMasks.bullet,
                         minSpread = 0f,
                         maxSpread = 0f,
-                        isCrit = base.RollCrit(),
-                        owner = base.gameObject,
+                        isCrit = RollCrit(),
+                        owner = gameObject,
                         muzzleName = muzzleString,
                         smartCollision = false,
-                        procChainMask = default(ProcChainMask),
+                        procChainMask = default,
                         procCoefficient = procCoefficient,
                         radius = 0.75f,
                         sniper = false,
                         stopperMask = LayerIndex.CommonMasks.bullet,
                         weapon = null,
-                        tracerEffectPrefab = Shoot.tracerEffectPrefab,
+                        tracerEffectPrefab = tracerEffectPrefab,
                         spreadPitchScale = 0f,
                         spreadYawScale = 0f,
                         queryTriggerInteraction = QueryTriggerInteraction.UseGlobal,

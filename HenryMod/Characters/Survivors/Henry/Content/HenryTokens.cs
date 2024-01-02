@@ -1,5 +1,6 @@
 ﻿using System;
 using HenryMod.Modules;
+using HenryMod.Survivors.Henry.Achievements;
 
 namespace HenryMod.Survivors.Henry
 {
@@ -67,9 +68,8 @@ namespace HenryMod.Survivors.Henry
             #endregion
 
             #region Achievements
-            Language.Add(prefix + "MASTERYUNLOCKABLE_ACHIEVEMENT_NAME", "Henry: Mastery");
-            Language.Add(prefix + "MASTERYUNLOCKABLE_ACHIEVEMENT_DESC", "As Henry, beat the game or obliterate on Monsoon.");
-            Language.Add(prefix + "MASTERYUNLOCKABLE_UNLOCKABLE_NAME", "Henry: Mastery");
+            Language.Add(Tokens.GetAchievementNameToken(HenryMasteryAchievement.identifier), "Henry: Mastery");
+            Language.Add(Tokens.GetAchievementDescriptionToken(HenryMasteryAchievement.identifier), "As Henry, beat the game or obliterate on Monsoon.");
             #endregion
             #endregion
         }

@@ -6,9 +6,9 @@ namespace HenryMod.Survivors.Henry
 {
     public static class HenryAI
     {
-        public static void Init(GameObject bodyPrefab)
+        public static void Init(GameObject bodyPrefab, string masterName)
         {
-            GameObject master = Modules.Prefabs.CreateBlankMasterPrefab(bodyPrefab, "HenryMonsterMaster");
+            GameObject master = Modules.Prefabs.CreateBlankMasterPrefab(bodyPrefab, masterName);
 
             BaseAI baseAI = master.GetComponent<BaseAI>();
             baseAI.aimVectorDampTime = 0.1f;

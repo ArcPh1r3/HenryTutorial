@@ -19,7 +19,7 @@ namespace HenryMod.Modules
         internal static AssetBundle LoadAssetBundle(string bundleName)
         {
 
-            if (bundleName == "myassetbundlee")
+            if (bundleName == "myassetbundle")
             {
                 Log.Error($"AssetBundle name hasn't been changed. not loading any assets to avoid conflicts.\nMake sure to rename your assetbundle filename and rename the AssetBundleName field in your character setup code ");
                 return null;
@@ -79,7 +79,7 @@ namespace HenryMod.Modules
             if (loadedCrosshair == null)
             {
                 Log.Error($"could not load crosshair with the name {crosshairName}. defaulting to Standard");
-                //would probably be better if this just fails instead of silently falling back
+
                 return RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Crosshair/StandardCrosshair");
             }
 
@@ -100,7 +100,7 @@ namespace HenryMod.Modules
             newEffect.AddComponent<DestroyOnTimer>().duration = 12;
             newEffect.AddComponent<NetworkIdentity>();
             newEffect.AddComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
-            var effect = newEffect.AddComponent<EffectComponent>();
+            EffectComponent effect = newEffect.AddComponent<EffectComponent>();
             effect.applyScale = false;
             effect.effectIndex = EffectIndex.Invalid;
             effect.parentToReferencedTransform = parentToTransform;
@@ -130,6 +130,19 @@ namespace HenryMod.Modules
         internal static GameObject CloneProjectilePrefab(string prefabName, string newPrefabName)
         {
             GameObject newPrefab = PrefabAPI.InstantiateClone(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/" + prefabName), newPrefabName);
+            return newPrefab;
+        }
+
+        internal static GameObject LoadAndAddProjectilePrefab(this AssetBundle assetBundle, string newPrefabName)
+        {
+            GameObject newPrefab = assetBundle.LoadAsset<GameObject>(newPrefabName);
+            if(newPrefab == null)
+            {
+                Log.ErrorAssetBundle(newPrefabName, assetBundle.name);
+                return null;
+            }
+
+            Content.AddProjectilePrefab(newPrefab);
             return newPrefab;
         }
     }

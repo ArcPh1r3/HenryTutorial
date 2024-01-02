@@ -18,7 +18,7 @@ namespace HenryMod
 
     public class HenryPlugin : BaseUnityPlugin
     {
-        // if you don't change these you're giving permission to deprecate the mod-
+        // if you do not change this, you are giving permission to deprecate the mod-
         //  please change the names to your own stuff, thanks
         //   this shouldn't even have to be said
         public const string MODUID = "com.rob.HenryMod";
@@ -30,7 +30,7 @@ namespace HenryMod
 
         public static HenryPlugin instance;
 
-        private void Awake()
+        void Awake()
         {
             instance = this;
 

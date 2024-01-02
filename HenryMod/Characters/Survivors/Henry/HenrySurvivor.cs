@@ -1,8 +1,8 @@
 ﻿using BepInEx.Configuration;
-using HenryMod.Henry.Components;
-using HenryMod.Henry.SkillStates;
 using HenryMod.Modules;
 using HenryMod.Modules.Characters;
+using HenryMod.Survivors.Henry.Components;
+using HenryMod.Survivors.Henry.SkillStates;
 using RoR2;
 using RoR2.Skills;
 using System;
@@ -14,11 +14,14 @@ namespace HenryMod.Survivors.Henry
     public class HenrySurvivor : SurvivorBase<HenrySurvivor>
     {
         //todo guide
-        //used to load the assetbundle for this character. make sure to rename this
-        public override string assetBundleName => "myassetbundle";
+        //used to load the assetbundle for this character. must be unique
+        public override string assetBundleName => "myassetbundle"; //if you do not change this, you are giving permission to deprecate the mod
 
-        //the name of the prefab we will create. conventionally ending in "Body"
-        public override string bodyName => "HenryBody";
+        //the name of the prefab we will create. conventionally ending in "Body". must be unique
+        public override string bodyName => "HenryBody"; //if you do not change this, you get the point by now
+
+        //name of the ai master for vengeance and goobo. must be unique
+        public override string masterName => "HenryMonsterMaster"; //if you do not
 
         //the names of the prefabs you set up in unity that we will use to build your character
         public override string modelPrefabName => "mdlHenry";
@@ -28,7 +31,7 @@ namespace HenryMod.Survivors.Henry
 
         //used when registering your survivor's language tokens
         public override string survivorTokenPrefix => HENRY_PREFIX;
-
+        
         public override BodyInfo bodyInfo => new BodyInfo
         {
             bodyName = bodyName,
@@ -89,15 +92,12 @@ namespace HenryMod.Survivors.Henry
             HenryAssets.Init(assetBundle);
             HenryBuffs.Init(assetBundle);
 
-            AdditionalBodySetup();
-
             InitializeEntityStateMachines();
-
             InitializeSkills();
-
             InitializeSkins();
-
             InitializeCharacterMaster();
+
+            AdditionalBodySetup();
 
             AddHooks();
         }
@@ -276,7 +276,7 @@ namespace HenryMod.Survivors.Henry
                 //pass in meshes as they are named in your assetbundle
             //currently not needed as with only 1 skin they will simply take the default meshes
                 //uncomment this when you have another skin
-            //defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(defaultRendererinfos,
+            //defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
             //    "meshHenrySword",
             //    "meshHenryGun",
             //    "meshHenry");
@@ -287,7 +287,7 @@ namespace HenryMod.Survivors.Henry
 
             //uncomment this when you have a mastery skin
             #region MasterySkin
-            /*
+            
             //creating a new skindef as we did before
             SkinDef masterySkin = Modules.Skins.CreateSkinDef(HENRY_PREFIX + "MASTERY_SKIN_NAME",
                 assetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
@@ -320,7 +320,7 @@ namespace HenryMod.Survivors.Henry
             //simply find an object on your child locator you want to activate/deactivate and set if you want to activate/deacitvate it with this skin
 
             skins.Add(masterySkin);
-            */
+            
             #endregion
 
             skinController.skins = skins.ToArray();
@@ -331,18 +331,17 @@ namespace HenryMod.Survivors.Henry
         public override void InitializeCharacterMaster()
         {
             //if you're lazy or prototyping you can simply copy the AI of a different character to be used
-            //Modules.Prefabs.CloneAndAddDopplegangerMaster(bodyPrefab, "HenryMonsterMaster", "Merc");
+            //Modules.Prefabs.CloneDopplegangerMaster(bodyPrefab, masterName, "Merc");
 
             //how to set up AI in code
-            HenryAI.Init(bodyPrefab);
+            HenryAI.Init(bodyPrefab, masterName);
 
-            //how to load a master set up in unity (recommended)
-            //assetBundle.LoadMaster("HenryMaster", bodyPrefab);
+            //how to load a master set up in unity, can be an empty gameobject with just AISkillDriver components
+            //assetBundle.LoadMaster(bodyPrefab, masterName);
         }
 
         private void AddHooks()
         {
-
             R2API.RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
         }
 

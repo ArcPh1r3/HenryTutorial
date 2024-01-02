@@ -4,39 +4,37 @@ using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
 
-namespace HenryMod.SkillStates
+namespace HenryMod.Survivors.Henry.SkillStates
 {
     public class ThrowBomb : GenericProjectileBaseState
     {
-
         public static float BaseDuration = 0.65f;
-        //delay here for example and to match animation
-        //ordinarily I recommend not having a delay before projectiles. makes the move feel sluggish
-        public static float BaseDelayDuration = 0.35f * BaseDuration;
+        //delays for projectiles feel absolute ass so only do this if you know what you're doing, otherwise it's best to keep it at 0
+        public static float BaseDelayDuration = 0.0f;
 
-        public static float DamageCoefficient = 1.6f;
+        public static float DamageCoefficient = 16f;
 
         public override void OnEnter()
         {
-            base.projectilePrefab = HenryAssets.bombProjectilePrefab;
+            projectilePrefab = HenryAssets.bombProjectilePrefab;
             //base.effectPrefab = Modules.Assets.SomeMuzzleEffect;
             //targetmuzzle = "muzzleThrow"
 
-            base.attackSoundString = "HenryBombThrow";
-            
-            base.baseDuration = BaseDuration;
-            base.baseDelayBeforeFiringProjectile = BaseDelayDuration;
+            attackSoundString = "HenryBombThrow";
 
-            base.damageCoefficient = DamageCoefficient;
+            baseDuration = BaseDuration;
+            baseDelayBeforeFiringProjectile = BaseDelayDuration;
+
+            damageCoefficient = DamageCoefficient;
             //proc coefficient is set on the components of the projectile prefab
-            base.force = 80f;
+            force = 80f;
 
             //base.projectilePitchBonus = 0;
             //base.minSpread = 0;
             //base.maxSpread = 0;
 
-            base.recoilAmplitude = 0.1f;
-            base.bloom = 10;
+            recoilAmplitude = 0.1f;
+            bloom = 10;
 
             base.OnEnter();
         }
@@ -54,9 +52,9 @@ namespace HenryMod.SkillStates
         public override void PlayAnimation(float duration)
         {
 
-            if (base.GetModelAnimator())
+            if (GetModelAnimator())
             {
-                base.PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", this.duration);
+                PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", this.duration);
             }
         }
     }

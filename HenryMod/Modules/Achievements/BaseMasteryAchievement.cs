@@ -8,6 +8,11 @@ namespace HenryMod.Modules
         public abstract string RequiredCharacterBody { get; }
         public abstract float RequiredDifficultyCoefficient { get; }
 
+        public override BodyIndex LookUpRequiredBodyIndex()
+        {
+            return BodyCatalog.FindBodyIndex(RequiredCharacterBody);
+        }
+
         public override void OnBodyRequirementMet()
         {
             base.OnBodyRequirementMet();
@@ -32,18 +37,17 @@ namespace HenryMod.Modules
                 DifficultyDef difficultyDef = DifficultyCatalog.GetDifficultyDef(difficultyIndex);
                 if (difficultyDef != null)
                 {
+                    
                     bool isDifficulty = difficultyDef.countsAsHardMode && difficultyDef.scalingValue >= RequiredDifficultyCoefficient;
                     bool isInferno = difficultyDef.nameToken == "INFERNO_NAME";
                     bool isEclipse = difficultyIndex >= DifficultyIndex.Eclipse1 && difficultyIndex <= DifficultyIndex.Eclipse8;
 
-                    if (isDifficulty || isInferno || isEclipse) base.Grant();
+                    if (isDifficulty || isInferno || isEclipse)
+                    {
+                        base.Grant();
+                    }
                 }
             }
-        }
-
-        public override BodyIndex LookUpRequiredBodyIndex()
-        {
-            return BodyCatalog.FindBodyIndex(RequiredCharacterBody);
         }
     }
 }
