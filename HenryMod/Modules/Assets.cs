@@ -19,7 +19,7 @@ namespace HenryMod.Modules
         internal static AssetBundle LoadAssetBundle(string bundleName)
         {
 
-            if (bundleName == "myassetbundle")
+            if (bundleName == "myassetbundlee")
             {
                 Log.Error($"AssetBundle name hasn't been changed. not loading any assets to avoid conflicts.\nMake sure to rename your assetbundle filename and rename the AssetBundleName field in your character setup code ");
                 return null;
@@ -30,11 +30,14 @@ namespace HenryMod.Modules
                 return loadedBundles[bundleName];
             }
 
-            AssetBundle assetBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(HenryPlugin.instance.Info.Location), "AssetBundles", bundleName));
-
-            if (assetBundle == null)
-            {                                                       //todo guide
-                Log.Error($"Could not find assetbundle, {bundleName}. Follow the guide to build and install your mod correctly!");
+            AssetBundle assetBundle = null;
+            try
+            {
+                assetBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(HenryPlugin.instance.Info.Location), "AssetBundles", bundleName));
+            }
+            catch (System.Exception e)
+            {
+                Log.Error($"Error loading asset bundle, {bundleName}. Your asset bundle must be in a folder next to your mod dll called 'AssetBundles'. Follow the guide to build and install your mod correctly!\n{e}");
             }
 
             loadedBundles[bundleName] = assetBundle;

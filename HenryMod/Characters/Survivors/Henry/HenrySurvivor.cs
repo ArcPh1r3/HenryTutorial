@@ -13,7 +13,6 @@ namespace HenryMod.Survivors.Henry
 {
     public class HenrySurvivor : SurvivorBase<HenrySurvivor>
     {
-        //todo guide
         //used to load the assetbundle for this character. must be unique
         public override string assetBundleName => "myassetbundle"; //if you do not change this, you are giving permission to deprecate the mod
 
@@ -288,38 +287,38 @@ namespace HenryMod.Survivors.Henry
             //uncomment this when you have a mastery skin
             #region MasterySkin
             
-            //creating a new skindef as we did before
-            SkinDef masterySkin = Modules.Skins.CreateSkinDef(HENRY_PREFIX + "MASTERY_SKIN_NAME",
-                assetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
-                defaultRendererinfos,
-                prefabCharacterModel.gameObject,
-                HenryUnlockables.masterySkinUnlockableDef);
+            ////creating a new skindef as we did before
+            //SkinDef masterySkin = Modules.Skins.CreateSkinDef(HENRY_PREFIX + "MASTERY_SKIN_NAME",
+            //    assetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
+            //    defaultRendererinfos,
+            //    prefabCharacterModel.gameObject,
+            //    HenryUnlockables.masterySkinUnlockableDef);
 
-            //adding the mesh replacements as above. 
-            //if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
-            masterySkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
-                "meshHenrySwordAlt",
-                null,//no gun mesh replacement. use same gun mesh
-                "meshHenryAlt");
+            ////adding the mesh replacements as above. 
+            ////if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
+            //masterySkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+            //    "meshHenrySwordAlt",
+            //    null,//no gun mesh replacement. use same gun mesh
+            //    "meshHenryAlt");
 
-            //masterySkin has a new set of RendererInfos (based on default rendererinfos)
-            //you can simply access the RendererInfos' materials and set them to the new materials for your skin.
-            masterySkin.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
-            masterySkin.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
-            masterySkin.rendererInfos[2].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            ////masterySkin has a new set of RendererInfos (based on default rendererinfos)
+            ////you can simply access the RendererInfos' materials and set them to the new materials for your skin.
+            //masterySkin.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            //masterySkin.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            //masterySkin.rendererInfos[2].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
 
-            //here's a barebones example of using gameobjectactivations that could probably be streamlined or rewritten entirely, truthfully, but it works
-            masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
-            {
-                new SkinDef.GameObjectActivation
-                {
-                    gameObject = childLocator.FindChildGameObject("GunModel"),
-                    shouldActivate = false,
-                }
-            };
-            //simply find an object on your child locator you want to activate/deactivate and set if you want to activate/deacitvate it with this skin
+            ////here's a barebones example of using gameobjectactivations that could probably be streamlined or rewritten entirely, truthfully, but it works
+            //masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            //{
+            //    new SkinDef.GameObjectActivation
+            //    {
+            //        gameObject = childLocator.FindChildGameObject("GunModel"),
+            //        shouldActivate = false,
+            //    }
+            //};
+            ////simply find an object on your child locator you want to activate/deactivate and set if you want to activate/deacitvate it with this skin
 
-            skins.Add(masterySkin);
+            //skins.Add(masterySkin);
             
             #endregion
 

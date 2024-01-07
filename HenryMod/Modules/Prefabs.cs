@@ -21,23 +21,23 @@ namespace HenryMod.Modules
 
         public static GameObject CreateDisplayPrefab(AssetBundle assetBundle, string displayPrefabName, GameObject prefab)
         {
-            GameObject model = assetBundle.LoadAsset<GameObject>(displayPrefabName);
-            if (model == null)
+            GameObject display = assetBundle.LoadAsset<GameObject>(displayPrefabName);
+            if (display == null)
             {
                 Log.Error($"could not load display prefab {displayPrefabName}. Make sure this prefab exists in assetbundle {assetBundle.name}");
                 return null;
             }
 
-            CharacterModel characterModel = model.GetComponent<CharacterModel>();
+            CharacterModel characterModel = display.GetComponent<CharacterModel>();
             if (!characterModel)
             {
-                characterModel = model.AddComponent<CharacterModel>();
+                characterModel = display.AddComponent<CharacterModel>();
             }
             characterModel.baseRendererInfos = prefab.GetComponentInChildren<CharacterModel>().baseRendererInfos;
 
-            Modules.Assets.ConvertAllRenderersToHopooShader(model);
+            Modules.Assets.ConvertAllRenderersToHopooShader(display);
 
-            return model.gameObject;
+            return display;
         }
 
         #region body setup
@@ -53,15 +53,19 @@ namespace HenryMod.Modules
             return model;
         }
 
-        public static GameObject CreateBodyPrefab(AssetBundle assetBundle, string modelName, BodyInfo bodyInfo) => CreateBodyPrefab(LoadCharacterModel(assetBundle, modelName), bodyInfo);
-        public static GameObject CreateBodyPrefab(GameObject model, BodyInfo bodyInfo)
+        public static GameObject LoadCharacterBody(AssetBundle assetBundle, string bodyName)
         {
-            if(model == null)
+            GameObject body = assetBundle.LoadAsset<GameObject>(bodyName);
+            if (body == null)
             {
-                Log.Error($"No model prefab for body {bodyInfo.bodyName}. character creation failed");
+                Log.Error($"could not load body prefab {bodyName}. Make sure this prefab exists in assetbundle {assetBundle.name}");
                 return null;
             }
+            return body;
+        }
 
+        public static GameObject CloneCharacterBody(BodyInfo bodyInfo)
+        {
             GameObject clonedBody = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/" + bodyInfo.bodyNameToClone + "Body");
             if (!clonedBody)
             {
@@ -71,15 +75,47 @@ namespace HenryMod.Modules
 
             GameObject newBodyPrefab = PrefabAPI.InstantiateClone(clonedBody, bodyInfo.bodyName);
 
-            Transform modelBaseTransform = AddCharacterModelToSurvivorBody(newBodyPrefab, model.transform, bodyInfo);
+            for (int i = newBodyPrefab.transform.childCount - 1; i >= 0; i--)
+            {
+                UnityEngine.Object.DestroyImmediate(newBodyPrefab.transform.GetChild(i).gameObject);
+            }
+
+            return newBodyPrefab;
+        }
+
+        public static GameObject CreateBodyPrefab(AssetBundle assetBundle, string modelPrefabName, BodyInfo bodyInfo)
+        {
+            return CreateBodyPrefab(LoadCharacterModel(assetBundle, modelPrefabName), bodyInfo);
+        }
+        public static GameObject CreateBodyPrefab(AssetBundle assetBundle, string bodyPrefabName, string modelPrefabName, BodyInfo bodyInfo)
+        {
+            return CreateBodyPrefab(LoadCharacterBody(assetBundle, bodyPrefabName), LoadCharacterModel(assetBundle, modelPrefabName), bodyInfo);
+        }
+        public static GameObject CreateBodyPrefab(GameObject model, BodyInfo bodyInfo)
+        {
+            return CreateBodyPrefab(CloneCharacterBody(bodyInfo), model, bodyInfo);
+        }
+        public static GameObject CreateBodyPrefab(GameObject newBodyPrefab, AssetBundle assetBundle, string modelName, BodyInfo bodyInfo)
+        {
+            return CreateBodyPrefab(newBodyPrefab, LoadCharacterModel(assetBundle, modelName), bodyInfo);
+        }
+        public static GameObject CreateBodyPrefab(GameObject newBodyPrefab, GameObject model, BodyInfo bodyInfo)
+        {
+            if (model == null || newBodyPrefab == null)
+            {
+                Log.Error($"Character creation failed. Model: {model}, Body: {newBodyPrefab}");
+                return null;
+            }
 
             SetupCharacterBody(newBodyPrefab, bodyInfo);
 
-            SetupCameraTargetParams(newBodyPrefab, bodyInfo);
+            Transform modelBaseTransform = AddCharacterModelToSurvivorBody(newBodyPrefab, model.transform, bodyInfo);
+
             SetupModelLocator(newBodyPrefab, modelBaseTransform, model.transform);
+            SetupCharacterDirection(newBodyPrefab, modelBaseTransform, model.transform);
+            SetupCameraTargetParams(newBodyPrefab, bodyInfo);
             //SetupRigidbody(newPrefab);
             SetupCapsuleCollider(newBodyPrefab);
-            SetupCharacterDirection(newBodyPrefab, modelBaseTransform, model.transform);
 
             Modules.Content.AddCharacterBodyPrefab(newBodyPrefab);
 
@@ -165,12 +201,8 @@ namespace HenryMod.Modules
 
         private static Transform AddCharacterModelToSurvivorBody(GameObject bodyPrefab, Transform modelTransform, BodyInfo bodyInfo)
         {
-            for (int i = bodyPrefab.transform.childCount - 1; i >= 0; i--)
-            {
-                UnityEngine.Object.DestroyImmediate(bodyPrefab.transform.GetChild(i).gameObject);
-            }
-
-            Transform modelBase = new GameObject("ModelBase").transform;
+            Transform modelBase = bodyPrefab.transform.Find("ModelBase");
+            if (modelBase == null) modelBase = new GameObject("ModelBase").transform;
             modelBase.parent = bodyPrefab.transform;
             modelBase.localPosition = bodyInfo.modelBasePosition;
             modelBase.localRotation = Quaternion.identity;
@@ -179,16 +211,18 @@ namespace HenryMod.Modules
             modelTransform.localPosition = Vector3.zero;
             modelTransform.localRotation = Quaternion.identity;
 
-            GameObject cameraPivot = new GameObject("CameraPivot");
-            cameraPivot.transform.parent = bodyPrefab.transform;
-            cameraPivot.transform.localPosition = bodyInfo.cameraPivotPosition;
-            cameraPivot.transform.localRotation = Quaternion.identity;
+            Transform cameraPivot = bodyPrefab.transform.Find("CameraPivot");
+            if (cameraPivot == null) cameraPivot = new GameObject("CameraPivot").transform;
+            cameraPivot.parent = bodyPrefab.transform;
+            cameraPivot.localPosition = bodyInfo.cameraPivotPosition;
+            cameraPivot.localRotation = Quaternion.identity;
 
-            GameObject aimOrigin = new GameObject("AimOrigin");
-            aimOrigin.transform.parent = bodyPrefab.transform;
-            aimOrigin.transform.localPosition = bodyInfo.aimOriginPosition;
-            aimOrigin.transform.localRotation = Quaternion.identity;
-            bodyPrefab.GetComponent<CharacterBody>().aimOriginTransform = aimOrigin.transform;
+            Transform aimOrigin = bodyPrefab.transform.Find("AimOrigin");
+            if (aimOrigin == null) aimOrigin = new GameObject("AimOrigin").transform;
+            aimOrigin.parent = bodyPrefab.transform;
+            aimOrigin.localPosition = bodyInfo.aimOriginPosition;
+            aimOrigin.localRotation = Quaternion.identity;
+            bodyPrefab.GetComponent<CharacterBody>().aimOriginTransform = aimOrigin;
 
             return modelBase.transform;
         }
@@ -452,6 +486,10 @@ namespace HenryMod.Modules
                     {
                         boneCollider.material = ragdollMaterial;
                         boneCollider.sharedMaterial = ragdollMaterial;
+                    }
+                    else
+                    {
+                        Log.Error($"Ragdoll bone {boneTransform.gameObject} doesn't have a collider. Ragdoll will break.");
                     }
                 }
             }

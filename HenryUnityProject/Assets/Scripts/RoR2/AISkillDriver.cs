@@ -13,14 +13,15 @@ namespace RoR2.CharacterAI
         [Tooltip("The slot of the associated skill. Set to None to allow this behavior to run regardless of skill availability.")]
         public SkillSlot skillSlot;
 
-        // Token: 0x0400458E RID: 17806
-        //[Header("Selection Conditions")]
-        //[Tooltip("The skill that the specified slot must have for this behavior to run. Set to none to allow any skill.")]
-        //public SkillDef requiredSkill;
 
         // Token: 0x0400458F RID: 17807
+        [Header("Selection Conditions")]
         [Tooltip("If set, this cannot be the dominant driver while the skill is on cooldown or out of stock.")]
         public bool requireSkillReady;
+
+        // Token: 0x0400458E RID: 17806
+        //[Tooltip("The skill that the specified slot must have for this behavior to run. Set to none to allow any skill.")]
+        //public SkillDef requiredSkill;
 
         // Token: 0x04004590 RID: 17808
         [Tooltip("If set, this cannot be the dominant driver while the equipment is on cooldown or out of stock.")]
