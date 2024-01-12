@@ -90,7 +90,7 @@ namespace HenryMod.SkillStates.BaseStates
 
         protected virtual void PlaySwingEffect()
         {
-            EffectManager.SimpleMuzzleFlash(this.swingEffectPrefab, base.gameObject, this.muzzleString, true);
+            EffectManager.SimpleMuzzleFlash(this.swingEffectPrefab, base.gameObject, this.muzzleString, false);
         }
 
         protected virtual void OnHitEnemyAuthority()
@@ -137,9 +137,10 @@ namespace HenryMod.SkillStates.BaseStates
             this.hasFired = true;
             Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
 
+            this.PlaySwingEffect();
+
             if (base.isAuthority)
             {
-                this.PlaySwingEffect();
                 base.AddRecoil(-1f * this.attackRecoil, -2f * this.attackRecoil, -0.5f * this.attackRecoil, 0.5f * this.attackRecoil);
             }
         }
