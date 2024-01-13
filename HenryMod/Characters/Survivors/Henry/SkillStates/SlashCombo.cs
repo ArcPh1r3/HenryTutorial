@@ -1,7 +1,6 @@
-﻿using HenryMod.SkillStates.BaseStates;
+﻿using HenryMod.Modules.BaseStates;
 using RoR2;
 using UnityEngine;
-using HenryMod.Survivors.Henry;
 
 namespace HenryMod.Survivors.Henry.SkillStates
 {

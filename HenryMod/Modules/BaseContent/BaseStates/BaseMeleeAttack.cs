@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace HenryMod.SkillStates.BaseStates
+namespace HenryMod.Modules.BaseStates
 {
     public abstract class BaseMeleeAttack : BaseSkillState, SteppedSkillDef.IStepSetter
     {
@@ -47,36 +47,36 @@ namespace HenryMod.SkillStates.BaseStates
         private bool hasHopped;
         protected float stopwatch;
         protected Animator animator;
-        private BaseState.HitStopCachedState hitStopCachedState;
+        private HitStopCachedState hitStopCachedState;
         private Vector3 storedVelocity;
 
         public override void OnEnter()
         {
             base.OnEnter();
-            this.duration = this.baseDuration / this.attackSpeedStat;
-            this.animator = base.GetModelAnimator();
-            base.StartAimMode(0.5f + this.duration, false);
+            duration = baseDuration / attackSpeedStat;
+            animator = GetModelAnimator();
+            StartAimMode(0.5f + duration, false);
 
-            this.PlayAttackAnimation();
+            PlayAttackAnimation();
 
-            this.attack = new OverlapAttack();
-            this.attack.damageType = this.damageType;
-            this.attack.attacker = base.gameObject;
-            this.attack.inflictor = base.gameObject;
-            this.attack.teamIndex = base.GetTeam();
-            this.attack.damage = this.damageCoefficient * this.damageStat;
-            this.attack.procCoefficient = this.procCoefficient;
-            this.attack.hitEffectPrefab = this.hitEffectPrefab;
-            this.attack.forceVector = this.bonusForce;
-            this.attack.pushAwayForce = this.pushForce;
-            this.attack.hitBoxGroup = FindHitBoxGroup(hitboxName);
-            this.attack.isCrit = base.RollCrit();
-            this.attack.impactSound = this.impactSound;
+            attack = new OverlapAttack();
+            attack.damageType = damageType;
+            attack.attacker = gameObject;
+            attack.inflictor = gameObject;
+            attack.teamIndex = GetTeam();
+            attack.damage = damageCoefficient * damageStat;
+            attack.procCoefficient = procCoefficient;
+            attack.hitEffectPrefab = hitEffectPrefab;
+            attack.forceVector = bonusForce;
+            attack.pushAwayForce = pushForce;
+            attack.hitBoxGroup = FindHitBoxGroup(hitboxName);
+            attack.isCrit = RollCrit();
+            attack.impactSound = impactSound;
         }
 
         protected virtual void PlayAttackAnimation()
         {
-            base.PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), playbackRateParam, this.duration, 0.05f);
+            PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), playbackRateParam, duration, 0.05f);
         }
 
         public override void OnExit()
@@ -90,21 +90,21 @@ namespace HenryMod.SkillStates.BaseStates
 
         protected virtual void PlaySwingEffect()
         {
-            EffectManager.SimpleMuzzleFlash(this.swingEffectPrefab, base.gameObject, this.muzzleString, false);
+            EffectManager.SimpleMuzzleFlash(swingEffectPrefab, gameObject, muzzleString, true);
         }
 
         protected virtual void OnHitEnemyAuthority()
         {
-            Util.PlaySound(this.hitSoundString, base.gameObject);
+            Util.PlaySound(hitSoundString, gameObject);
 
-            if (!this.hasHopped)
+            if (!hasHopped)
             {
-                if (base.characterMotor && !base.characterMotor.isGrounded && this.hitHopVelocity > 0f)
+                if (characterMotor && !characterMotor.isGrounded && hitHopVelocity > 0f)
                 {
-                    base.SmallHop(base.characterMotor, this.hitHopVelocity);
+                    SmallHop(characterMotor, hitHopVelocity);
                 }
 
-                this.hasHopped = true;
+                hasHopped = true;
             }
 
             ApplyHitstop();
@@ -112,36 +112,36 @@ namespace HenryMod.SkillStates.BaseStates
 
         protected void ApplyHitstop()
         {
-            if (!this.inHitPause && this.hitStopDuration > 0f)
+            if (!inHitPause && hitStopDuration > 0f)
             {
-                this.storedVelocity = base.characterMotor.velocity;
-                this.hitStopCachedState = base.CreateHitStopCachedState(base.characterMotor, this.animator, this.playbackRateParam);
-                this.hitPauseTimer = this.hitStopDuration / this.attackSpeedStat;
-                this.inHitPause = true;
+                storedVelocity = characterMotor.velocity;
+                hitStopCachedState = CreateHitStopCachedState(characterMotor, animator, playbackRateParam);
+                hitPauseTimer = hitStopDuration / attackSpeedStat;
+                inHitPause = true;
             }
         }
 
         private void FireAttack()
         {
-            if (base.isAuthority)
+            if (isAuthority)
             {
-                if (this.attack.Fire())
+                if (attack.Fire())
                 {
-                    this.OnHitEnemyAuthority();
+                    OnHitEnemyAuthority();
                 }
             }
         }
 
         private void EnterAttack()
         {
-            this.hasFired = true;
-            Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
+            hasFired = true;
+            Util.PlayAttackSpeedSound(swingSoundString, gameObject, attackSpeedStat);
 
-            this.PlaySwingEffect();
+            PlaySwingEffect();
 
-            if (base.isAuthority)
+            if (isAuthority)
             {
-                base.AddRecoil(-1f * this.attackRecoil, -2f * this.attackRecoil, -0.5f * this.attackRecoil, 0.5f * this.attackRecoil);
+                AddRecoil(-1f * attackRecoil, -2f * attackRecoil, -0.5f * attackRecoil, 0.5f * attackRecoil);
             }
         }
 
@@ -149,28 +149,28 @@ namespace HenryMod.SkillStates.BaseStates
         {
             base.FixedUpdate();
 
-            this.hitPauseTimer -= Time.fixedDeltaTime;
+            hitPauseTimer -= Time.fixedDeltaTime;
 
-            if (this.hitPauseTimer <= 0f && this.inHitPause)
+            if (hitPauseTimer <= 0f && inHitPause)
             {
                 RemoveHitstop();
             }
 
-            if (!this.inHitPause)
+            if (!inHitPause)
             {
-                this.stopwatch += Time.fixedDeltaTime;
+                stopwatch += Time.fixedDeltaTime;
             }
             else
             {
-                if (base.characterMotor) base.characterMotor.velocity = Vector3.zero;
-                if (this.animator) this.animator.SetFloat(playbackRateParam, 0f);
+                if (characterMotor) characterMotor.velocity = Vector3.zero;
+                if (animator) animator.SetFloat(playbackRateParam, 0f);
             }
 
-            bool fireStarted = stopwatch >= this.duration * attackStartPercentTime;
-            bool fireEnded = stopwatch >= this.duration * attackEndPercentTime;
+            bool fireStarted = stopwatch >= duration * attackStartPercentTime;
+            bool fireEnded = stopwatch >= duration * attackEndPercentTime;
 
             //to guarantee attack comes out if at high attack speed the stopwatch skips past the firing duration between frames
-            if ((fireStarted && !fireEnded) || (fireStarted && fireEnded && !this.hasFired))
+            if (fireStarted && !fireEnded || fireStarted && fireEnded && !hasFired)
             {
                 if (!hasFired)
                 {
@@ -179,23 +179,23 @@ namespace HenryMod.SkillStates.BaseStates
                 FireAttack();
             }
 
-            if (this.stopwatch >= this.duration && base.isAuthority)
+            if (stopwatch >= duration && isAuthority)
             {
-                this.outer.SetNextStateToMain();
+                outer.SetNextStateToMain();
                 return;
             }
         }
 
         private void RemoveHitstop()
         {
-            base.ConsumeHitStopCachedState(this.hitStopCachedState, base.characterMotor, this.animator);
-            this.inHitPause = false;
-            base.characterMotor.velocity = this.storedVelocity;
+            ConsumeHitStopCachedState(hitStopCachedState, characterMotor, animator);
+            inHitPause = false;
+            characterMotor.velocity = storedVelocity;
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            if (this.stopwatch >= this.duration * this.earlyExitPercentTime)
+            if (stopwatch >= duration * earlyExitPercentTime)
             {
                 return InterruptPriority.Any;
             }
@@ -205,13 +205,13 @@ namespace HenryMod.SkillStates.BaseStates
         public override void OnSerialize(NetworkWriter writer)
         {
             base.OnSerialize(writer);
-            writer.Write(this.swingIndex);
+            writer.Write(swingIndex);
         }
 
         public override void OnDeserialize(NetworkReader reader)
         {
             base.OnDeserialize(reader);
-            this.swingIndex = reader.ReadInt32();
+            swingIndex = reader.ReadInt32();
         }
 
         public void SetStep(int i)

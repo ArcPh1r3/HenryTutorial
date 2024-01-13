@@ -1,7 +1,7 @@
 ﻿using EntityStates;
 using System;
 
-namespace HenryMod.SkillStates.BaseStates
+namespace HenryMod.Modules.BaseStates
 {
     //see example skills below
     public class BaseTimedSkillState : BaseSkillState
@@ -28,7 +28,7 @@ namespace HenryMod.SkillStates.BaseStates
             TimedBaseCastStartTime = castStartPercentTime;
             TimedBaseCastEndTime = castEndPercentTime;
 
-            duration = TimedBaseDuration / base.attackSpeedStat;
+            duration = TimedBaseDuration / attackSpeedStat;
             this.castStartPercentTime = castStartPercentTime * duration;
             this.castEndPercentTime = castEndPercentTime * duration;
         }
@@ -43,7 +43,7 @@ namespace HenryMod.SkillStates.BaseStates
             base.FixedUpdate();
 
             //wait start duration and fire
-            if(!hasFired && fixedAge > castStartPercentTime)
+            if (!hasFired && fixedAge > castStartPercentTime)
             {
                 hasFired = true;
                 OnCastEnter();
@@ -54,19 +54,19 @@ namespace HenryMod.SkillStates.BaseStates
             isFiring = false;
 
             //to guarantee attack comes out if at high attack speed the fixedage skips past the endtime
-            if ((fireStarted && !fireEnded) || (fireStarted && fireEnded && !this.hasFired))
+            if (fireStarted && !fireEnded || fireStarted && fireEnded && !hasFired)
             {
                 isFiring = true;
                 OnCastFixedUpdate();
             }
 
-            if(fireEnded && !hasExited)
+            if (fireEnded && !hasExited)
             {
                 hasExited = true;
                 OnCastExit();
             }
 
-            if(fixedAge > duration)
+            if (fixedAge > duration)
             {
                 outer.SetNextStateToMain();
                 return;
@@ -87,7 +87,7 @@ namespace HenryMod.SkillStates.BaseStates
     {
         public static float SkillBaseDuration = 1.5f;
         public static float SkillStartTime = 0.2f;
-        public static float SkillEndTime =  0.9f;
+        public static float SkillEndTime = 0.9f;
 
         public override void OnEnter()
         {
