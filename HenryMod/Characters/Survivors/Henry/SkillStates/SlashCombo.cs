@@ -8,7 +8,7 @@ namespace HenryMod.Survivors.Henry.SkillStates
     {
         public override void OnEnter()
         {
-            hitboxName = "Sword";
+            hitboxGroupName = "SwordGroup";
 
             damageType = DamageType.Generic;
             damageCoefficient = HenryStaticValues.swordDamageCoefficient;

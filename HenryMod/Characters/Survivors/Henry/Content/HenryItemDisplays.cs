@@ -10,7 +10,6 @@ namespace HenryMod.Survivors.Henry
     {
         protected override void SetItemDisplayRules(List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules)
         {
-            //todo joe item display fun
             //paste all your displays here
             //sotv item displays not added yet. you can add them yourself from DLC1Content if you like. I believe in ya
             #region Item Displays

@@ -19,7 +19,7 @@ namespace HenryMod.Modules
         internal static AssetBundle LoadAssetBundle(string bundleName)
         {
 
-            if (bundleName == "myassetbundlee")
+            if (bundleName == "myassetbundle")
             {
                 Log.Error($"AssetBundle name hasn't been changed. not loading any assets to avoid conflicts.\nMake sure to rename your assetbundle filename and rename the AssetBundleName field in your character setup code ");
                 return null;
@@ -45,8 +45,7 @@ namespace HenryMod.Modules
             return assetBundle;
 
         }
-        //todo joe I know I've added more shit to this over the years
-        //oh wait it's probably in projectile or whatever
+
         internal static GameObject CloneTracer(string originalTracerName, string newTracerName)
         {
             if (RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName) == null) 
@@ -57,7 +56,7 @@ namespace HenryMod.Modules
             if (!newTracer.GetComponent<EffectComponent>()) newTracer.AddComponent<EffectComponent>();
             if (!newTracer.GetComponent<VFXAttributes>()) newTracer.AddComponent<VFXAttributes>();
             if (!newTracer.GetComponent<NetworkIdentity>()) newTracer.AddComponent<NetworkIdentity>();
-
+            
             newTracer.GetComponent<Tracer>().speed = 250f;
             newTracer.GetComponent<Tracer>().length = 50f;
 

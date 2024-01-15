@@ -12,10 +12,8 @@ using System.Security.Permissions;
 //rename this namespace
 namespace HenryMod
 {
-    [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
-
     public class HenryPlugin : BaseUnityPlugin
     {
         // if you do not change this, you are giving permission to deprecate the mod-

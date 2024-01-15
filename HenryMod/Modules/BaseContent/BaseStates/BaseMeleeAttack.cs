@@ -13,7 +13,7 @@ namespace HenryMod.Modules.BaseStates
     {
         public int swingIndex;
 
-        protected string hitboxName = "Sword";
+        protected string hitboxGroupName = "SwordGroup";
 
         protected DamageType damageType = DamageType.Generic;
         protected float damageCoefficient = 3.5f;
@@ -69,7 +69,7 @@ namespace HenryMod.Modules.BaseStates
             attack.hitEffectPrefab = hitEffectPrefab;
             attack.forceVector = bonusForce;
             attack.pushAwayForce = pushForce;
-            attack.hitBoxGroup = FindHitBoxGroup(hitboxName);
+            attack.hitBoxGroup = FindHitBoxGroup(hitboxGroupName);
             attack.isCrit = RollCrit();
             attack.impactSound = impactSound;
         }

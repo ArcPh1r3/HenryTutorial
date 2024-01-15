@@ -702,7 +702,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8315140139175220323}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.955, z: 3.26}
+  m_LocalPosition: {x: 0, y: 1.22, z: 3.26}
   m_LocalScale: {x: 6.6444645, y: 4.3567033, z: 7.0518}
   m_Children: []
   m_Father: {fileID: 8315140139193319990}
@@ -2044,6 +2044,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transformPairs:
+  - name: MainHurtbox
+    transform: {fileID: 8801724157396953430}
+  - name: SwordHitbox
+    transform: {fileID: 8315140139175220320}
+  - name: Model
+    transform: {fileID: 8315140139193319996}
+  - name: SwordModel
+    transform: {fileID: 8315140139193319994}
+  - name: GunModel
+    transform: {fileID: 7238953316064410136}
   - name: Root
     transform: {fileID: 8315140139193319992}
   - name: Base
@@ -2066,18 +2076,8 @@ MonoBehaviour:
     transform: {fileID: 8315140139179319567}
   - name: SwingCenter
     transform: {fileID: 6458978905384375279}
-  - name: SwordHitbox
-    transform: {fileID: 8315140139175220320}
-  - name: MainHurtbox
-    transform: {fileID: 8801724157396953430}
   - name: Sword
     transform: {fileID: 8315140139193320022}
-  - name: Model
-    transform: {fileID: 8315140139193319996}
-  - name: SwordModel
-    transform: {fileID: 8315140139193319994}
-  - name: GunModel
-    transform: {fileID: 7238953316064410136}
   - name: Gun
     transform: {fileID: 7238953316064410150}
   - name: Pelvis

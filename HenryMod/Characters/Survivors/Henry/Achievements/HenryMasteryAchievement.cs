@@ -1,8 +1,5 @@
 ﻿using RoR2;
-using System;
-using UnityEngine;
-using HenryMod.Survivors.Henry;
-using HenryMod.Modules;
+using HenryMod.Modules.Achievements;
 
 namespace HenryMod.Survivors.Henry.Achievements
 {

@@ -20,14 +20,14 @@ namespace HenryMod.Modules.Characters
 
         public static T instance { get; private set; }
 
-        public AssetBundle assetBundle { get; private set; }
+        public abstract AssetBundle assetBundle { get; protected set; }
 
-        public GameObject bodyPrefab;
-        public CharacterBody prefabCharacterBody;
-        public GameObject characterModelObject;
-        public CharacterModel prefabCharacterModel;
+        public abstract GameObject bodyPrefab                 {get; protected set;}
+        public abstract CharacterBody prefabCharacterBody     {get; protected set;}
+        public abstract GameObject characterModelObject       {get; protected set;}
+        public abstract CharacterModel prefabCharacterModel   {get; protected set;}
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             instance = this as T;
             assetBundle = Assets.LoadAssetBundle(assetBundleName);
@@ -44,11 +44,7 @@ namespace HenryMod.Modules.Characters
 
         protected virtual void InitializeCharacterBodyPrefab()
         {
-            //ability to pass in an existing model
-            if(characterModelObject == null)
-            {
-                characterModelObject = Prefabs.LoadCharacterModel(assetBundle, modelPrefabName);
-            }
+            characterModelObject = Prefabs.LoadCharacterModel(assetBundle, modelPrefabName);
 
             bodyPrefab = Modules.Prefabs.CreateBodyPrefab(characterModelObject, bodyInfo);
             prefabCharacterBody = bodyPrefab.GetComponent<CharacterBody>();

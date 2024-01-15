@@ -261,7 +261,6 @@ namespace HenryMod.Modules
         //    rigidbody.mass = 100f;
         //}
 
-        //todo setup see if this affects kinematiccharactercontroller
         private static void SetupCapsuleCollider(GameObject prefab)
         {
             //character collider MUST be commando's size!
@@ -682,16 +681,16 @@ namespace HenryMod.Modules
             }
         }
 
-        public static void SetupHitbox(GameObject prefab, Transform hitboxTransform, string hitboxName) => SetupHitbox(prefab, hitboxName, hitboxTransform);
-        public static void SetupHitbox(GameObject prefab, string hitboxName, params Transform[] hitboxTransforms)
+        public static void SetupHitbox(GameObject prefab, Transform hitboxTransform, string hitboxName) => SetupHitBoxGroup(prefab, hitboxName, hitboxTransform);
+        public static void SetupHitBoxGroup(GameObject prefab, string hitBoxGroupName, params Transform[] hitBoxTransforms)
         {
             List<HitBox> hitBoxes = new List<HitBox>();
 
-            foreach (Transform i in hitboxTransforms)
+            foreach (Transform i in hitBoxTransforms)
             {
                 if (i == null)
                 {
-                    Log.Error($"Error setting up hitboxGroup for {hitboxName}: hitbox transform was null");
+                    Log.Error($"Error setting up hitboxGroup for {hitBoxGroupName}: hitbox transform was null");
                     continue;
                 }
                 HitBox hitBox = i.gameObject.AddComponent<HitBox>();
@@ -701,7 +700,7 @@ namespace HenryMod.Modules
 
             if(hitBoxes.Count == 0)
             {
-                Log.Error($"No hitboxes were set up. aborting setting up hitboxGroup for {hitboxName}");
+                Log.Error($"No hitboxes were set up. aborting setting up hitboxGroup for {hitBoxGroupName}");
                 return;
             }
 
@@ -709,7 +708,7 @@ namespace HenryMod.Modules
 
             hitBoxGroup.hitBoxes = hitBoxes.ToArray();
 
-            hitBoxGroup.groupName = hitboxName;
+            hitBoxGroup.groupName = hitBoxGroupName;
         }
 
     }

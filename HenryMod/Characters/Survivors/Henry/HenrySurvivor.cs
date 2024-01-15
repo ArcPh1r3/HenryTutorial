@@ -39,6 +39,7 @@ namespace HenryMod.Survivors.Henry
 
             characterPortrait = assetBundle.LoadAsset<Texture>("texHenryIcon"),
             bodyColor = Color.white,
+            sortPosition = 100,
 
             crosshair = Assets.LoadCrosshair("Standard"),
             podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
@@ -71,7 +72,16 @@ namespace HenryMod.Survivors.Henry
         
         public override ItemDisplaysBase itemDisplays => new HenryItemDisplays();
 
-        public override void InitializeCharacter()
+        //set in base classes
+        public override AssetBundle assetBundle { get; protected set; }
+
+        public override GameObject bodyPrefab { get; protected set; }
+        public override CharacterBody prefabCharacterBody { get; protected set; }
+        public override GameObject characterModelObject { get; protected set; }
+        public override CharacterModel prefabCharacterModel { get; protected set; }
+        public override GameObject displayPrefab { get; protected set; }
+
+        public override void Initialize()
         {
             //uncomment if you have multiple characters
             //ConfigEntry<bool> characterEnabled = Config.CharacterEnableConfig("Survivors", "Henry");
@@ -79,6 +89,11 @@ namespace HenryMod.Survivors.Henry
             //if (!characterEnabled.Value)
             //    return;
 
+            base.Initialize();
+        }
+
+        public override void InitializeCharacter()
+        {
             //need the character unlockable before you initialize the survivordef
             HenryUnlockables.Init();
 
@@ -111,11 +126,11 @@ namespace HenryMod.Survivors.Henry
 
         public void AddHitboxes()
         {
-            ChildLocator childLocator = bodyPrefab.GetComponentInChildren<ChildLocator>();
+            ChildLocator childLocator = characterModelObject.GetComponent<ChildLocator>();
 
             //example of how to create a hitbox
-            Transform hitboxTransform = childLocator.FindChild("SwordHitbox");
-            Prefabs.SetupHitbox(characterModelObject, hitboxTransform, "Sword");
+            Transform hitBoxTransform = childLocator.FindChild("SwordHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "SwordGroup", hitBoxTransform);
         }
 
         public override void InitializeEntityStateMachines() 
@@ -169,8 +184,8 @@ namespace HenryMod.Survivors.Henry
                 resetCooldownTimerOnUse = false,
                 fullRestockOnAssign = true,
                 dontAllowPastMaxStocks = false,
-                beginSkillCooldownOnSkillEnd = false,
                 mustKeyPress = false,
+                beginSkillCooldownOnSkillEnd = false,
 
                 isCombatSkill = true,
                 canceledFromSprinting = false,

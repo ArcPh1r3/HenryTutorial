@@ -8,7 +8,6 @@ namespace HenryMod.Modules.Characters
 {
     public abstract class SurvivorBase<T> : CharacterBase<T> where T : SurvivorBase<T>, new()
     {
-
         public abstract string masterName { get; }
 
         public abstract string displayPrefabName { get; }
@@ -17,7 +16,7 @@ namespace HenryMod.Modules.Characters
 
         public abstract UnlockableDef characterUnlockableDef { get; }
 
-        public virtual GameObject displayPrefab { get; set; }
+        public abstract GameObject displayPrefab { get; protected set; }
 
         public override void InitializeCharacter()
         {
