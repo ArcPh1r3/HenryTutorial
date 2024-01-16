@@ -32,16 +32,16 @@ namespace HenryMod
         {
             instance = this;
 
+            //easy to use logger
             Log.Init(Logger);
-            Modules.Language.Init();
-            
-            // collect item display prefabs for use in our display rules
-            Modules.ItemDisplays.PopulateDisplays();
 
-            // character initialization. this should be after itemdisplays
+            // used when you want to properly set up language folders
+            Modules.Language.Init();
+
+            // character initialization
             new HenrySurvivor().Initialize();
 
-            // now make a content pack and add it this has to be last
+            // make a content pack and add it. this has to be last
             new Modules.ContentPacks().Initialize();
         }
     }

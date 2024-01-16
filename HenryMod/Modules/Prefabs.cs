@@ -83,22 +83,37 @@ namespace HenryMod.Modules
             return newBodyPrefab;
         }
 
+        /// <summary>
+        /// clone a body according to your BodyInfo, load your model prefab from the assetbundle, and set up components on both objects through code
+        /// </summary>
         public static GameObject CreateBodyPrefab(AssetBundle assetBundle, string modelPrefabName, BodyInfo bodyInfo)
         {
             return CreateBodyPrefab(LoadCharacterModel(assetBundle, modelPrefabName), bodyInfo);
         }
-        public static GameObject CreateBodyPrefab(AssetBundle assetBundle, string bodyPrefabName, string modelPrefabName, BodyInfo bodyInfo)
-        {
-            return CreateBodyPrefab(LoadCharacterBody(assetBundle, bodyPrefabName), LoadCharacterModel(assetBundle, modelPrefabName), bodyInfo);
-        }
+        /// <summary>
+        /// clone a body according to your BodyInfo, pass in your model prefab, and set up components on both objects through code
+        /// </summary>
         public static GameObject CreateBodyPrefab(GameObject model, BodyInfo bodyInfo)
         {
             return CreateBodyPrefab(CloneCharacterBody(bodyInfo), model, bodyInfo);
         }
+        /// <summary>
+        /// Pass in a body prefab, loads your model from the assetbundle, and set up components on both objects through code
+        /// </summary>
         public static GameObject CreateBodyPrefab(GameObject newBodyPrefab, AssetBundle assetBundle, string modelName, BodyInfo bodyInfo)
         {
             return CreateBodyPrefab(newBodyPrefab, LoadCharacterModel(assetBundle, modelName), bodyInfo);
         }
+        /// <summary>
+        /// loads your body from the assetbundle, loads your model from the assetbundle, and set up components on both objects through code
+        /// </summary>
+        public static GameObject CreateBodyPrefab(AssetBundle assetBundle, string bodyPrefabName, string modelPrefabName, BodyInfo bodyInfo)
+        {
+            return CreateBodyPrefab(LoadCharacterBody(assetBundle, bodyPrefabName), LoadCharacterModel(assetBundle, modelPrefabName), bodyInfo);
+        }
+        /// <summary>
+        /// Pass in a body prefab, pass in a model prefab, and set up components on both objects through code
+        /// </summary>
         public static GameObject CreateBodyPrefab(GameObject newBodyPrefab, GameObject model, BodyInfo bodyInfo)
         {
             if (model == null || newBodyPrefab == null)
@@ -202,26 +217,35 @@ namespace HenryMod.Modules
         private static Transform AddCharacterModelToSurvivorBody(GameObject bodyPrefab, Transform modelTransform, BodyInfo bodyInfo)
         {
             Transform modelBase = bodyPrefab.transform.Find("ModelBase");
-            if (modelBase == null) modelBase = new GameObject("ModelBase").transform;
-            modelBase.parent = bodyPrefab.transform;
-            modelBase.localPosition = bodyInfo.modelBasePosition;
-            modelBase.localRotation = Quaternion.identity;
+            if (modelBase == null) // if these objects exist, you must have set them as you want them in editor
+            {
+                modelBase = new GameObject("ModelBase").transform;
+                modelBase.parent = bodyPrefab.transform;
+                modelBase.localPosition = bodyInfo.modelBasePosition;
+                modelBase.localRotation = Quaternion.identity;
+            }
 
             modelTransform.parent = modelBase.transform;
             modelTransform.localPosition = Vector3.zero;
             modelTransform.localRotation = Quaternion.identity;
 
             Transform cameraPivot = bodyPrefab.transform.Find("CameraPivot");
-            if (cameraPivot == null) cameraPivot = new GameObject("CameraPivot").transform;
-            cameraPivot.parent = bodyPrefab.transform;
-            cameraPivot.localPosition = bodyInfo.cameraPivotPosition;
-            cameraPivot.localRotation = Quaternion.identity;
+            if (cameraPivot == null)
+            {
+                cameraPivot = new GameObject("CameraPivot").transform;
+                cameraPivot.parent = bodyPrefab.transform;
+                cameraPivot.localPosition = bodyInfo.cameraPivotPosition;
+                cameraPivot.localRotation = Quaternion.identity;
+            }
 
             Transform aimOrigin = bodyPrefab.transform.Find("AimOrigin");
-            if (aimOrigin == null) aimOrigin = new GameObject("AimOrigin").transform;
-            aimOrigin.parent = bodyPrefab.transform;
-            aimOrigin.localPosition = bodyInfo.aimOriginPosition;
-            aimOrigin.localRotation = Quaternion.identity;
+            if (aimOrigin == null)
+            {
+                aimOrigin = new GameObject("AimOrigin").transform;
+                aimOrigin.parent = bodyPrefab.transform;
+                aimOrigin.localPosition = bodyInfo.aimOriginPosition;
+                aimOrigin.localRotation = Quaternion.identity;
+            }
             bodyPrefab.GetComponent<CharacterBody>().aimOriginTransform = aimOrigin;
 
             return modelBase.transform;

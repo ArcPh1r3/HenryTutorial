@@ -59,6 +59,7 @@ namespace HenryMod.Modules.Characters
             prefabCharacterModel.itemDisplayRuleSet = itemDisplayRuleSet;
 
             if (itemDisplays != null) {
+                Modules.ItemDisplays.queuedDisplays++;
                 RoR2.ContentManagement.ContentManager.onContentPacksAssigned += SetItemDisplays;
             }
         }

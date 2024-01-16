@@ -144,7 +144,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6504392670548064762}
-  - component: {fileID: 662250192032420986}
   m_Layer: 0
   m_Name: HeadCollider
   m_TagString: Untagged
@@ -166,23 +165,6 @@ Transform:
   m_Father: {fileID: 8315140139193319944}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &662250192032420986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4735786425572373389}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc41cd48bee14034db80323ab44fbd3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Center: {x: 0, y: 0, z: 0}
-  m_Radius: 0.18
-  m_Height: 0
-  m_Direction: 0
-  m_Bound: 0
 --- !u!1 &5759912551305007785
 GameObject:
   m_ObjectHideFlags: 0
@@ -1392,7 +1374,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8315140139193319966}
-  - component: {fileID: 8026021457226145154}
   - component: {fileID: 7238953315125949121}
   - component: {fileID: 7238953315125949120}
   - component: {fileID: 7238953315125949094}
@@ -1420,23 +1401,6 @@ Transform:
   m_Father: {fileID: 8315140139193319974}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 14.721029, y: 41.06809, z: 19.748842}
---- !u!114 &8026021457226145154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8315140139193097790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc41cd48bee14034db80323ab44fbd3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Center: {x: 0, y: 0.19, z: 0}
-  m_Radius: 0.15
-  m_Height: 0.49
-  m_Direction: 1
-  m_Bound: 0
 --- !u!136 &7238953315125949121
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1981,7 +1945,6 @@ GameObject:
   - component: {fileID: 8315140139200490998}
   - component: {fileID: 8315140139193097815}
   - component: {fileID: 7238953315125949139}
-  - component: {fileID: 1209521308}
   m_Layer: 0
   m_Name: mdlHenry
   m_TagString: Untagged
@@ -2129,71 +2092,7 @@ MonoBehaviour:
   - {fileID: 7238953316064410150}
   - {fileID: 8315140139193320022}
   componentsToDisableOnRagdoll:
-  - {fileID: 1209521308}
---- !u!114 &1209521308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8315140139193097814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a68da65c907acb4eb4dbcd042f172e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Root: {fileID: 8315140139193319944}
-  m_UpdateRate: 240
-  m_UpdateMode: 1
-  m_Damping: 0.1
-  m_DampingDistrib:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_Elasticity: 0.005
-  m_ElasticityDistrib:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_Stiffness: 0.2
-  m_StiffnessDistrib:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_Inert: 0
-  m_InertDistrib:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_Radius: 0.01
-  m_RadiusDistrib:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_EndLength: 0
-  m_EndOffset: {x: 0, y: 0, z: 0}
-  m_Gravity: {x: 0, y: 0, z: 0}
-  m_Force: {x: 0, y: 0, z: 0}
-  m_Colliders:
-  - {fileID: 662250192032420986}
-  - {fileID: 8026021457226145154}
-  m_Exclusions:
-  - {fileID: 4520737839041294053}
-  - {fileID: 6504392670548064762}
-  m_FreezeAxis: 0
-  m_DistantDisable: 1
-  m_ReferenceObject: {fileID: 0}
-  m_DistanceToObject: 60
+  - {fileID: 0}
 --- !u!1 &8315140139193097816
 GameObject:
   m_ObjectHideFlags: 0
@@ -2607,7 +2506,6 @@ GameObject:
   - component: {fileID: 7238953315125949105}
   - component: {fileID: 7238953315125949106}
   - component: {fileID: 7238953315125949130}
-  - component: {fileID: 160948032}
   m_Layer: 0
   m_Name: thigh.r
   m_TagString: Untagged
@@ -2705,23 +2603,6 @@ CharacterJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &160948032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8315140139193097840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc41cd48bee14034db80323ab44fbd3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Center: {x: 0, y: 0.36, z: 0}
-  m_Radius: 0.11
-  m_Height: 0.47
-  m_Direction: 1
-  m_Bound: 0
 --- !u!1 &8315140139193097842
 GameObject:
   m_ObjectHideFlags: 0
@@ -2734,7 +2615,6 @@ GameObject:
   - component: {fileID: 7238953315125949111}
   - component: {fileID: 7238953315125949112}
   - component: {fileID: 7238953315125949127}
-  - component: {fileID: 1702727270}
   m_Layer: 0
   m_Name: thigh.l
   m_TagString: Untagged
@@ -2832,23 +2712,6 @@ CharacterJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &1702727270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8315140139193097842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc41cd48bee14034db80323ab44fbd3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Center: {x: 0, y: 0.36, z: 0}
-  m_Radius: 0.11
-  m_Height: 0.47
-  m_Direction: 1
-  m_Bound: 0
 --- !u!1 &8315140139193097844
 GameObject:
   m_ObjectHideFlags: 0

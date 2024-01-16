@@ -9,9 +9,13 @@ namespace HenryMod.Modules.Characters
         {
             List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules = new List<ItemDisplayRuleSet.KeyAssetRuleGroup>();
 
+            ItemDisplays.LazyInit();
+
             SetItemDisplayRules(itemDisplayRules);
 
             itemDisplayRuleSet.keyAssetRuleGroups = itemDisplayRules.ToArray();
+
+            ItemDisplays.DisposeWhenDone();
         }
 
         protected abstract void SetItemDisplayRules(List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules);

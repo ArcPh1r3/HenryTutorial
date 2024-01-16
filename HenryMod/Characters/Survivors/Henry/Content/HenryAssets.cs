@@ -69,7 +69,6 @@ namespace HenryMod.Survivors.Henry
         #region projectiles
         private static void CreateProjectiles()
         {
-
             CreateBombProjectile();
             Content.AddProjectilePrefab(bombProjectilePrefab);
         }
