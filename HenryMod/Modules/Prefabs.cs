@@ -375,11 +375,11 @@ namespace HenryMod.Modules
                         {
                             if (customInfos[i].dontHotpoo)
                             {
-                                mat = rend.material;
+                                mat = rend.sharedMaterial;
                             }
                             else
                             {
-                                mat = rend.material.ConvertDefaultShaderToHopoo();
+                                mat = rend.sharedMaterial.ConvertDefaultShaderToHopoo();
                             }
                         }
 
@@ -507,7 +507,7 @@ namespace HenryMod.Modules
                     Collider boneCollider = boneTransform.GetComponent<Collider>();
                     if (boneCollider)
                     {
-                        boneCollider.material = ragdollMaterial;
+                        //boneCollider.material = ragdollMaterial;
                         boneCollider.sharedMaterial = ragdollMaterial;
                     }
                     else

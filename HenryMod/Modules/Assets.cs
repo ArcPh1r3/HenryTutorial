@@ -71,7 +71,7 @@ namespace HenryMod.Modules
 
             foreach (Renderer i in objectToConvert.GetComponentsInChildren<Renderer>())
             {
-                i?.material?.ConvertDefaultShaderToHopoo();
+                i?.sharedMaterial?.ConvertDefaultShaderToHopoo();
             }
         }
 
