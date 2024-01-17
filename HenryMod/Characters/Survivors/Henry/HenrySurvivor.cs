@@ -152,13 +152,34 @@ namespace HenryMod.Survivors.Henry
         public override void InitializeSkills()
         {
             Skills.CreateSkillFamilies(bodyPrefab);
-            AddPrmarySkills();
+            AddPrimarySkills();
             AddSecondarySkills();
             AddUtiitySkills();
             AddSpecialSkills();
         }
 
-        //let's look at secondary before primary because it is simpler
+        //if this is your first look at skilldef creation, take a look at Secondary first
+        private void AddPrimarySkills()
+        {
+            //the primary skill is created using a constructor for a typical primary
+            //it is also a SteppedSkillDef. Custom Skilldefs are very useful for custom behaviors related to casting a skill. see ror2's different skilldefs for reference
+            SteppedSkillDef slashSkillDef = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
+                (
+                    "HenrySlash",
+                    HENRY_PREFIX + "PRIMARY_SLASH_NAME",
+                    HENRY_PREFIX + "PRIMARY_SLASH_DESCRIPTION",
+                    assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                    new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)),
+                    "Weapon",
+                    true
+                ));
+            //custom Skilldefs can have additional fields that you can set manually
+            slashSkillDef.stepCount = 2;
+            slashSkillDef.stepGraceDuration = 0.5f;
+
+            Skills.AddPrimarySkills(bodyPrefab, slashSkillDef);
+        }
+
         private void AddSecondarySkills()
         {
             //here is a basic skill def with all fields accounted for
@@ -195,27 +216,6 @@ namespace HenryMod.Survivors.Henry
             });
 
             Skills.AddSecondarySkills(bodyPrefab, gunSkillDef);
-        }
-
-        private void AddPrmarySkills()
-        {
-            //the primary skill is created using a constructor for a typical primary
-            //it is also a SteppedSkillDef. Custom Skilldefs are very useful for custom behaviors related to casting a skill. see ror2's different skilldefs for reference
-            SteppedSkillDef slashSkillDef = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
-                (
-                    "HenrySlash",
-                    HENRY_PREFIX + "PRIMARY_SLASH_NAME",
-                    HENRY_PREFIX + "PRIMARY_SLASH_DESCRIPTION",
-                    assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
-                    new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)),
-                    "Weapon",
-                    true
-                ));
-            //custom Skilldefs can have additional fields that you can set manually
-            slashSkillDef.stepCount = 2;
-            slashSkillDef.stepGraceDuration = 0.5f;
-
-            Skills.AddPrimarySkills(bodyPrefab, slashSkillDef);
         }
 
         private void AddUtiitySkills()
@@ -255,8 +255,8 @@ namespace HenryMod.Survivors.Henry
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
-                activationStateMachineName = "Weapon2", //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
-                interruptPriority = EntityStates.InterruptPriority.Skill,
+                //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
+                activationStateMachineName = "Weapon2", interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
                 baseRechargeInterval = 10f,
