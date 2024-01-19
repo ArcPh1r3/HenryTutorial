@@ -344,6 +344,8 @@ namespace HenryMod.Survivors.Henry
         //Character Master is what governs the AI of your character when it is not controlled by a player (artifact of vengeance, goobo)
         public override void InitializeCharacterMaster()
         {
+            //you must only do one of these. adding duplicate masters breaks the game.
+
             //if you're lazy or prototyping you can simply copy the AI of a different character to be used
             //Modules.Prefabs.CloneDopplegangerMaster(bodyPrefab, masterName, "Merc");
 
