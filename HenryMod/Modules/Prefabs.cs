@@ -613,6 +613,12 @@ namespace HenryMod.Modules
             {
                 deathBehavior.idleStateMachine = new EntityStateMachine[0];
             }
+            
+            SetStateOnHurt setStateOnHurt = bodyPrefab.GetComponent<SetStateOnHurt>();
+            if (setStateOnHurt)
+            {
+                setStateOnHurt.idleStateMachine = setStateOnHurt.idleStateMachine = new EntityStateMachine[0];
+            }
         }
 
         public static void AddMainEntityStateMachine(GameObject bodyPrefab, string machineName = "Body", Type mainStateType = null, Type initalStateType = null)

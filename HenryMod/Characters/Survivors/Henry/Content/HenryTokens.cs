@@ -18,7 +18,6 @@ namespace HenryMod.Survivors.Henry
 
         public static void AddHenryTokens()
         {
-            #region Henry
             string prefix = HenrySurvivor.HENRY_PREFIX;
 
             string desc = "Henry is a skilled fighter who makes use of a wide arsenal of weaponry to take down his foes.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
@@ -69,7 +68,6 @@ namespace HenryMod.Survivors.Henry
             #region Achievements
             Language.Add(Tokens.GetAchievementNameToken(HenryMasteryAchievement.identifier), "Henry: Mastery");
             Language.Add(Tokens.GetAchievementDescriptionToken(HenryMasteryAchievement.identifier), "As Henry, beat the game or obliterate on Monsoon.");
-            #endregion
             #endregion
         }
     }
