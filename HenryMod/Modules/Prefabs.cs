@@ -606,18 +606,18 @@ namespace HenryMod.Modules
             }
 
             NetworkStateMachine networkMachine = bodyPrefab.GetComponent<NetworkStateMachine>();
-            networkMachine.stateMachines = new EntityStateMachine[0];
+            networkMachine.stateMachines = Array.Empty<EntityStateMachine>();
 
             CharacterDeathBehavior deathBehavior = bodyPrefab.GetComponent<CharacterDeathBehavior>();
             if (deathBehavior)
             {
-                deathBehavior.idleStateMachine = new EntityStateMachine[0];
+                deathBehavior.idleStateMachine = Array.Empty<EntityStateMachine>();
             }
             
             SetStateOnHurt setStateOnHurt = bodyPrefab.GetComponent<SetStateOnHurt>();
             if (setStateOnHurt)
             {
-                setStateOnHurt.idleStateMachine = setStateOnHurt.idleStateMachine = new EntityStateMachine[0];
+                setStateOnHurt.idleStateMachine = Array.Empty<EntityStateMachine>();
             }
         }
 

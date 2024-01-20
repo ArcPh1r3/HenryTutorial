@@ -197,7 +197,7 @@ namespace HenryMod.Modules
         public string skillName;
         public string skillNameToken;
         public string skillDescriptionToken;
-        public string[] keywordTokens = new string[0];
+        public string[] keywordTokens = Array.Empty<string>();
         public Sprite skillIcon;
 
         public SerializableEntityStateType activationState;
