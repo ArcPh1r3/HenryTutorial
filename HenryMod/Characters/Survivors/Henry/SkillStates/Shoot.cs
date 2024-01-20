@@ -86,7 +86,7 @@ namespace HenryMod.Survivors.Henry.SkillStates
                         isCrit = RollCrit(),
                         owner = gameObject,
                         muzzleName = muzzleString,
-                        smartCollision = false,
+                        smartCollision = true,
                         procChainMask = default,
                         procCoefficient = procCoefficient,
                         radius = 0.75f,
