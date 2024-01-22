@@ -131,6 +131,7 @@ namespace HenryMod.Modules
             SetupCameraTargetParams(newBodyPrefab, bodyInfo);
             //SetupRigidbody(newPrefab);
             SetupCapsuleCollider(newBodyPrefab);
+            Skills.ClearGenericSkills(newBodyPrefab);
 
             Modules.Content.AddCharacterBodyPrefab(newBodyPrefab);
 

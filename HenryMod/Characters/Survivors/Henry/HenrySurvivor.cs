@@ -163,7 +163,7 @@ namespace HenryMod.Survivors.Henry
         {
             //the primary skill is created using a constructor for a typical primary
             //it is also a SteppedSkillDef. Custom Skilldefs are very useful for custom behaviors related to casting a skill. see ror2's different skilldefs for reference
-            SteppedSkillDef slashSkillDef = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
+            SteppedSkillDef primarySkillDef1 = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
                 (
                     "HenrySlash",
                     HENRY_PREFIX + "PRIMARY_SLASH_NAME",
@@ -174,16 +174,16 @@ namespace HenryMod.Survivors.Henry
                     true
                 ));
             //custom Skilldefs can have additional fields that you can set manually
-            slashSkillDef.stepCount = 2;
-            slashSkillDef.stepGraceDuration = 0.5f;
+            primarySkillDef1.stepCount = 2;
+            primarySkillDef1.stepGraceDuration = 0.5f;
 
-            Skills.AddPrimarySkills(bodyPrefab, slashSkillDef);
+            Skills.AddPrimarySkills(bodyPrefab, primarySkillDef1);
         }
 
         private void AddSecondarySkills()
         {
             //here is a basic skill def with all fields accounted for
-            SkillDef gunSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef secondarySkillDef1 = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "HenryGun",
                 skillNameToken = HENRY_PREFIX + "SECONDARY_GUN_NAME",
@@ -215,13 +215,13 @@ namespace HenryMod.Survivors.Henry
 
             });
 
-            Skills.AddSecondarySkills(bodyPrefab, gunSkillDef);
+            Skills.AddSecondarySkills(bodyPrefab, secondarySkillDef1);
         }
 
         private void AddUtiitySkills()
         {
             //here's a skilldef of a typical movement skill. some fields are omitted and will just have default values
-            SkillDef rollSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef utilitySkillDef1 = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "HenryRoll",
                 skillNameToken = HENRY_PREFIX + "UTILITY_ROLL_NAME",
@@ -241,13 +241,13 @@ namespace HenryMod.Survivors.Henry
                 cancelSprintingOnActivation = false,
             });
 
-            Skills.AddUtilitySkills(bodyPrefab, rollSkillDef);
+            Skills.AddUtilitySkills(bodyPrefab, utilitySkillDef1);
         }
 
         private void AddSpecialSkills()
         {
             //a basic skill
-            SkillDef bombSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef specialSkilLDef1 = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "HenryBomb",
                 skillNameToken = HENRY_PREFIX + "SPECIAL_BOMB_NAME",
@@ -265,7 +265,7 @@ namespace HenryMod.Survivors.Henry
                 mustKeyPress = false,
             });
 
-            Skills.AddSpecialSkills(bodyPrefab, bombSkillDef);
+            Skills.AddSpecialSkills(bodyPrefab, specialSkilLDef1);
         }
         #endregion skills
         

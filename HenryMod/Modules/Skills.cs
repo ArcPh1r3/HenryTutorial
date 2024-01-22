@@ -16,31 +16,15 @@ namespace HenryMod.Modules
         /// </summary>
         /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
         /// <param name="destroyExisting">Destroy any existing GenericSkills on the body prefab so you can replace them?</param>
-        public static void CreateSkillFamilies(GameObject targetPrefab, bool destroyExisting = true) => CreateSkillFamilies(targetPrefab, destroyExisting, SkillSlot.Primary, SkillSlot.Secondary, SkillSlot.Utility, SkillSlot.Special);
-        /// <summary>
-        /// Destroy existing GenericSkills, create in order the GenericSkills for the skillslots desired, and create skillfamilies for them.
-        /// </summary>
-        /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
-        /// <param name="slots">Order of slots to add to the body prefab. Input SkillSlot.None to create a GenericSkill on the prefab outside of usual 4. For example, mul-t's selectable second primary, a selectable passive like acrid, etc</param>
-        public static void CreateSkillFamilies(GameObject targetPrefab, params SkillSlot[] slots) => CreateSkillFamilies(targetPrefab, true, slots);
-
+        public static void CreateSkillFamilies(GameObject targetPrefab) => CreateSkillFamilies(targetPrefab, SkillSlot.Primary, SkillSlot.Secondary, SkillSlot.Utility, SkillSlot.Special);
         /// <summary>
         /// Create in order the GenericSkills for the skillslots desired, and create skillfamilies for them.
         /// </summary>
         /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
         /// <param name="destroyExisting">Destroy any existing GenericSkills on the body prefab so you can replace them?</param>
         /// <param name="slots">Order of slots to add to the body prefab. <para>Input SkillSlot.None to create a GenericSkill on the prefab outside of usual 4. These will be called GenericSkill1, with the number being its order on the loadout screen</para><para>For example, mul-t's selectable second primary, a selectable passive like acrid, etc</para></param>
-        public static void CreateSkillFamilies(GameObject targetPrefab, bool destroyExisting, params SkillSlot[] slots)
+        public static void CreateSkillFamilies(GameObject targetPrefab, params SkillSlot[] slots)
         {
-            //should this even be a thing here
-            if (destroyExisting)
-            {
-                foreach (GenericSkill obj in targetPrefab.GetComponentsInChildren<GenericSkill>())
-                {
-                    UnityEngine.Object.DestroyImmediate(obj);
-                }
-            }
-
             SkillLocator skillLocator = targetPrefab.GetComponent<SkillLocator>();
 
             for (int i = 0; i < slots.Length; i++)
@@ -65,6 +49,14 @@ namespace HenryMod.Modules
                 }
             }
 
+        }
+
+        public static void ClearGenericSkills(GameObject targetPrefab)
+        {
+            foreach (GenericSkill obj in targetPrefab.GetComponentsInChildren<GenericSkill>())
+            {
+                UnityEngine.Object.DestroyImmediate(obj);
+            }
         }
 
         public static GenericSkill CreateGenericSkillWithSkillFamily(GameObject targetPrefab, string familyName, bool hidden = false)
