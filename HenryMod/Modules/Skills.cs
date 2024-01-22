@@ -15,14 +15,12 @@ namespace HenryMod.Modules
         /// Create 4 GenericSkills for primary, secondary, utility, and special, and create skillfamilies for them
         /// </summary>
         /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
-        /// <param name="destroyExisting">Destroy any existing GenericSkills on the body prefab so you can replace them?</param>
         public static void CreateSkillFamilies(GameObject targetPrefab) => CreateSkillFamilies(targetPrefab, SkillSlot.Primary, SkillSlot.Secondary, SkillSlot.Utility, SkillSlot.Special);
         /// <summary>
         /// Create in order the GenericSkills for the skillslots desired, and create skillfamilies for them.
         /// </summary>
         /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
-        /// <param name="destroyExisting">Destroy any existing GenericSkills on the body prefab so you can replace them?</param>
-        /// <param name="slots">Order of slots to add to the body prefab. <para>Input SkillSlot.None to create a GenericSkill on the prefab outside of usual 4. These will be called GenericSkill1, with the number being its order on the loadout screen</para><para>For example, mul-t's selectable second primary, a selectable passive like acrid, etc</para></param>
+        /// <param name="slots">Order of slots to add to the body prefab.</param>
         public static void CreateSkillFamilies(GameObject targetPrefab, params SkillSlot[] slots)
         {
             SkillLocator skillLocator = targetPrefab.GetComponent<SkillLocator>();
@@ -44,11 +42,9 @@ namespace HenryMod.Modules
                         skillLocator.special = CreateGenericSkillWithSkillFamily(targetPrefab, "Special");
                         break;
                     case SkillSlot.None:
-                        CreateGenericSkillWithSkillFamily(targetPrefab, "GenericSkill" + i+1);
                         break;
                 }
             }
-
         }
 
         public static void ClearGenericSkills(GameObject targetPrefab)

@@ -151,6 +151,9 @@ namespace HenryMod.Survivors.Henry
         #region skills
         public override void InitializeSkills()
         {
+            //remove the genericskills from the commando body we cloned
+            Skills.ClearGenericSkills(bodyPrefab);
+            //add our own
             Skills.CreateSkillFamilies(bodyPrefab);
             AddPrimarySkills();
             AddSecondarySkills();
