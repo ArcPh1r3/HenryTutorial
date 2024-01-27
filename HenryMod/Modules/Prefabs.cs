@@ -77,7 +77,7 @@ namespace HenryMod.Modules
 
             for (int i = newBodyPrefab.transform.childCount - 1; i >= 0; i--)
             {
-                UnityEngine.Object.DestroyImmediate(newBodyPrefab.transform.GetChild(i).gameObject);
+                UnityEngine.Object.Destroy(newBodyPrefab.transform.GetChild(i).gameObject);
             }
 
             return newBodyPrefab;
