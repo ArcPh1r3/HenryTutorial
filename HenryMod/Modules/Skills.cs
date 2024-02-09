@@ -55,10 +55,11 @@ namespace HenryMod.Modules
             }
         }
 
-        public static GenericSkill CreateGenericSkillWithSkillFamily(GameObject targetPrefab, string familyName, bool hidden = false)
+        public static GenericSkill CreateGenericSkillWithSkillFamily(GameObject targetPrefab, string familyName, bool hidden = false) => CreateGenericSkillWithSkillFamily(targetPrefab, familyName, familyName, hidden);
+        public static GenericSkill CreateGenericSkillWithSkillFamily(GameObject targetPrefab, string genericSkillName, string familyName, bool hidden = false)
         {
             GenericSkill skill = targetPrefab.AddComponent<GenericSkill>();
-            skill.skillName = familyName;
+            skill.skillName = genericSkillName;
             skill.hideInCharacterSelect = hidden;
 
             SkillFamily newFamily = ScriptableObject.CreateInstance<SkillFamily>();
@@ -67,7 +68,7 @@ namespace HenryMod.Modules
 
             skill._skillFamily = newFamily;
 
-            HenryMod.Modules.Content.AddSkillFamily(newFamily);
+            Content.AddSkillFamily(newFamily);
             return skill;
         }
         #endregion

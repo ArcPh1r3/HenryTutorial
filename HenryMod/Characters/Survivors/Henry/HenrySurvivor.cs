@@ -139,11 +139,11 @@ namespace HenryMod.Survivors.Henry
             //omit all this if you want to just keep theirs
             Prefabs.ClearEntityStateMachines(bodyPrefab);
 
-            //if you set up a custom main characterstate, set it up here
-                //don't forget to register custom entitystates in your HenryStates.cs
             //the main "body" state machine has some special properties
             Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(EntityStates.GenericCharacterMain), typeof(EntityStates.SpawnTeleporterState));
-            
+            //if you set up a custom main characterstate, set it up here
+                //don't forget to register custom entitystates in your HenryStates.cs
+
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon2");
         }
@@ -223,7 +223,7 @@ namespace HenryMod.Survivors.Henry
 
         private void AddUtiitySkills()
         {
-            //here's a skilldef of a typical movement skill. some fields are omitted and will just have default values
+            //here's a skilldef of a typical movement skill.
             SkillDef utilitySkillDef1 = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "HenryRoll",
@@ -235,13 +235,23 @@ namespace HenryMod.Survivors.Henry
                 activationStateMachineName = "Body",
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
-                baseMaxStock = 1,
                 baseRechargeInterval = 4f,
+                baseMaxStock = 1,
+
+                rechargeStock = 1,
+                requiredStock = 1,
+                stockToConsume = 1,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = false,
+                mustKeyPress = false,
+                beginSkillCooldownOnSkillEnd = false,
 
                 isCombatSkill = false,
-                mustKeyPress = false,
-                forceSprintDuringState = true,
+                canceledFromSprinting = false,
                 cancelSprintingOnActivation = false,
+                forceSprintDuringState = true,
             });
 
             Skills.AddUtilitySkills(bodyPrefab, utilitySkillDef1);
@@ -249,8 +259,8 @@ namespace HenryMod.Survivors.Henry
 
         private void AddSpecialSkills()
         {
-            //a basic skill
-            SkillDef specialSkilLDef1 = Skills.CreateSkillDef(new SkillDefInfo
+            //a basic skill. some fields are omitted and will just have default values
+            SkillDef specialSkillDef1 = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "HenryBomb",
                 skillNameToken = HENRY_PREFIX + "SPECIAL_BOMB_NAME",
@@ -268,7 +278,7 @@ namespace HenryMod.Survivors.Henry
                 mustKeyPress = false,
             });
 
-            Skills.AddSpecialSkills(bodyPrefab, specialSkilLDef1);
+            Skills.AddSpecialSkills(bodyPrefab, specialSkillDef1);
         }
         #endregion skills
         
