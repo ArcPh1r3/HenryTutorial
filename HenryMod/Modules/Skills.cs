@@ -193,8 +193,8 @@ namespace HenryMod.Modules
         public string activationStateMachineName;
         public InterruptPriority interruptPriority;
 
-        public int baseMaxStock = 1;
         public float baseRechargeInterval;
+        public int baseMaxStock = 1;
 
         public int rechargeStock = 1;
         public int requiredStock = 1;

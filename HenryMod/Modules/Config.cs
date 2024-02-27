@@ -72,6 +72,10 @@ namespace HenryMod.Modules
             //{
             //    ModSettingsManager.AddOption(new CheckBoxOption(entry as ConfigEntry<bool>, restartRequired));
             //}
+            //if (entry is BepInEx.Configuration.ConfigEntry<KeyboardShortcut>)
+            //{
+            //    ModSettingsManager.AddOption(new KeyBindOption(entry as ConfigEntry<KeyboardShortcut>, restartRequired));
+            //}
         }
 
         //Taken from https://github.com/ToastedOven/CustomEmotesAPI/blob/main/CustomEmotesAPI/CustomEmotesAPI/CustomEmotesAPI.cs

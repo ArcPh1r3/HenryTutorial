@@ -12,6 +12,7 @@ using System.Security.Permissions;
 //rename this namespace
 namespace HenryMod
 {
+    //[BepInDependency("com.rune580.riskofoptions", BepInDependency.DependencyFlags.SoftDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
     public class HenryPlugin : BaseUnityPlugin
