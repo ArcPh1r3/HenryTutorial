@@ -37,7 +37,7 @@ namespace HenryMod.Modules.BaseStates
         protected string playbackRateParam = "Slash.playbackRate";
         protected GameObject swingEffectPrefab;
         protected GameObject hitEffectPrefab;
-        protected NetworkSoundEventIndex impactSound;
+        protected NetworkSoundEventIndex impactSound = NetworkSoundEventIndex.Invalid;
 
         public float duration;
         private bool hasFired;
