@@ -69,9 +69,26 @@ namespace HenryMod.Modules
         {
             if (!objectToConvert) return;
 
-            foreach (Renderer i in objectToConvert.GetComponentsInChildren<Renderer>())
+            foreach (MeshRenderer i in objectToConvert.GetComponentsInChildren<MeshRenderer>())
             {
-                i?.sharedMaterial?.ConvertDefaultShaderToHopoo();
+                if (i)
+                {
+                    if (i.material)
+                    {
+                        i.sharedMaterial.ConvertDefaultShaderToHopoo();
+                    }
+                }
+            }
+
+            foreach (SkinnedMeshRenderer i in objectToConvert.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                if (i)
+                {
+                    if (i.material)
+                    {
+                        i.sharedMaterial.ConvertDefaultShaderToHopoo();
+                    }
+                }
             }
         }
 
