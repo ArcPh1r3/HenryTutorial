@@ -73,7 +73,7 @@ namespace HenryMod.Modules
             {
                 if (i)
                 {
-                    if (i.material)
+                    if (i.sharedMaterial)
                     {
                         i.sharedMaterial.ConvertDefaultShaderToHopoo();
                     }
@@ -84,7 +84,7 @@ namespace HenryMod.Modules
             {
                 if (i)
                 {
-                    if (i.material)
+                    if (i.sharedMaterial)
                     {
                         i.sharedMaterial.ConvertDefaultShaderToHopoo();
                     }
