@@ -39,9 +39,9 @@ namespace HenryMod.Modules
 
         internal static void PopulateDisplays()
         {
-            PopulateFromBody("MercBody");
+            PopulateFromBody("LoaderBody");
 
-            PopulateCustomLightningArm();
+            //PopulateCustomLightningArm();
 
             //if you have any custom item displays to add here I would be very impressed
         }

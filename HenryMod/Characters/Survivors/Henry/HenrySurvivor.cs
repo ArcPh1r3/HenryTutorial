@@ -126,11 +126,8 @@ namespace HenryMod.Survivors.Henry
 
         public void AddHitboxes()
         {
-            ChildLocator childLocator = characterModelObject.GetComponent<ChildLocator>();
-
-            //example of how to create a hitbox
-            Transform hitBoxTransform = childLocator.FindChild("SwordHitbox");
-            Prefabs.SetupHitBoxGroup(characterModelObject, "SwordGroup", hitBoxTransform);
+            //example of how to create a HitBoxGroup. see summary for more details
+            Prefabs.SetupHitBoxGroup(characterModelObject, "SwordGroup", "SwordHitbox");
         }
 
         public override void InitializeEntityStateMachines() 

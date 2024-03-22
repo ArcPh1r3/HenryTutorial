@@ -90,7 +90,7 @@ namespace HenryMod.Modules.BaseStates
 
         protected virtual void PlaySwingEffect()
         {
-            EffectManager.SimpleMuzzleFlash(swingEffectPrefab, gameObject, muzzleString, true);
+            EffectManager.SimpleMuzzleFlash(swingEffectPrefab, gameObject, muzzleString, false);
         }
 
         protected virtual void OnHitEnemyAuthority()

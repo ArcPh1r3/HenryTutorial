@@ -710,8 +710,32 @@ namespace HenryMod.Modules
                 setStateOnHurt.idleStateMachine = setStateOnHurt.idleStateMachine.Append(entityStateMachine).ToArray();
             }
         }
+        /// <summary>
+        /// Sets up a hitboxgroup with passed in child transforms as hitboxes
+        /// </summary>
+        /// <param name="hitBoxGroupName">name that is used by melee or other overlapattacks</param>
+        /// <param name="hitboxChildNames">childname of the transform set up in editor</param>
+        public static void SetupHitBoxGroup(GameObject modelPrefab, string hitBoxGroupName, params string[] hitboxChildNames)
+        {
+            ChildLocator childLocator = modelPrefab.GetComponent<ChildLocator>();
 
-        public static void SetupHitbox(GameObject prefab, Transform hitboxTransform, string hitboxName) => SetupHitBoxGroup(prefab, hitboxName, hitboxTransform);
+            Transform[] hitboxTransforms = new Transform[hitboxChildNames.Length];
+            for (int i = 0; i < hitboxChildNames.Length; i++)
+            {
+                hitboxTransforms[i] = childLocator.FindChild(hitboxChildNames[i]);
+
+                if (hitboxTransforms[i] == null)
+                {
+                    Log.Error("missing hitbox for " + hitboxChildNames[i]);
+                }
+            }
+            SetupHitBoxGroup(modelPrefab, hitBoxGroupName, hitboxTransforms);
+        }
+        /// <summary>
+        /// Sets up a hitboxgroup with passed in transforms as hitboxes
+        /// </summary>
+        /// <param name="hitBoxGroupName">name that is used by melee or other overlapattacks</param>
+        /// <param name="hitBoxTransforms">the transforms to be used in this hitboxgroup</param>
         public static void SetupHitBoxGroup(GameObject prefab, string hitBoxGroupName, params Transform[] hitBoxTransforms)
         {
             List<HitBox> hitBoxes = new List<HitBox>();
