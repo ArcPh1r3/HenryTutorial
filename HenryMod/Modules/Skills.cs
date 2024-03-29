@@ -11,10 +11,6 @@ namespace HenryMod.Modules
     internal static class Skills
     {
         #region genericskills
-        /// <summary>
-        /// Create 4 GenericSkills for primary, secondary, utility, and special, and create skillfamilies for them
-        /// </summary>
-        /// <param name="targetPrefab">Body prefab to add GenericSkills</param>
         public static void CreateSkillFamilies(GameObject targetPrefab) => CreateSkillFamilies(targetPrefab, SkillSlot.Primary, SkillSlot.Secondary, SkillSlot.Utility, SkillSlot.Special);
         /// <summary>
         /// Create in order the GenericSkills for the skillslots desired, and create skillfamilies for them.
@@ -55,6 +51,25 @@ namespace HenryMod.Modules
             }
         }
 
+        public static GenericSkill CreateGenericSkillWithSkillFamily(GameObject targetPrefab, SkillSlot skillSlot, bool hidden = false)
+        {
+            SkillLocator skillLocator = targetPrefab.GetComponent<SkillLocator>();
+            switch (skillSlot)
+            {
+                case SkillSlot.Primary:
+                    return skillLocator.primary = CreateGenericSkillWithSkillFamily(targetPrefab, "Primary", hidden);
+                case SkillSlot.Secondary:
+                    return skillLocator.secondary = CreateGenericSkillWithSkillFamily(targetPrefab, "Secondary", hidden);
+                case SkillSlot.Utility:
+                    return skillLocator.utility = CreateGenericSkillWithSkillFamily(targetPrefab, "Utility", hidden);
+                case SkillSlot.Special:
+                    return skillLocator.special = CreateGenericSkillWithSkillFamily(targetPrefab, "Special", hidden);
+                case SkillSlot.None:
+                    Log.Error("Failed to create GenericSkill with skillslot None. If making a GenericSkill outside of the main 4, specify a familyName, and optionally a genericSkillName");
+                    return null;
+            }
+            return null;
+        }
         public static GenericSkill CreateGenericSkillWithSkillFamily(GameObject targetPrefab, string familyName, bool hidden = false) => CreateGenericSkillWithSkillFamily(targetPrefab, familyName, familyName, hidden);
         public static GenericSkill CreateGenericSkillWithSkillFamily(GameObject targetPrefab, string genericSkillName, string familyName, bool hidden = false)
         {
