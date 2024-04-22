@@ -36,7 +36,14 @@ namespace HenryMod.Modules
         public static Material ConvertDefaultShaderToHopoo(this Material tempMat)
         {
             if (cachedMaterials.Contains(tempMat)) {
-                Log.Debug($"{tempMat.name} has already been loaded. returning cached");
+                Log.Debug($"{tempMat.name} has already been converted. returning cached");
+                return tempMat;
+            }
+
+            string name = tempMat.shader.name.ToLowerInvariant();
+            if (!name.StartsWith("standard") && !name.StartsWith("autodesk"))
+            {
+                Log.Debug($"{tempMat.name} is not unity standard shader. aborting material conversion");
                 return tempMat;
             }
 
@@ -93,7 +100,6 @@ namespace HenryMod.Modules
         /// </summary>
         public static Material MakeUnique(this Material material)
         {
-
             if (cachedMaterials.Contains(material))
             {
                 return new Material(material);
