@@ -63,11 +63,6 @@ public static class PrefabUpdater {
         string assetDataFile;
         string assetDataPath = m_ProjectPath + "/" + AssetDatabase.GUIDToAssetPath(guid);
 
-        if (assetDataPath.Contains("Backup")) {
-            Debug.LogWarning("skipping backup");
-            return;
-        }
-
         try {
             assetDataFile = File.ReadAllText(assetDataPath);
         }
