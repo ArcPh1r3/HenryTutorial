@@ -94,8 +94,8 @@ namespace HenryMod.Survivors.Henry.SkillStates
                         stopperMask = LayerIndex.CommonMasks.bullet,
                         weapon = null,
                         tracerEffectPrefab = tracerEffectPrefab,
-                        spreadPitchScale = 0f,
-                        spreadYawScale = 0f,
+                        spreadPitchScale = 1f,
+                        spreadYawScale = 1f,
                         queryTriggerInteraction = QueryTriggerInteraction.UseGlobal,
                         hitEffectPrefab = EntityStates.Commando.CommandoWeapon.FirePistol2.hitEffectPrefab,
                     }.Fire();
