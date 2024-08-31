@@ -11,7 +11,7 @@ using Path = System.IO.Path;
 
 namespace HenryMod.Modules
 {
-    internal static class Assets
+    internal static class Asset
     {
         //cache bundles if multiple characters use the same one
         internal static Dictionary<string, AssetBundle> loadedBundles = new Dictionary<string, AssetBundle>();
@@ -141,7 +141,7 @@ namespace HenryMod.Modules
             if (!ghostPrefab.GetComponent<NetworkIdentity>()) ghostPrefab.AddComponent<NetworkIdentity>();
             if (!ghostPrefab.GetComponent<ProjectileGhostController>()) ghostPrefab.AddComponent<ProjectileGhostController>();
 
-            Modules.Assets.ConvertAllRenderersToHopooShader(ghostPrefab);
+            Modules.Asset.ConvertAllRenderersToHopooShader(ghostPrefab);
 
             return ghostPrefab;
         }
