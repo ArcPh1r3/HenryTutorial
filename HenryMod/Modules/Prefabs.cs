@@ -13,7 +13,7 @@ namespace HenryMod.Modules
 {
     // module for creating body prefabs and whatnot
     // recommended to simply avoid touching this unless you REALLY need to
-
+    // some functions are annotated and commented. These ones are useful when you want to learn more what's going on, but when starting out, you don't have to worry about it.
     internal static class Prefabs
     {
         // cache this just to give our ragdolls the same physic material as vanilla stuff
@@ -166,9 +166,9 @@ namespace HenryMod.Modules
             //level stats
             bodyComponent.autoCalculateLevelStats = bodyInfo.autoCalculateLevelStats;
 
+            //there is a standard for survivors that should be followed for how much they gain from level up.
             if (bodyInfo.autoCalculateLevelStats)
             {
-
                 bodyComponent.levelMaxHealth = Mathf.Round(bodyComponent.baseMaxHealth * 0.3f);
                 bodyComponent.levelMaxShield = Mathf.Round(bodyComponent.baseMaxShield * 0.3f);
                 bodyComponent.levelRegen = bodyComponent.baseRegen * 0.2f;
@@ -181,11 +181,9 @@ namespace HenryMod.Modules
                 bodyComponent.levelCrit = 0f;
 
                 bodyComponent.levelArmor = 0f;
-
             }
             else
             {
-
                 bodyComponent.levelMaxHealth = bodyInfo.healthGrowth;
                 bodyComponent.levelMaxShield = bodyInfo.shieldGrowth;
                 bodyComponent.levelRegen = bodyInfo.regenGrowth;
@@ -609,6 +607,11 @@ namespace HenryMod.Modules
         }
         #endregion master
 
+        /// <summary>
+        /// More than remove the EntityStateMachine components, it also clears fields from NetworkStateMachine, CharacterDeathBehavior, and SetStateOnHurt
+        /// <para>See AddEntityStateMachine and AddMainEntityStateMachine for more info</para>
+        /// </summary>
+        /// <param name="bodyPrefab"></param>
         public static void ClearEntityStateMachines(GameObject bodyPrefab)
         {
             EntityStateMachine[] machines = bodyPrefab.GetComponents<EntityStateMachine>();
@@ -626,7 +629,7 @@ namespace HenryMod.Modules
             {
                 deathBehavior.idleStateMachine = Array.Empty<EntityStateMachine>();
             }
-            
+
             SetStateOnHurt setStateOnHurt = bodyPrefab.GetComponent<SetStateOnHurt>();
             if (setStateOnHurt)
             {
@@ -634,7 +637,68 @@ namespace HenryMod.Modules
             }
         }
 
-        public static void AddMainEntityStateMachine(GameObject bodyPrefab, string machineName = "Body", Type mainStateType = null, Type initalStateType = null)
+        //this but in reverse https://media.discordapp.net/attachments/875473107891150878/896193331720237106/caption-7.gif?ex=65989f94&is=65862a94&hm=e1f51da3ad190c00c5da1f90269d5ef10bedb0ae063c0f20aa0dd8721608018a&
+        /// <summary>
+        /// Creates an EntityStateMachine, and adds it to the NetworkStateMachine, CharacterDeathBehavior, and SetStateOnHurt components. 
+        /// <para>See AddMainEntityStateMachine for typically your "Body" state machine.</para>
+        /// </summary>
+        public static EntityStateMachine AddEntityStateMachine(GameObject prefab, string machineName, Type mainStateType = null, Type initalStateType = null, bool addToHurt = true, bool addToDeath = true)
+        {
+            EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(prefab, machineName);
+            if (entityStateMachine == null)
+            {
+                entityStateMachine = prefab.AddComponent<EntityStateMachine>();
+            }
+            else
+            {
+                Log.Message($"An Entity State Machine already exists with the name {machineName}. replacing.");
+            }
+            //Set up entitystatemachine
+            entityStateMachine.customName = machineName;
+
+            if (mainStateType == null)
+            {
+                mainStateType = typeof(EntityStates.Idle);
+            }
+            entityStateMachine.mainStateType = new EntityStates.SerializableEntityStateType(mainStateType);
+
+            if (initalStateType == null)
+            {
+                initalStateType = typeof(EntityStates.Idle);
+            }
+            entityStateMachine.initialStateType = new EntityStates.SerializableEntityStateType(initalStateType);
+
+            //Add to NetworkStateMachine so it is networked, as it sounds
+            NetworkStateMachine networkMachine = prefab.GetComponent<NetworkStateMachine>();
+            if (networkMachine)
+            {
+                networkMachine.stateMachines = networkMachine.stateMachines.Append(entityStateMachine).ToArray();
+            }
+
+            //Add to the array of "idle" StateMachines. For when the character dies.
+            //This component sets that state machine to idle, stopping what it was doing
+            CharacterDeathBehavior deathBehavior = prefab.GetComponent<CharacterDeathBehavior>();
+            if (deathBehavior && addToDeath)
+            {
+                deathBehavior.idleStateMachine = deathBehavior.idleStateMachine.Append(entityStateMachine).ToArray();
+            }
+
+            //Add to the array of "idle" StateMachines.
+            //Same as CharacterDeathBehavior but for stunning/freezing/etc
+            SetStateOnHurt setStateOnHurt = prefab.GetComponent<SetStateOnHurt>();
+            if (setStateOnHurt && addToHurt)
+            {
+                setStateOnHurt.idleStateMachine = setStateOnHurt.idleStateMachine.Append(entityStateMachine).ToArray();
+            }
+
+            return entityStateMachine;
+        }
+
+        /// <summary>
+        /// Creates an EntityStateMachine, and adds it to the NetworkStateMachine, CharacterDeathBehavior, and SetStateOnHurt components.
+        /// <para>Similar to AddEntityStateMachine, however when adding to these components, what we'll consider the "main state machine" (typically the "Body" state machine) has to be set in certain fields.</para>
+        /// </summary>
+        public static EntityStateMachine AddMainEntityStateMachine(GameObject bodyPrefab, string machineName = "Body", Type mainStateType = null, Type initalStateType = null)
         {
             EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(bodyPrefab, machineName);
             if (entityStateMachine == null)
@@ -646,6 +710,7 @@ namespace HenryMod.Modules
                 Log.Message($"An Entity State Machine already exists with the name {machineName}. replacing.");
             }
 
+            //Create entitystatemachine
             entityStateMachine.customName = machineName;
 
             if (mainStateType == null)
@@ -660,69 +725,33 @@ namespace HenryMod.Modules
             }
             entityStateMachine.initialStateType = new EntityStates.SerializableEntityStateType(initalStateType);
 
+            //Add to NetworkStateMachine so it is networked, as it sounds
             NetworkStateMachine networkMachine = bodyPrefab.GetComponent<NetworkStateMachine>();
             if (networkMachine)
             {
                 networkMachine.stateMachines = networkMachine.stateMachines.Append(entityStateMachine).ToArray();
             }
 
+            //Add to the main state machine field of CharacterDeathBehavior for when the character dies.
+            //This EntityStateMachine will enter the death state, while other state machines are set to idle
+            //The death state is set elsewhere, (likely in the commando clone). It is typically GenericCharacterDeath, but you can set it to whatever you want.
             CharacterDeathBehavior deathBehavior = bodyPrefab.GetComponent<CharacterDeathBehavior>();
             if (deathBehavior)
             {
                 deathBehavior.deathStateMachine = entityStateMachine;
             }
 
+            //Add to the main state machine field of SetStateOnHurt for when the character is Stunned/Frozen/etc,
+            //This EntityStateMachine will enter the relative state, while other state machines are set to idle.
             SetStateOnHurt setStateOnHurt = bodyPrefab.GetComponent<SetStateOnHurt>();
             if (setStateOnHurt)
             {
                 setStateOnHurt.targetStateMachine = entityStateMachine;
             }
+
+            return entityStateMachine;
         }
 
-        //this but in reverse https://media.discordapp.net/attachments/875473107891150878/896193331720237106/caption-7.gif?ex=65989f94&is=65862a94&hm=e1f51da3ad190c00c5da1f90269d5ef10bedb0ae063c0f20aa0dd8721608018a&
-        public static void AddEntityStateMachine(GameObject prefab, string machineName, Type mainStateType = null,  Type initalStateType = null)
-        {
-            EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(prefab, machineName);
-            if (entityStateMachine == null)
-            {
-                entityStateMachine = prefab.AddComponent<EntityStateMachine>();
-            } else
-            {
-                Log.Message($"An Entity State Machine already exists with the name {machineName}. replacing.");
-            }
-
-            entityStateMachine.customName = machineName;
-
-            if (mainStateType == null)
-            {
-                mainStateType = typeof(EntityStates.Idle);
-            }
-            entityStateMachine.mainStateType = new EntityStates.SerializableEntityStateType(mainStateType);
-
-            if(initalStateType == null)
-            {
-                initalStateType = typeof(EntityStates.Idle);
-            }
-            entityStateMachine.initialStateType = new EntityStates.SerializableEntityStateType(initalStateType);
-
-            NetworkStateMachine networkMachine = prefab.GetComponent<NetworkStateMachine>();
-            if (networkMachine)
-            {
-                networkMachine.stateMachines = networkMachine.stateMachines.Append(entityStateMachine).ToArray();
-            }
-
-            CharacterDeathBehavior deathBehavior = prefab.GetComponent<CharacterDeathBehavior>();
-            if (deathBehavior)
-            {
-                deathBehavior.idleStateMachine = deathBehavior.idleStateMachine.Append(entityStateMachine).ToArray();
-            }
-
-            SetStateOnHurt setStateOnHurt = prefab.GetComponent<SetStateOnHurt>();
-            if (setStateOnHurt)
-            {
-                setStateOnHurt.idleStateMachine = setStateOnHurt.idleStateMachine.Append(entityStateMachine).ToArray();
-            }
-        }
         /// <summary>
         /// Sets up a hitboxgroup with passed in child transforms as hitboxes
         /// </summary>
