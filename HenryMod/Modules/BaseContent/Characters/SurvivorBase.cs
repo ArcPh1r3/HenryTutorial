@@ -18,15 +18,6 @@ namespace HenryMod.Modules.Characters
 
         public abstract GameObject displayPrefab { get; protected set; }
 
-        public override void InitializeCharacter()
-        {
-            base.InitializeCharacter();
-
-            InitializeDisplayPrefab();
-
-            InitializeSurvivor();
-        }
-
         protected virtual void InitializeDisplayPrefab()
         {
             displayPrefab = Prefabs.CreateDisplayPrefab(assetBundle, displayPrefabName, bodyPrefab);

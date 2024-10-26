@@ -35,12 +35,7 @@ namespace HenryMod.Modules.Characters
             InitializeCharacter();
         }
 
-        public virtual void InitializeCharacter()
-        {
-            InitializeCharacterBodyPrefab();
-
-            InitializeItemDisplays();
-        }
+        public abstract void InitializeCharacter();
 
         protected virtual void InitializeCharacterBodyPrefab()
         {

@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using HenryMod.Characters.Survivors.Henry.Content;
 using HenryMod.Modules;
 using HenryMod.Modules.Characters;
 using HenryMod.Survivors.Henry.Components;
@@ -68,7 +69,7 @@ namespace HenryMod.Survivors.Henry
                 }
         };
 
-        public override UnlockableDef characterUnlockableDef => HenryUnlockables.characterUnlockableDef;
+        public override UnlockableDef characterUnlockableDef => HenryContent.characterUnlockableDef;
         
         public override ItemDisplaysBase itemDisplays => new HenryItemDisplays();
 
@@ -95,16 +96,19 @@ namespace HenryMod.Survivors.Henry
         public override void InitializeCharacter()
         {
             //need the character unlockable before you initialize the survivordef
-            HenryUnlockables.Init();
+            HenryContent.PreInit();
 
-            base.InitializeCharacter();
+            //the magic. creating your survivor
+            InitializeCharacterBodyPrefab();
+            InitializeItemDisplays();
+            InitializeDisplayPrefab();
+            InitializeSurvivor();
 
+            HenryContent.Init(assetBundle);
             HenryConfig.Init();
-            HenryStates.Init();
             HenryTokens.Init();
 
             HenryAssets.Init(assetBundle);
-            HenryBuffs.Init(assetBundle);
 
             InitializeEntityStateMachines();
             InitializeSkills();
@@ -435,7 +439,7 @@ namespace HenryMod.Survivors.Henry
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, R2API.RecalculateStatsAPI.StatHookEventArgs args)
         {
 
-            if (sender.HasBuff(HenryBuffs.armorBuff))
+            if (sender.HasBuff(HenryContent.armorBuff))
             {
                 args.armorAdd += 300;
             }

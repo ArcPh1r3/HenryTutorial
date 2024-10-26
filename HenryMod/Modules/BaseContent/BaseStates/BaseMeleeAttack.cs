@@ -9,10 +9,8 @@ using UnityEngine.Networking;
 
 namespace HenryMod.Modules.BaseStates
 {
-    public abstract class BaseMeleeAttack : BaseSkillState, SteppedSkillDef.IStepSetter
+    public abstract class BaseMeleeAttack : BaseSkillState
     {
-        public int swingIndex;
-
         protected string hitboxGroupName = "SwordGroup";
 
         protected DamageType damageType = DamageType.Generic;
@@ -74,10 +72,7 @@ namespace HenryMod.Modules.BaseStates
             attack.impactSound = impactSound;
         }
 
-        protected virtual void PlayAttackAnimation()
-        {
-            PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), playbackRateParam, duration, 0.05f);
-        }
+        protected abstract void PlayAttackAnimation();
 
         public override void OnExit()
         {
@@ -200,23 +195,6 @@ namespace HenryMod.Modules.BaseStates
                 return InterruptPriority.Any;
             }
             return InterruptPriority.Skill;
-        }
-
-        public override void OnSerialize(NetworkWriter writer)
-        {
-            base.OnSerialize(writer);
-            writer.Write(swingIndex);
-        }
-
-        public override void OnDeserialize(NetworkReader reader)
-        {
-            base.OnDeserialize(reader);
-            swingIndex = reader.ReadInt32();
-        }
-
-        public void SetStep(int i)
-        {
-            swingIndex = i;
         }
     }
 }

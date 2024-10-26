@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using RoR2.UI;
 using RoR2.Projectile;
 using Path = System.IO.Path;
+using System;
 
 namespace HenryMod.Modules
 {
@@ -92,6 +93,7 @@ namespace HenryMod.Modules
             }
         }
 
+        [Obsolete("just load from addressables")]
         internal static GameObject LoadCrosshair(string crosshairName)
         {
             GameObject loadedCrosshair = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Crosshair/" + crosshairName + "Crosshair");

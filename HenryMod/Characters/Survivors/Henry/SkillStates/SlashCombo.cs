@@ -1,17 +1,28 @@
-﻿using HenryMod.Modules.BaseStates;
+﻿using HenryMod.Characters.Survivors.Henry.Content;
+using HenryMod.Modules.BaseStates;
+using RoR2.Skills;
 using RoR2;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace HenryMod.Survivors.Henry.SkillStates
 {
-    public class SlashCombo : BaseMeleeAttack
+    public class SlashCombo : BaseMeleeAttack, SteppedSkillDef.IStepSetter
     {
+        public int swingIndex;
+
+        //used by the steppedskilldef to increment your combo whenever this state is entered
+        public void SetStep(int i)
+        {
+            swingIndex = i;
+        }
+
         public override void OnEnter()
         {
             hitboxGroupName = "SwordGroup";
 
             damageType = DamageType.Generic;
-            damageCoefficient = HenryStaticValues.swordDamageCoefficient;
+            damageCoefficient = HenryContent.swordDamageCoefficient;
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
@@ -43,7 +54,16 @@ namespace HenryMod.Survivors.Henry.SkillStates
 
         protected override void PlayAttackAnimation()
         {
-            PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), playbackRateParam, duration, 0.1f * duration);
+            //play a adifferent animation based on what step of the combo you are currently in.
+            switch (swingIndex)
+            {
+                case 0:
+                    PlayCrossfade("Gesture, Override", "Slash1", playbackRateParam, duration, 0.1f * duration);
+                    break;
+                case 1:
+                    PlayCrossfade("Gesture, Override", "Slash1", playbackRateParam, duration, 0.1f * duration);
+                    break;
+            }
         }
 
         protected override void PlaySwingEffect()
@@ -59,6 +79,20 @@ namespace HenryMod.Survivors.Henry.SkillStates
         public override void OnExit()
         {
             base.OnExit();
+        }
+
+        //bit advanced so don't worry about this, it's for networking. all you need to know is you have to do this for steppedskilldefs
+        //long story short this syncs a value from authority (current player) to all other clients, so the swingIndex is the same for all machines
+        public override void OnSerialize(NetworkWriter writer)
+        {
+            base.OnSerialize(writer);
+            writer.Write(swingIndex);
+        }
+
+        public override void OnDeserialize(NetworkReader reader)
+        {
+            base.OnDeserialize(reader);
+            swingIndex = reader.ReadInt32();
         }
     }
 }
