@@ -1,5 +1,4 @@
 ﻿using BepInEx.Configuration;
-using HenryMod.Characters.Survivors.Henry.Content;
 using HenryMod.Modules;
 using HenryMod.Modules.Characters;
 using HenryMod.Survivors.Henry.Components;
@@ -97,14 +96,15 @@ namespace HenryMod.Survivors.Henry
         {
             //need the character unlockable before you initialize the survivordef
             HenryContent.PreInit();
-
+            
             //the magic. creating your survivor
-            InitializeCharacterBodyPrefab();
-            InitializeItemDisplays();
-            InitializeDisplayPrefab();
-            InitializeSurvivor();
+            base.InitializeCharacterBodyPrefab();
+            base.InitializeDisplayPrefab();
+            base.InitializeSurvivor();
+            base.InitializeItemDisplays();
 
             HenryContent.Init(assetBundle);
+
             HenryConfig.Init();
             HenryTokens.Init();
 
@@ -122,13 +122,13 @@ namespace HenryMod.Survivors.Henry
 
         private void AdditionalBodySetup()
         {
-            AddHitboxes();
+            AddHitBoxes();
             bodyPrefab.AddComponent<HenryWeaponComponent>();
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
         }
 
-        public void AddHitboxes()
+        public void AddHitBoxes()
         {
             //example of how to create a HitBoxGroup. see summary for more details
             Prefabs.SetupHitBoxGroup(characterModelObject, "SwordGroup", "SwordHitbox");
@@ -142,7 +142,7 @@ namespace HenryMod.Survivors.Henry
 
             //the main "Body" state machine has some special properties
             Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(EntityStates.GenericCharacterMain), typeof(EntityStates.SpawnTeleporterState));
-            //if you set up a custom main characterstate, set it up here
+            //if you set up a custom `CharacterMain` state, set it here. 
                 //don't forget to register custom entitystates in your HenryStates.cs
 
             Prefabs.AddEntityStateMachine(bodyPrefab, "Weapon");

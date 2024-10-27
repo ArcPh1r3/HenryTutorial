@@ -11,40 +11,68 @@ namespace HenryMod.Modules.BaseStates
 {
     public abstract class BaseMeleeAttack : BaseSkillState
     {
-        protected string hitboxGroupName = "SwordGroup";
+        /// <summary>
+        /// the name of your HitBoxGroup as setup with Prefabs.SetupHitBoxGroup in your survivor creation
+        /// </summary>
+        public string hitBoxGroupName = "SwordGroup";
 
-        protected DamageType damageType = DamageType.Generic;
-        protected float damageCoefficient = 3.5f;
-        protected float procCoefficient = 1f;
-        protected float pushForce = 300f;
-        protected Vector3 bonusForce = Vector3.zero;
-        protected float baseDuration = 1f;
+        public DamageType damageType = DamageType.Generic;
+        public float damageCoefficient = 3.5f;
+        public float procCoefficient = 1f;
+        public float pushForce = 300f;
+        public Vector3 bonusForce = Vector3.zero;
+        public float baseDuration = 1f;
+        /// <summary>
+        /// 0-1 multiplier of baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
+        /// <para>for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds</para>
+        /// </summary>
+        public float attackStartPercentTime = 0.2f;
 
-        protected float attackStartPercentTime = 0.2f;
-        protected float attackEndPercentTime = 0.4f;
+        /// <summary>
+        /// 0-1 multiplier of baseduration, used to time when the hitbox stops (usually based on the run time of the animation)
+        /// </summary>
+        public float attackEndPercentTime = 0.4f;
+        /// <summary>
+        /// 0-1 multiplier of baseduration. This is the point at which the attack can be interrupted by itself, continuing a combo
+        /// </summary>
+        public float earlyExitPercentTime = 0.4f;
 
-        protected float earlyExitPercentTime = 0.4f;
+        public float hitStopDuration = 0.012f;
+        /// <summary>
+        /// camera recoil
+        /// </summary>
+        public float attackRecoil = 0.75f;
+        /// <summary>
+        /// when you land hits in the air
+        /// </summary>
+        public float hitHopVelocity = 4f;
 
-        protected float hitStopDuration = 0.012f;
-        protected float attackRecoil = 0.75f;
-        protected float hitHopVelocity = 4f;
+        public string swingSoundString = "";
+        /// <summary>
+        /// this is an entry in your childlocator for where the effect will be spawned
+        /// </summary>
+        public string muzzleString = "SwingCenter";
+        /// <summary>
+        /// used to control the speed of your animations, this is paused during hitstop
+        /// </summary>
+        public string playbackRateParam;
+        public GameObject swingEffectPrefab;
+        public GameObject hitEffectPrefab;
+        public NetworkSoundEventIndex impactSound = NetworkSoundEventIndex.Invalid;
 
-        protected string swingSoundString = "";
-        protected string hitSoundString = "";
-        protected string muzzleString = "SwingCenter";
-        protected string playbackRateParam = "Slash.playbackRate";
-        protected GameObject swingEffectPrefab;
-        protected GameObject hitEffectPrefab;
-        protected NetworkSoundEventIndex impactSound = NetworkSoundEventIndex.Invalid;
-
-        public float duration;
-        private bool hasFired;
-        private float hitPauseTimer;
-        private OverlapAttack attack;
-        protected bool inHitPause;
-        private bool hasHopped;
-        protected float stopwatch;
+        /// <summary>
+        /// the actual damaging part of your melee attack. We call overlapAttack.Fire() every frame to see if it hits something
+        /// <para>It's all set up in BaseMeleeAttack.OnEnter, but you can access it to do anything else you want, namely add modded damagetypes</para>
+        /// </summary>
+        protected OverlapAttack overlapAttack;
+        protected float duration;
         protected Animator animator;
+        protected float stopwatch;
+        protected bool inHitPause;
+        protected bool hasFired;
+
+        private float hitPauseTimer;
+        private bool hasHopped;
         private HitStopCachedState hitStopCachedState;
         private Vector3 storedVelocity;
 
@@ -55,21 +83,19 @@ namespace HenryMod.Modules.BaseStates
             animator = GetModelAnimator();
             StartAimMode(0.5f + duration, false);
 
-            PlayAttackAnimation();
-
-            attack = new OverlapAttack();
-            attack.damageType = damageType;
-            attack.attacker = gameObject;
-            attack.inflictor = gameObject;
-            attack.teamIndex = GetTeam();
-            attack.damage = damageCoefficient * damageStat;
-            attack.procCoefficient = procCoefficient;
-            attack.hitEffectPrefab = hitEffectPrefab;
-            attack.forceVector = bonusForce;
-            attack.pushAwayForce = pushForce;
-            attack.hitBoxGroup = FindHitBoxGroup(hitboxGroupName);
-            attack.isCrit = RollCrit();
-            attack.impactSound = impactSound;
+            overlapAttack = new OverlapAttack();
+            overlapAttack.damageType = damageType;
+            overlapAttack.attacker = gameObject;
+            overlapAttack.inflictor = gameObject;
+            overlapAttack.teamIndex = GetTeam();
+            overlapAttack.damage = damageCoefficient * damageStat;
+            overlapAttack.procCoefficient = procCoefficient;
+            overlapAttack.hitEffectPrefab = hitEffectPrefab;
+            overlapAttack.forceVector = bonusForce;
+            overlapAttack.pushAwayForce = pushForce;
+            overlapAttack.hitBoxGroup = FindHitBoxGroup(hitBoxGroupName);
+            overlapAttack.isCrit = RollCrit();
+            overlapAttack.impactSound = impactSound;
         }
 
         protected abstract void PlayAttackAnimation();
@@ -90,7 +116,7 @@ namespace HenryMod.Modules.BaseStates
 
         protected virtual void OnHitEnemyAuthority()
         {
-            Util.PlaySound(hitSoundString, gameObject);
+            //Util.PlaySound(hitSoundString, gameObject);
 
             if (!hasHopped)
             {
@@ -120,7 +146,7 @@ namespace HenryMod.Modules.BaseStates
         {
             if (isAuthority)
             {
-                if (attack.Fire())
+                if (overlapAttack.Fire())
                 {
                     OnHitEnemyAuthority();
                 }

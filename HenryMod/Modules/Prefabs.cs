@@ -642,6 +642,9 @@ namespace HenryMod.Modules
         /// Creates an EntityStateMachine, and adds it to the NetworkStateMachine, CharacterDeathBehavior, and SetStateOnHurt components. 
         /// <para>See AddMainEntityStateMachine for typically your "Body" state machine.</para>
         /// </summary>
+        /// <param name="machineName">the custom name of your statemachine, used for assigning in SkillDefs, and any other case where you want to find a certain state machine on your body</param>
+        /// <param name="mainStateType">most commonly, your skill states will call SetNextStateToMain, which will return to this state</param>
+        /// <param name="initalStateType"></param>
         public static EntityStateMachine AddEntityStateMachine(GameObject prefab, string machineName, Type mainStateType = null, Type initalStateType = null, bool addToHurt = true, bool addToDeath = true)
         {
             EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(prefab, machineName);
@@ -698,6 +701,10 @@ namespace HenryMod.Modules
         /// Creates an EntityStateMachine, and adds it to the NetworkStateMachine, CharacterDeathBehavior, and SetStateOnHurt components.
         /// <para>Similar to AddEntityStateMachine, however when adding to these components, what we'll consider the "main state machine" (typically the "Body" state machine) has to be set in certain fields.</para>
         /// </summary>
+        /// <param name="machineName">the custom name of your statemachine, used for assigning in SkillDefs, and any other case where you want to find a certain state machine on your body</param>
+        /// <param name="mainStateType">most commonly, your skill states will call SetNextStateToMain, which will return to this state <para>for most characters, the "Body" state machine is set to GenericCharacterMain, if you set up a custom `CharacterMain` state, set it here. don't forget to register custom entitystates in your HenryStates.cs</para></param>
+        /// <param name="initalStateType"></param>
+        /// <returns></returns>
         public static EntityStateMachine AddMainEntityStateMachine(GameObject bodyPrefab, string machineName = "Body", Type mainStateType = null, Type initalStateType = null)
         {
             EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(bodyPrefab, machineName);
@@ -756,22 +763,22 @@ namespace HenryMod.Modules
         /// Sets up a hitboxgroup with passed in child transforms as hitboxes
         /// </summary>
         /// <param name="hitBoxGroupName">name that is used by melee or other overlapattacks</param>
-        /// <param name="hitboxChildNames">childname of the transform set up in editor</param>
-        public static void SetupHitBoxGroup(GameObject modelPrefab, string hitBoxGroupName, params string[] hitboxChildNames)
+        /// <param name="hitBoxChildNames">childname of the transform set up in editor</param>
+        public static void SetupHitBoxGroup(GameObject modelPrefab, string hitBoxGroupName, params string[] hitBoxChildNames)
         {
             ChildLocator childLocator = modelPrefab.GetComponent<ChildLocator>();
 
-            Transform[] hitboxTransforms = new Transform[hitboxChildNames.Length];
-            for (int i = 0; i < hitboxChildNames.Length; i++)
+            Transform[] hitBoxTransforms = new Transform[hitBoxChildNames.Length];
+            for (int i = 0; i < hitBoxChildNames.Length; i++)
             {
-                hitboxTransforms[i] = childLocator.FindChild(hitboxChildNames[i]);
+                hitBoxTransforms[i] = childLocator.FindChild(hitBoxChildNames[i]);
 
-                if (hitboxTransforms[i] == null)
+                if (hitBoxTransforms[i] == null)
                 {
-                    Log.Error("missing hitbox for " + hitboxChildNames[i]);
+                    Log.Error("missing hitbox for " + hitBoxChildNames[i]);
                 }
             }
-            SetupHitBoxGroup(modelPrefab, hitBoxGroupName, hitboxTransforms);
+            SetupHitBoxGroup(modelPrefab, hitBoxGroupName, hitBoxTransforms);
         }
         /// <summary>
         /// Sets up a hitboxgroup with passed in transforms as hitboxes

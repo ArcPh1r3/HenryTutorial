@@ -1,5 +1,4 @@
 ﻿using System;
-using HenryMod.Characters.Survivors.Henry.Content;
 using HenryMod.Modules;
 using HenryMod.Survivors.Henry.Achievements;
 

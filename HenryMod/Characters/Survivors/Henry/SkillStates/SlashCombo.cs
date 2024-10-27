@@ -1,5 +1,4 @@
-﻿using HenryMod.Characters.Survivors.Henry.Content;
-using HenryMod.Modules.BaseStates;
+﻿using HenryMod.Modules.BaseStates;
 using RoR2.Skills;
 using RoR2;
 using UnityEngine;
@@ -19,7 +18,8 @@ namespace HenryMod.Survivors.Henry.SkillStates
 
         public override void OnEnter()
         {
-            hitboxGroupName = "SwordGroup";
+            //mouse over variables for detailed explanations
+            hitBoxGroupName = "SwordGroup";
 
             damageType = DamageType.Generic;
             damageCoefficient = HenryContent.swordDamageCoefficient;
@@ -29,11 +29,9 @@ namespace HenryMod.Survivors.Henry.SkillStates
             baseDuration = 1f;
 
             //0-1 multiplier of baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
-            //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
             attackStartPercentTime = 0.2f;
             attackEndPercentTime = 0.4f;
 
-            //this is the point at which the attack can be interrupted by itself, continuing a combo
             earlyExitPercentTime = 0.6f;
 
             hitStopDuration = 0.012f;
@@ -41,29 +39,30 @@ namespace HenryMod.Survivors.Henry.SkillStates
             hitHopVelocity = 4f;
 
             swingSoundString = "HenrySwordSwing";
-            hitSoundString = "";
-            muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
             playbackRateParam = "Slash.playbackRate";
+            muzzleString = swingIndex == 0 ? "SwingLeft" : "SwingRight";
             swingEffectPrefab = HenryAssets.swordSwingEffect;
             hitEffectPrefab = HenryAssets.swordHitImpactEffect;
 
             impactSound = HenryAssets.swordHitSoundEvent.index;
 
             base.OnEnter();
+
+            PlayAttackAnimation();
         }
 
         protected override void PlayAttackAnimation()
         {
             //play a adifferent animation based on what step of the combo you are currently in.
-            switch (swingIndex)
+            if (swingIndex == 0)
             {
-                case 0:
-                    PlayCrossfade("Gesture, Override", "Slash1", playbackRateParam, duration, 0.1f * duration);
-                    break;
-                case 1:
-                    PlayCrossfade("Gesture, Override", "Slash1", playbackRateParam, duration, 0.1f * duration);
-                    break;
+                PlayCrossfade("Gesture, Override", "Slash1", playbackRateParam, duration, 0.1f * duration);
             }
+            if (swingIndex == 1)
+            {
+                PlayCrossfade("Gesture, Override", "Slash2", playbackRateParam, duration, 0.1f * duration);
+            }
+            //as a challenge, see if you can rewrite this code to be one line.
         }
 
         protected override void PlaySwingEffect()
@@ -81,7 +80,8 @@ namespace HenryMod.Survivors.Henry.SkillStates
             base.OnExit();
         }
 
-        //bit advanced so don't worry about this, it's for networking. all you need to know is you have to do this for steppedskilldefs
+        //add these functions for steppedskilldefs
+        //bit advanced so don't worry about this, it's for networking.
         //long story short this syncs a value from authority (current player) to all other clients, so the swingIndex is the same for all machines
         public override void OnSerialize(NetworkWriter writer)
         {

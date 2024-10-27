@@ -1,6 +1,4 @@
 ﻿using EntityStates;
-using HenryMod.Characters.Survivors.Henry.Content;
-using HenryMod.Survivors.Henry;
 using RoR2;
 using UnityEngine;
 

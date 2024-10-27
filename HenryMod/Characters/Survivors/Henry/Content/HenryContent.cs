@@ -1,13 +1,13 @@
 ﻿using HenryMod.Survivors.Henry.Achievements;
-using HenryMod.Survivors.Henry;
 using HenryMod.Survivors.Henry.SkillStates;
 using RoR2;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using R2API;
 
-namespace HenryMod.Characters.Survivors.Henry.Content
+namespace HenryMod.Survivors.Henry
 {
     public class HenryContent
     {
@@ -15,6 +15,7 @@ namespace HenryMod.Characters.Survivors.Henry.Content
 
         //static values
         public const float swordDamageCoefficient = 2.8f;
+        public const float swordFinisherDamageCoefficient = 4.0f;
         public const float gunDamageCoefficient = 4.2f;
         public const float bombDamageCoefficient = 16f;
 
@@ -23,6 +24,11 @@ namespace HenryMod.Characters.Survivors.Henry.Content
 
         // armor buff gained during roll
         public static BuffDef armorBuff;
+        // armor debuff applied with triple slash combo finisher
+        public static BuffDef armorDeBuff;
+
+        // damagetype used to apply armordebuff
+        public static DamageAPI.ModdedDamageType ComboFinisherDebuffDamage;
 
         //stuff needed before character creation
         public static void PreInit()
@@ -35,6 +41,7 @@ namespace HenryMod.Characters.Survivors.Henry.Content
 
             InitStates();
             InitBuffs();
+            InitDamageTypes();
         }
 
         #region pre-init
@@ -63,6 +70,17 @@ namespace HenryMod.Characters.Survivors.Henry.Content
                             Color.white,
                             false,
                             false);
+
+            armorDeBuff = Modules.Content.CreateAndAddBuff("HenryArmorDeBuff",
+                            LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,
+                            Color.white,
+                            false,
+                            false);
+        }
+
+        private static void InitDamageTypes()
+        {
+            ComboFinisherDebuffDamage = DamageAPI.ReserveDamageType();
         }
         #endregion init
     }
