@@ -26,7 +26,7 @@ namespace HenryMod.Survivors.Henry.SkillStates
 
             damageType = DamageType.Generic;
             // combo fnisher has more damage
-            damageCoefficient = isComboFinisher ? HenryContent.swordFinisherDamageCoefficient : HenryContent.swordDamageCoefficient;
+            damageCoefficient = isComboFinisher ? HenryContent.StaticValues.swordFinisherDamageCoefficient : HenryContent.StaticValues.swordDamageCoefficient;
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
@@ -39,28 +39,28 @@ namespace HenryMod.Survivors.Henry.SkillStates
 
             earlyExitPercentTime = 0.6f;
 
-            //combo finisher has a bit meatier hitstop. you get the point by now
+            //combo finisher has a bit meatier hitstop. you get the pattern by now
             hitStopDuration = isComboFinisher ? 0.1f : 0.012f;
             attackRecoil = 0.5f;
             hitHopVelocity = 4f;
-            //congratulations, you now are a master of ternary (?) operators (or you will be in a second when you look it up right now)
+            //congratulations, you now are a master of the ternary (?) operator (or you will be in a second when you look it up right now)
             swingSoundString = isComboFinisher ? "HenrySwordSwingEpic" : "HenrySwordSwing";
             playbackRateParam = "Slash.playbackRate";
             muzzleString = GetComboMuzzle();
-            swingEffectPrefab = HenryAssets.swordSwingEffect;
-            hitEffectPrefab = HenryAssets.swordHitImpactEffect;
+            swingEffectPrefab = HenryContent.Assets.swordSwingEffect;
+            hitEffectPrefab = HenryContent.Assets.swordHitImpactEffect;
 
-            impactSound = HenryAssets.swordHitSoundEvent.index;
+            impactSound = HenryContent.Assets.swordHitSoundEvent.index;
 
             base.OnEnter();
 
             PlayAttackAnimation();
 
-            //third hit in the combo applies a debuff
+            //third hit in the combo applies a dot
             if (isComboFinisher)
             {
                 //nani? what is this? overlapAttack? (mouse over it)
-                overlapAttack.AddModdedDamageType(HenryContent.ComboFinisherDebuffDamage);
+                overlapAttack.AddModdedDamageType(HenryContent.DamageTypes.ComboFinisherDebuffDamage);
                 //alternatively, R2API.DamageAPI.AddModdedDamageType(overlapAttack, HenryContent.ComboFinisherDebuffDamage);
             }
         }

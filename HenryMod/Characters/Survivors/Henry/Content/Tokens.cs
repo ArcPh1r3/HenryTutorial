@@ -2,9 +2,9 @@
 using HenryMod.Modules;
 using HenryMod.Survivors.Henry.Achievements;
 
-namespace HenryMod.Survivors.Henry
+namespace HenryMod.Survivors.Henry.HenryContent
 {
-    public static class HenryTokens
+    public static class Tokens
     {
         public static void Init()
         {
@@ -18,7 +18,7 @@ namespace HenryMod.Survivors.Henry
 
         public static void AddHenryTokens()
         {
-            string prefix = HenrySurvivor.HENRY_PREFIX;
+            string prefix = HenrySurvivor.TOKEN_PREFIX;
 
             string desc = "Henry is a skilled fighter who makes use of a wide arsenal of weaponry to take down his foes.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
              + "< ! > Sword is a good all-rounder while Boxing Gloves are better for laying a beatdown on more powerful foes." + Environment.NewLine + Environment.NewLine
@@ -47,12 +47,12 @@ namespace HenryMod.Survivors.Henry
 
             #region Primary
             Language.Add(prefix + "PRIMARY_SLASH_NAME", "Sword");
-            Language.Add(prefix + "PRIMARY_SLASH_DESCRIPTION", Tokens.agilePrefix + $"Swing forward for <style=cIsDamage>{100f * HenryContent.swordDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "PRIMARY_SLASH_DESCRIPTION", Modules.Tokens.agilePrefix + $"Swing forward for <style=cIsDamage>{100f * HenryContent.StaticValues.swordDamageCoefficient}% damage</style>.");
             #endregion
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_GUN_NAME", "Handgun");
-            Language.Add(prefix + "SECONDARY_GUN_DESCRIPTION", Tokens.agilePrefix + $"Fire a handgun for <style=cIsDamage>{100f * HenryContent.gunDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "SECONDARY_GUN_DESCRIPTION", Modules.Tokens.agilePrefix + $"Fire a handgun for <style=cIsDamage>{100f * HenryContent.StaticValues.gunDamageCoefficient}% damage</style>.");
             #endregion
 
             #region Utility
@@ -62,12 +62,12 @@ namespace HenryMod.Survivors.Henry
 
             #region Special
             Language.Add(prefix + "SPECIAL_BOMB_NAME", "Bomb");
-            Language.Add(prefix + "SPECIAL_BOMB_DESCRIPTION", $"Throw a bomb for <style=cIsDamage>{100f * HenryContent.bombDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "SPECIAL_BOMB_DESCRIPTION", $"Throw a bomb for <style=cIsDamage>{100f * HenryContent.StaticValues.bombDamageCoefficient}% damage</style>.");
             #endregion
 
             #region Achievements
-            Language.Add(Tokens.GetAchievementNameToken(HenryMasteryAchievement.identifier), "Henry: Mastery");
-            Language.Add(Tokens.GetAchievementDescriptionToken(HenryMasteryAchievement.identifier), "As Henry, beat the game or obliterate on Monsoon.");
+            Language.Add(Modules.Tokens.GetAchievementNameToken(MasteryAchievement.identifier), "Henry: Mastery");
+            Language.Add(Modules.Tokens.GetAchievementDescriptionToken(MasteryAchievement.identifier), "As Henry, beat the game or obliterate on Monsoon.");
             #endregion
         }
     }

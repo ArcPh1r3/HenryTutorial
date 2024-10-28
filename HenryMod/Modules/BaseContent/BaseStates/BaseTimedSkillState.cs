@@ -6,12 +6,19 @@ namespace HenryMod.Modules.BaseStates
     //see example skills below
     public abstract class BaseTimedSkillState : BaseSkillState
     {
-        //total duration of the move
+        /// <summary>
+        /// total duration of the move
+        /// </summary>
         public abstract float TimedBaseDuration { get; }
 
-        //0-1 time relative to duration that the skill starts
-        //for example, set 0.5 and the "cast" will happen halfway through the skill
+        /// <summary>
+        /// 0-1 time, relative to duration, when the skill starts
+        /// <para>for example, set 0.5 and the "cast" will happen halfway through the duration</para>
+        /// </summary>
         public abstract float TimedBaseCastStartPercentTime { get; }
+        /// <summary>
+        /// 0-1 time, relative to duration, when the skill ends
+        /// </summary>
         public virtual float TimedBaseCastEndPercentTime => 1;
 
         protected float duration;

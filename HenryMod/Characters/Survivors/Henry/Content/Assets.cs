@@ -4,9 +4,9 @@ using HenryMod.Modules;
 using System;
 using RoR2.Projectile;
 
-namespace HenryMod.Survivors.Henry
+namespace HenryMod.Survivors.Henry.HenryContent
 {
-    public static class HenryAssets
+    public static class Assets
     {
         // particle effects
         public static GameObject swordSwingEffect;
@@ -27,7 +27,7 @@ namespace HenryMod.Survivors.Henry
 
             _assetBundle = assetBundle;
 
-            swordHitSoundEvent = Content.CreateAndAddNetworkSoundEventDef("HenrySwordHit");
+            swordHitSoundEvent = Modules.Content.CreateAndAddNetworkSoundEventDef("HenrySwordHit");
 
             CreateEffects();
 
@@ -70,7 +70,7 @@ namespace HenryMod.Survivors.Henry
         private static void CreateProjectiles()
         {
             CreateBombProjectile();
-            Content.AddProjectilePrefab(bombProjectilePrefab);
+            Modules.Content.AddProjectilePrefab(bombProjectilePrefab);
         }
 
         private static void CreateBombProjectile()
@@ -88,7 +88,7 @@ namespace HenryMod.Survivors.Henry
             bombImpactExplosion.destroyOnEnemy = true;
             bombImpactExplosion.lifetime = 12f;
             bombImpactExplosion.impactEffect = bombExplosionEffect;
-            bombImpactExplosion.lifetimeExpiredSound = Content.CreateAndAddNetworkSoundEventDef("HenryBombExplosion");
+            bombImpactExplosion.lifetimeExpiredSound = Modules.Content.CreateAndAddNetworkSoundEventDef("HenryBombExplosion");
             bombImpactExplosion.timerAfterImpact = true;
             bombImpactExplosion.lifetimeAfterImpact = 0.1f;
 

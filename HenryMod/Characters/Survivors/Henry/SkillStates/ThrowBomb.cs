@@ -16,7 +16,7 @@ namespace HenryMod.Survivors.Henry.SkillStates
 
         public override void OnEnter()
         {
-            projectilePrefab = HenryAssets.bombProjectilePrefab;
+            projectilePrefab = HenryContent.Assets.bombProjectilePrefab;
             //base.effectPrefab = Modules.Assets.SomeMuzzleEffect;
             //targetmuzzle = "muzzleThrow"
 

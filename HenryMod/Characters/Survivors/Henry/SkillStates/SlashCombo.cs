@@ -22,7 +22,7 @@ namespace HenryMod.Survivors.Henry.SkillStates
             hitBoxGroupName = "SwordGroup";
 
             damageType = DamageType.Generic;
-            damageCoefficient = HenryContent.swordDamageCoefficient;
+            damageCoefficient = HenryContent.StaticValues.swordDamageCoefficient;
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
@@ -41,10 +41,10 @@ namespace HenryMod.Survivors.Henry.SkillStates
             swingSoundString = "HenrySwordSwing";
             playbackRateParam = "Slash.playbackRate";
             muzzleString = swingIndex == 0 ? "SwingLeft" : "SwingRight";
-            swingEffectPrefab = HenryAssets.swordSwingEffect;
-            hitEffectPrefab = HenryAssets.swordHitImpactEffect;
+            swingEffectPrefab = HenryContent.Assets.swordSwingEffect;
+            hitEffectPrefab = HenryContent.Assets.swordHitImpactEffect;
 
-            impactSound = HenryAssets.swordHitSoundEvent.index;
+            impactSound = HenryContent.Assets.swordHitSoundEvent.index;
 
             base.OnEnter();
 

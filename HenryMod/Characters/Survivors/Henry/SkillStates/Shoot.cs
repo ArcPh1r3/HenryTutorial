@@ -6,7 +6,7 @@ namespace HenryMod.Survivors.Henry.SkillStates
 {
     public class Shoot : BaseSkillState
     {
-        public static float damageCoefficient = HenryContent.gunDamageCoefficient;
+        public static float damageCoefficient = HenryContent.StaticValues.gunDamageCoefficient;
         public static float procCoefficient = 1f;
         public static float baseDuration = 0.6f;
         //delay on firing is usually ass-feeling. only set this if you know what you're doing

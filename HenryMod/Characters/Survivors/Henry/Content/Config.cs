@@ -1,9 +1,9 @@
 ﻿using BepInEx.Configuration;
 using HenryMod.Modules;
 
-namespace HenryMod.Survivors.Henry
+namespace HenryMod.Survivors.Henry.HenryContent
 {
-    public static class HenryConfig
+    public static class Config
     {
         public static ConfigEntry<bool> someConfigBool;
         public static ConfigEntry<float> someConfigFloat;
@@ -13,18 +13,18 @@ namespace HenryMod.Survivors.Henry
         {
             string section = "Henry";
 
-            someConfigBool = Config.BindAndOptions(
+            someConfigBool = Modules.Config.BindAndOptions(
                 section,
                 "someConfigBool",
                 true,
                 "this creates a bool config, and a checkbox option in risk of options");
 
-            someConfigFloat = Config.BindAndOptions(
+            someConfigFloat = Modules.Config.BindAndOptions(
                 section,
                 "someConfigfloat",
                 5f);//blank description will default to just the name
 
-            someConfigFloatWithCustomRange = Config.BindAndOptions(
+            someConfigFloatWithCustomRange = Modules.Config.BindAndOptions(
                 section,
                 "someConfigfloat2",
                 5f,

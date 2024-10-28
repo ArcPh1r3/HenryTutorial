@@ -11,9 +11,9 @@ using UnityEngine;
                     {localScale})
 */
 
-namespace HenryMod.Survivors.Henry
+namespace HenryMod.Survivors.Henry.HenryContent
 {
-    public class HenryItemDisplays : ItemDisplaysBase
+    public class ItemDisplaySetup : ItemDisplaysBase
     {
         protected override void SetItemDisplayRules(List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules)
         {
