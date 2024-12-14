@@ -10,7 +10,7 @@ namespace HenryMod.Survivors.Henry.SkillStates
         {
             hitboxGroupName = "SwordGroup";
 
-            damageType = DamageType.Generic;
+            damageType = DamageTypeCombo.GenericPrimary;
             damageCoefficient = HenryStaticValues.swordDamageCoefficient;
             procCoefficient = 1f;
             pushForce = 300f;

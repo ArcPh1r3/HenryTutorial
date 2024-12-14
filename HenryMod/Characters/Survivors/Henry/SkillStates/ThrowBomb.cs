@@ -39,6 +39,12 @@ namespace HenryMod.Survivors.Henry.SkillStates
             base.OnEnter();
         }
 
+        public override void ModifyProjectileInfo(ref FireProjectileInfo fireProjectileInfo)
+        {
+            base.ModifyProjectileInfo(ref fireProjectileInfo);
+            fireProjectileInfo.damageTypeOverride = DamageTypeCombo.GenericSpecial;
+        }
+
         public override void FixedUpdate()
         {
             base.FixedUpdate();

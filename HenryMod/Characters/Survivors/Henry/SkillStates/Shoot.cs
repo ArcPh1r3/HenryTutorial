@@ -76,7 +76,7 @@ namespace HenryMod.Survivors.Henry.SkillStates
                         origin = aimRay.origin,
                         damage = damageCoefficient * damageStat,
                         damageColorIndex = DamageColorIndex.Default,
-                        damageType = DamageType.Generic,
+                        damageType = DamageTypeCombo.GenericSecondary,
                         falloffModel = BulletAttack.FalloffModel.None,
                         maxDistance = range,
                         force = force,
