@@ -635,6 +635,14 @@ namespace HenryMod.Modules
             {
                 setStateOnHurt.idleStateMachine = Array.Empty<EntityStateMachine>();
             }
+			
+			// Ideally this should be changed to your weapon entity state machine
+			// Otherwise it lets you continue attacking during ziprails and similar
+            CharacterBody characterBody = bodyPrefab.GetComponent<CharacterBody>();
+            if (characterBody)
+            {
+                characterBody.vehicleIdleStateMachine = Array.Empty<EntityStateMachine>();
+            }
         }
 
         //this but in reverse https://media.discordapp.net/attachments/875473107891150878/896193331720237106/caption-7.gif?ex=65989f94&is=65862a94&hm=e1f51da3ad190c00c5da1f90269d5ef10bedb0ae063c0f20aa0dd8721608018a&
