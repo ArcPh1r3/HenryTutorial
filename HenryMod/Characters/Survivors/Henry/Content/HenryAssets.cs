@@ -95,8 +95,10 @@ namespace HenryMod.Survivors.Henry
             ProjectileController bombController = bombProjectilePrefab.GetComponent<ProjectileController>();
 
             if (_assetBundle.LoadAsset<GameObject>("HenryBombGhost") != null)
+            {
                 bombController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("HenryBombGhost");
-            
+                bombController.ghostPrefabAddress = null;
+            }
             bombController.startSound = "";
         }
         #endregion projectiles

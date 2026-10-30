@@ -69,8 +69,9 @@ namespace HenryMod.Survivors.Henry
         };
 
         public override UnlockableDef characterUnlockableDef => HenryUnlockables.characterUnlockableDef;
-        
-        public override ItemDisplaysBase itemDisplays => new HenryItemDisplays();
+
+        [Obsolete("will be deprecated with Hallowed Concepts update. move to using IDRSJson from KingEnderBrine")]
+        public override ItemDisplaysBase itemDisplays => null;// new HenryItemDisplays();
 
         //set in base classes
         public override AssetBundle assetBundle { get; protected set; }
