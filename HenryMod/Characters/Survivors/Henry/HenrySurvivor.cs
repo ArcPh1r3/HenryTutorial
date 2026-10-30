@@ -23,6 +23,7 @@ namespace HenryMod.Survivors.Henry
         public override string bodyName => CHARACTER_NAME + "Body"; //if you do not change CHARACTER_NAME, you get the point by now
         //the name of the ai master for vengeance and goobo. must be unique
         public override string masterName => CHARACTER_NAME + "MonsterMaster"; //if you do not yadda yadda
+
         //the names of the prefabs that we are loading from the bundle to build your character. must match the names of the asset names in unity.
         //doesn't have to be unique, but probably should be anyways.
         public override string modelPrefabName => "mdl" + CHARACTER_NAME;

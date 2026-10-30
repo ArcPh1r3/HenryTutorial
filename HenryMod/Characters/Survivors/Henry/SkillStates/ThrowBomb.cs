@@ -2,10 +2,11 @@
 using HenryMod.Survivors.Henry;
 using RoR2;
 using RoR2.Projectile;
-using UnityEngine;
 
 namespace HenryMod.Survivors.Henry.SkillStates
 {
+    //GenericProjectileBaseState is mainly useful for primaries, where the projectile being used is generic and repeatable.
+    //in other cases, it is likely useful to know how to create your own projectile. see ThrowBombSimple
     public class ThrowBomb : GenericProjectileBaseState
     {
         public static float BaseDuration = 0.65f;
@@ -29,10 +30,12 @@ namespace HenryMod.Survivors.Henry.SkillStates
             //proc coefficient is set on the components of the projectile prefab
             force = 80f;
 
+            //when your projectile has gravity. it is useful to give it a bit of an bump upwards in aim angle, so that it doesn't immediately start dropping, and you'll hit your crosshair at more ranges.
             //base.projectilePitchBonus = 0;
-            //base.minSpread = 0;
-            //base.maxSpread = 0;
 
+            //if you're throwing multiple or want to have random spread, use these
+            //base.minSpread = 0;
+            //base.maxSpread = 0
             recoilAmplitude = 0.1f;
             bloom = 10;
 
