@@ -12,10 +12,11 @@ namespace HenryMod.Modules
         public static Material LoadMaterial(this AssetBundle assetBundle, string materialName) => CreateHopooMaterialFromBundle(assetBundle, materialName);
         public static Material CreateHopooMaterialFromBundle(this AssetBundle assetBundle, string materialName)
         {
+            materialName = materialName.Replace(" (Instance)", "");
             Material tempMat = cachedMaterials.Find(mat =>
             {
-                materialName.Replace(" (Instance)", "");
-                return mat.name.Contains(materialName);
+                string cachedName = mat.name.Replace(" (Instance)", "");
+                return cachedName == materialName;
             });
             if (tempMat) {
                 Log.Debug($"{tempMat.name} has already been loaded. returning cached");
