@@ -23,24 +23,27 @@ namespace HenryMod.Survivors.Henry.SkillStates
 
             PlayAnimation("Gesture, Override", "ThrowBomb", "ThrowBomb.playbackRate", duration);
 
-            Ray aimray = GetAimRay();
-
-            FireProjectileInfo projectileInfo = new FireProjectileInfo
+            if (isAuthority)
             {
-                projectilePrefab = HenryContent.CharacterAssets.bombProjectilePrefab,
-                position = aimray.origin,
-                rotation = Util.QuaternionSafeLookRotation(aimray.direction),
-                owner = gameObject,
-                damage = damageStat * DamageCoefficient,
-                force = 100f,
-                crit = RollCrit(),
-                damageTypeOverride = DamageTypeCombo.GenericSpecial,
-                //optional:
-                target = null, //used for certain projectile components. 
-                useSpeedOverride = true, //as name implies overrides the speed usually used by ProjectileSimple component.
-                speedOverride = 100, //only works if useSpeedOverride is true
-            };
-            ProjectileManager.instance.FireProjectile(projectileInfo);
+                Ray aimray = GetAimRay();
+
+                FireProjectileInfo projectileInfo = new FireProjectileInfo
+                {
+                    projectilePrefab = HenryContent.CharacterAssets.bombProjectilePrefab,
+                    position = aimray.origin,
+                    rotation = Util.QuaternionSafeLookRotation(aimray.direction),
+                    owner = gameObject,
+                    damage = damageStat * DamageCoefficient,
+                    force = 100f,
+                    crit = RollCrit(),
+                    damageTypeOverride = DamageTypeCombo.GenericSpecial,
+                    //optional:
+                    target = null, //used for certain projectile components. 
+                    useSpeedOverride = true, //as name implies overrides the speed usually used by ProjectileSimple component.
+                    speedOverride = 100, //only works if useSpeedOverride is true
+                };
+                ProjectileManager.instance.FireProjectile(projectileInfo);
+            }
         }
 
         public override void FixedUpdate()
