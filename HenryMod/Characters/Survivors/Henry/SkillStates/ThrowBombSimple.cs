@@ -40,6 +40,7 @@ namespace HenryMod.Survivors.Henry.SkillStates
                 useSpeedOverride = true, //as name implies overrides the speed usually used by ProjectileSimple component.
                 speedOverride = 100, //only works if useSpeedOverride is true
             };
+            ProjectileManager.instance.FireProjectile(projectileInfo);
         }
 
         public override void FixedUpdate()
